@@ -29,11 +29,11 @@
     "target": [
       {
         "target": "dmg",
-        "arch": ["universal", "arm64", "x64"]
+        "arch": ["arm64", "x64"]
       },
       {
         "target": "zip",
-        "arch": ["universal", "arm64", "x64"]
+        "arch": ["arm64", "x64"]
       }
     ],
     "category": "public.app-category.productivity",
@@ -44,7 +44,8 @@
     "artifactName": "Folia-${version}-mac-${arch}.${ext}"
   },
   "dmg": {
-    "title": "${productName} ${version}",
+    "title": "${productName} ${version} (${arch})",
+    "writeUpdate": false,
     "contents": [
       {
         "x": 130,
