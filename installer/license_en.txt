@@ -1,0 +1,45 @@
+================================================================================
+                    FOLIA - DIGITAL WRITING SUITE
+             TERMS & CONDITIONS OF USE AND PRIVACY POLICY
+================================================================================
+
+Welcome to Folia, the writing and storytelling environment crafted for authors,
+novelists, screenwriters, and creative minds.
+
+Before proceeding with the installation and use of Folia, please read the
+following Terms and Conditions and Privacy Policy carefully.
+
+1. SOFTWARE NATURE AND LOCAL-FIRST ARCHITECTURE
+- Folia is a local-first desktop application. All your manuscripts, character sheets,
+  worldbuilding lore, notes, plots, and brainstorming ideas are stored exclusively
+  on your local computer.
+- Folia never uploads your literary texts or creative data to unauthorized external
+  servers. Intellectual property and copyright of any created content belong 100%
+  to the author.
+
+2. AUTOSAVE AND DATA INTEGRITY
+- The application includes an automated autosave feature scheduled every 2 minutes
+  to prevent accidental work loss.
+- Users are encouraged to maintain regular backup copies of their project files (.folia)
+  on external storage or personal cloud drives.
+
+3. LICENSE GRANT
+- Upon installation, you are granted a personal, non-exclusive, and non-transferable
+  license to use the application.
+- Reverse engineering, disassembly, or unauthorized commercial redistribution of the
+  binary application is prohibited.
+
+4. PRIVACY POLICY (GDPR COMPLIANT)
+- No personal data or creative text content is ever collected, tracked, or sold to third parties.
+- Folia does not contain invasive telemetry or user profiling mechanisms.
+- Application preferences (language, editor options, margins, typography) are kept
+  strictly on your local machine.
+
+5. DISCLAIMER & LIMITATION OF LIABILITY
+- The software is provided "AS IS". While built according to rigorous standards of
+  reliability and performance, the developers cannot be held liable for direct or
+  indirect damages resulting from software use or lack of user backups.
+
+By checking the acceptance box and proceeding with the installation, you acknowledge
+that you have read, understood, and agreed to these Terms and Privacy Policy.
+================================================================================

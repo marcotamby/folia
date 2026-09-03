@@ -1,0 +1,92 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.folia.writing",
+  "productName": "Folia",
+  "copyright": "Copyright © 2026 Marco Tamborrino",
+  "directories": {
+    "output": "release",
+    "buildResources": "build"
+  },
+  "files": [
+    "dist/**/*",
+    "assets/**/*",
+    "build/**/*"
+  ],
+  "extraResources": [
+    "assets/**/*",
+    "build/**/*",
+    "installer/**/*"
+  ],
+  "fileAssociations": [
+    {
+      "ext": "folia",
+      "name": "Folia Project",
+      "description": "Documento di scrittura e narrazione Folia",
+      "role": "Editor"
+    }
+  ],
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["universal", "arm64", "x64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["universal", "arm64", "x64"]
+      }
+    ],
+    "category": "public.app-category.productivity",
+    "icon": "build/icon.png",
+    "identity": null,
+    "hardenedRuntime": false,
+    "gatekeeperAssess": false,
+    "artifactName": "Folia-${version}-mac-${arch}.${ext}"
+  },
+  "dmg": {
+    "title": "${productName} ${version}",
+    "contents": [
+      {
+        "x": 130,
+        "y": 220
+      },
+      {
+        "x": 410,
+        "y": 220,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "build/icon.ico",
+    "fileAssociations": [
+      {
+        "ext": "folia",
+        "name": "Folia Project",
+        "description": "Documento di scrittura e narrazione Folia",
+        "icon": "build/icon.ico"
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "allowElevation": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Folia",
+    "license": "installer/license_it.txt",
+    "installerIcon": "build/icon.ico",
+    "uninstallerIcon": "build/icon.ico",
+    "installerHeaderIcon": "build/icon.ico",
+    "deleteAppDataOnUninstall": false,
+    "artifactName": "Folia-Installer-Setup-1.0.0.${ext}"
+  }
+}
