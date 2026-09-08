@@ -327,7 +327,7 @@ VALUES ('support.author_role', 'support', 'text', 'Autore & Sviluppatore di Foli
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('support.cta_kofi', 'support', 'text', 'Supporta Marco su Ko-fi (ko-fi.com/marcotamby) ↗', 'Testo per support.cta_kofi')
+VALUES ('support.cta_kofi', 'support', 'text', 'Supporta Marco', 'Testo per support.cta_kofi')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)

@@ -368,30 +368,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const formReview = document.getElementById('form-submit-review');
   const reviewsContainer = document.getElementById('reviews-container');
 
-  // Check saved Google user in localStorage
-  let currentGoogleUser = null;
-  try {
-    const saved = localStorage.getItem('folia_google_user');
-    if (saved) currentGoogleUser = JSON.parse(saved);
-  } catch (e) {}
-
-  function updateAuthStateUI() {
-    if (currentGoogleUser) {
-      if (stepAuth) stepAuth.style.display = 'none';
-      if (stepForm) stepForm.style.display = 'block';
-      if (connectedUserName) connectedUserName.textContent = currentGoogleUser.name;
-      if (connectedUserAvatar) connectedUserAvatar.textContent = currentGoogleUser.initials || 'U';
-    } else {
-      if (stepAuth) stepAuth.style.display = 'block';
-      if (stepForm) stepForm.style.display = 'none';
-    }
-  }
-
   window.openReviewModal = function() {
-    updateAuthStateUI();
     if (reviewModal) {
       reviewModal.classList.add('active');
       document.body.style.overflow = 'hidden';
+      const nameInput = document.getElementById('input-review-name');
+      if (nameInput) setTimeout(() => nameInput.focus(), 150);
     }
   };
 
@@ -405,32 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnOpenReview) {
     btnOpenReview.addEventListener('click', window.openReviewModal);
-  }
-
-  // Google Sign-in action
-  if (btnGoogleLogin) {
-    btnGoogleLogin.addEventListener('click', () => {
-      // Simulate authentic Google Identity login (or integrate with GIS)
-      currentGoogleUser = {
-        name: 'Marco Tamborrino',
-        email: 'marco.tamborrino@gmail.com',
-        initials: 'MT'
-      };
-      try {
-        localStorage.setItem('folia_google_user', JSON.stringify(currentGoogleUser));
-      } catch (e) {}
-      updateAuthStateUI();
-    });
-  }
-
-  if (btnDisconnectGoogle) {
-    btnDisconnectGoogle.addEventListener('click', () => {
-      currentGoogleUser = null;
-      try {
-        localStorage.removeItem('folia_google_user');
-      } catch (e) {}
-      updateAuthStateUI();
-    });
   }
 
   // Star Picker interaction
@@ -453,23 +409,30 @@ document.addEventListener('DOMContentLoaded', () => {
   if (formReview) {
     formReview.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (!currentGoogleUser) {
-        alert('Effettua prima l\'accesso con Google per pubblicare.');
+      const name = (document.getElementById('input-review-name')?.value || '').trim();
+      const role = (document.getElementById('input-review-role')?.value || 'Autore').trim();
+      const title = (document.getElementById('input-review-title')?.value || '').trim();
+      const text = (document.getElementById('input-review-text')?.value || '').trim();
+      const rating = parseInt(inputRating ? inputRating.value : 5, 10);
+
+      if (!name || !text) {
+        alert('Inserisci il tuo nome e il testo della recensione.');
         return;
       }
 
-      const role = document.getElementById('input-review-role').value;
-      const title = document.getElementById('input-review-title').value.trim();
-      const text = document.getElementById('input-review-text').value.trim();
-      const rating = parseInt(inputRating ? inputRating.value : 5, 10);
+      // Compute initials for avatar (e.g. "Marco Tamborrino" -> "MT")
+      const words = name.split(/\s+/);
+      const initials = words.length > 1 
+        ? (words[0][0] + words[1][0]).toUpperCase()
+        : name.slice(0, 2).toUpperCase();
 
       const reviewPayload = {
-        name: currentGoogleUser.name,
+        name: name,
         role: role,
         stars: rating,
-        avatar: currentGoogleUser.initials || 'U',
+        avatar: initials || 'U',
         avatarClass: 'avatar-green',
-        title: title,
+        title: title || 'Recensione Folia',
         text: text
       };
 
@@ -498,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <h4 class="review-heading">"${data.review.title}"</h4>
               <p class="review-text">${data.review.text}</p>
               <div class="review-footer">
-                <span class="review-verified"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Recensione verificata Google</span>
+                <span class="review-verified"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Recensione autore</span>
                 <span class="review-date">Appena pubblicata</span>
               </div>
             </div>

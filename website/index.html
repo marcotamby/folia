@@ -798,7 +798,7 @@
 
         <button class="btn btn-primary btn-lg" id="btn-open-review-modal" style="font-size: 1rem; padding: 0.85rem 1.8rem; border-radius: 999px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          <span>Lascia la tua recensione con Google</span>
+          <span>Lascia una recensione</span>
         </button>
 
         <!-- Live reviews container populated as users submit -->
@@ -834,7 +834,7 @@
 
         <div class="kofi-action-row">
           <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-            <span data-content-key="support.cta_kofi">Supporta Marco su Ko-fi (ko-fi.com/marcotamby) ↗</span>
+            <span data-content-key="support.cta_kofi">Supporta Marco</span>
           </a>
         </div>
       </div>
@@ -1024,44 +1024,24 @@
     <div class="review-modal-card" onclick="event.stopPropagation()">
       <button class="review-modal-close" onclick="closeReviewModal()" aria-label="Chiudi" title="Chiudi">✕</button>
 
-      <!-- State 1: Need to sign in with Google -->
-      <div id="review-step-auth">
-        <div class="review-modal-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-        </div>
-        <h3>Lascia la tua recensione per Folia</h3>
-        <p class="review-modal-desc">
-          Per garantire la massima trasparenza, proteggere la community da recensioni bot o spam e verificare l'autenticità degli autori, richiediamo l'accesso rapido con il tuo account Google.
-        </p>
-
-        <button class="btn-google-signin" id="btn-google-login">
-          <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
-            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.36 7.33 24 12 24z"/>
-            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.92 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
-            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-          </svg>
-          <span>Continua con Google</span>
-        </button>
-
-        <div class="review-modal-privacy-note">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          <span>Nessun dato viene ceduto a terzi. Verrà mostrato solo il tuo nome e iniziale cognome.</span>
-        </div>
-      </div>
-
-      <!-- State 2: Logged in - Write Review Form -->
-      <div id="review-step-form" style="display: none;">
-        <div class="review-user-connected">
-          <div class="connected-user-avatar" id="connected-user-avatar">U</div>
-          <div>
-            <div class="connected-user-name" id="connected-user-name">Utente Google</div>
-            <span class="connected-user-badge">Account Google Verificato</span>
+      <!-- Direct Review Form -->
+      <div id="review-step-form">
+        <div style="text-align: center; margin-bottom: 1.4rem;">
+          <div class="review-modal-icon" style="margin: 0 auto 0.6rem;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
           </div>
-          <button class="btn-disconnect-google" id="btn-disconnect-google" title="Cambia account">Disconnetti</button>
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.35rem;">Lascia la tua recensione per Folia</h3>
+          <p class="review-modal-desc" style="margin-bottom: 0;">
+            Condividi le tue impressioni per aiutare altri autori e far crescere il progetto.
+          </p>
         </div>
 
         <form id="form-submit-review">
+          <!-- Author Name -->
+          <div class="form-group">
+            <label class="form-label" for="input-review-name">Il tuo Nome o Pseudonimo:</label>
+            <input type="text" id="input-review-name" class="form-input" placeholder="Es. Marco T., Elena B., DungeonMaster" required>
+          </div>
           <!-- Star Rating Selector -->
           <div class="form-group">
             <label class="form-label">La tua valutazione:</label>
