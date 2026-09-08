@@ -11,6 +11,7 @@ export interface ConfirmModalProps {
   confirmLabel?: string;
   cancelLabel?: string;
   variant?: 'danger' | 'warning' | 'folia';
+  contained?: boolean;
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -22,7 +23,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   message,
   confirmLabel = 'Elimina definitivamente',
   cancelLabel = 'Annulla',
-  variant = 'danger'
+  variant = 'danger',
+  contained = false
 }) => {
   if (!isOpen) return null;
 
@@ -30,7 +32,10 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   const isWarning = variant === 'warning';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none">
+    <div 
+      className={`${contained ? 'absolute' : 'fixed'} inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay`}
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-md overflow-hidden flex flex-col p-6 space-y-4"
         onClick={(e) => e.stopPropagation()}

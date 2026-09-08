@@ -94,7 +94,10 @@ export const SpecialCharsModal: React.FC<SpecialCharsModalProps> = ({
   })).filter(cat => cat.items.length > 0);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs p-4 animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs p-4 animate-in fade-in folia-modal-overlay"
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-xl overflow-hidden flex flex-col max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   MessageSquare, 
@@ -17,6 +17,7 @@ interface CommentsDrawerProps {
   comments: DocumentComment[];
   selectedText?: string;
   defaultAuthor?: string;
+  activeCommentId?: string | null;
   onAddComment: (text: string, quotedText?: string) => void;
   onToggleResolveComment: (id: string) => void;
   onDeleteComment: (id: string) => void;
@@ -29,6 +30,7 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
   comments,
   selectedText,
   defaultAuthor = 'Autore',
+  activeCommentId,
   onAddComment,
   onToggleResolveComment,
   onDeleteComment,
@@ -148,10 +150,14 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
           filteredComments.map((comment) => (
             <div
               key={comment.id}
-              className={`p-3 rounded-xl border transition-all space-y-2 select-text ${
-                comment.resolved
-                  ? 'bg-paper-100/60 border-paper-200 opacity-60'
-                  : 'bg-white border-paper-300 shadow-2xs hover:border-folia-300'
+              id={`comment-card-${comment.id}`}
+              onClick={() => onJumpToCommentInText?.(comment)}
+              className={`p-3 rounded-xl border transition-all space-y-2 select-text cursor-pointer ${
+                activeCommentId === comment.id
+                  ? 'bg-amber-50/90 border-amber-500 ring-2 ring-amber-300/80 shadow-md'
+                  : comment.resolved
+                  ? 'bg-paper-100/60 border-paper-200 opacity-60 hover:opacity-90'
+                  : 'bg-white border-paper-300 shadow-2xs hover:border-folia-400 hover:shadow-xs'
               }`}
             >
               {/* Header: Author + Date */}
@@ -170,7 +176,10 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
               {/* Quoted Text (if any) */}
               {comment.quotedText && (
                 <div 
-                  onClick={() => onJumpToCommentInText?.(comment)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onJumpToCommentInText?.(comment);
+                  }}
                   title="Clicca per evidenziare nel testo"
                   className="p-1.5 bg-paper-100/70 border-l-2 border-folia-600 rounded-r text-[11px] text-paper-700 italic line-clamp-2 cursor-pointer hover:bg-paper-200/60 transition-colors select-none"
                 >
@@ -187,7 +196,10 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
               <div className="flex items-center justify-between pt-1 border-t border-paper-150 text-[11px] select-none">
                 <button
                   type="button"
-                  onClick={() => onToggleResolveComment(comment.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleResolveComment(comment.id);
+                  }}
                   className={`flex items-center gap-1 font-medium transition-colors cursor-pointer ${
                     comment.resolved ? 'text-emerald-700 hover:text-emerald-800' : 'text-paper-500 hover:text-paper-900'
                   }`}
@@ -200,7 +212,10 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
                   {comment.quotedText && onJumpToCommentInText && (
                     <button
                       type="button"
-                      onClick={() => onJumpToCommentInText(comment)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onJumpToCommentInText(comment);
+                      }}
                       title="Vai al punto nel testo"
                       className="p-1 text-paper-400 hover:text-folia-800 rounded transition-colors cursor-pointer"
                     >
@@ -209,7 +224,10 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
                   )}
                   <button
                     type="button"
-                    onClick={() => onDeleteComment(comment.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteComment(comment.id);
+                    }}
                     title="Elimina commento"
                     className="p-1 text-paper-400 hover:text-rose-600 rounded transition-colors cursor-pointer"
                   >

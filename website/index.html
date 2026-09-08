@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-content-key="meta.title">Folia — Suite di Scrittura, Worldbuilding & Narrazione</title>
+  <meta name="description" content="Folia è l'ambiente di scrittura e worldbuilding per autori, romanzieri, worldbuilder e Game Master. Cartelle editoriali da 1800 battute, schede personaggi psicologiche e D&D 5e, mappe interattive con pin, outliner con 18+ template di trama e privacy locale assoluta.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts: Lora (literary serif) & Plus Jakarta Sans (clean UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Minimal Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-wrap">
+      <a href="#" class="nav-brand">
+        <img src="assets/logo.png" alt="Folia" class="nav-logo">
+        <span class="nav-title" data-content-key="nav.brand_name">Folia</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#nicchie" class="nav-link" data-content-key="nav.link_niches">Per chi è</a></li>
+          <li><a href="#anteprima" class="nav-link" data-content-key="nav.link_app">Applicazione</a></li>
+          <li><a href="#features" class="nav-link" data-content-key="nav.link_features">Funzionalità</a></li>
+          <li><a href="#privacy" class="nav-link" data-content-key="nav.link_privacy">Local-first</a></li>
+          <li><a href="#recensioni" class="nav-link">Recensioni</a></li>
+          <li><a href="#supporta" class="nav-link" data-content-key="nav.link_support">Sostieni</a></li>
+          <li><a href="#download" class="nav-link" data-content-key="nav.link_download">Download</a></li>
+          <li><a href="#faq" class="nav-link" data-content-key="nav.link_faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-kofi-subtle" title="Sostieni lo sviluppo su Ko-fi">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+          <span data-content-key="nav.btn_kofi">Ko-fi</span>
+        </a>
+
+        <a href="#download" class="btn btn-primary">
+          <span data-content-key="nav.btn_download">Scarica</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section (Clean & Literary) -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title" data-content-html="hero.title">
+        L'ambiente di scrittura per chi <em>dà vita a nuove storie</em>.
+      </h1>
+
+      <p class="hero-desc" data-content-html="hero.desc">
+        Dalla prima scintilla d'ispirazione fino all'ultima pagina del tuo libro. Folia combina un editor conforme alle 
+        <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) 
+        con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per 
+        schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#download" class="btn btn-primary btn-lg">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span data-content-key="hero.cta_download">Scarica gratis per Windows (v1.0.1)</span>
+        </a>
+
+        <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-subtle btn-lg">
+          <span data-content-key="hero.cta_kofi">Sostieni su Ko-fi ↗</span>
+        </a>
+      </div>
+
+      <div class="hero-meta-badges">
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-content-key="hero.badge_offline">100% Offline &amp; Privato</span>
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-content-key="hero.badge_cartelle">Cartelle editoriali 1800 battute</span>
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-content-key="hero.badge_maps">Mappe geografiche con pin</span>
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-content-key="hero.badge_free">Attualmente gratuito</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Niche Selector: Who is Folia for? -->
+  <section class="niches-section" id="nicchie">
+    <div class="container">
+      <div class="niches-intro">
+        <span class="section-label" data-content-key="niches.section_label">Fatto su misura</span>
+        <h2 data-content-key="niches.title">Progettato per le reali esigenze di chi narra.</h2>
+        <p data-content-key="niches.subtitle">
+          Gli elaboratori di testo generici ignorano le peculiarità del mondo letterario e ludico. 
+          Seleziona la tua area di scrittura per scoprire gli strumenti creati per te.
+        </p>
+      </div>
+
+      <!-- Niche Tabs -->
+      <div class="niches-tabs">
+        <button class="niche-tab-btn active" data-niche="novel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span>Romanzieri &amp; Autori</span>
+        </button>
+        <button class="niche-tab-btn" data-niche="fantasy">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span>Fantasy &amp; Worldbuilding</span>
+        </button>
+        <button class="niche-tab-btn" data-niche="ttrpg">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 8h.01"></path><path d="M8 8h.01"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path><path d="M12 12h.01"></path></svg>
+          <span>Game Master &amp; GDR (D&amp;D 5e)</span>
+        </button>
+        <button class="niche-tab-btn" data-niche="thriller">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          <span>Gialli, Thriller &amp; Sceneggiatura</span>
+        </button>
+        <button class="niche-tab-btn" data-niche="indie">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Self-Publisher &amp; Indipendenti</span>
+        </button>
+      </div>
+
+      <!-- Niche Display Cards -->
+      <div class="niche-cards-container">
+        
+        <!-- 1. Novel Card -->
+        <div class="niche-display-card active" id="niche-novel">
+          <div class="niche-card-header">
+            <div class="niche-header-title">
+              <h3>Per Scrittori di Romanzi &amp; Narrativa Tradizionale</h3>
+              <p>Dalla prima bozza alla consegna a case editrici, agenzie e concorsi letterari.</p>
+            </div>
+            <span class="niche-pill-badge">Standard Editoriali Nativi</span>
+          </div>
+          <div class="niche-features-columns">
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Cartelle &amp; Tipografia</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Cartelle Editoriali Standard:</strong> Calcolo in tempo reale di 1.800 battute (spazi inclusi, 30 righe x 60 battute).</li>
+                <li><strong>Formato Romanzo (14x21 cm):</strong> Simula la reale resa su carta stampata fin dalla stesura.</li>
+                <li><strong>Sillabazione e Trattini:</strong> Rientro prima riga regolabile, em-dash (—) e caporali (« ») a portata di mano.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Note &amp; Revisione</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Note a Piè di Pagina:</strong> Numerazione automatica e gestione integrata a piè di capitolo.</li>
+                <li><strong>Commenti e Revisioni:</strong> Annota brani di testo con commenti risolvibili senza sporcare il testo.</li>
+                <li><strong>Font Letterari:</strong> Garamond, Lora, Caslon, Baskerville, Palatino, Times New Roman e 15+ caratteri tipografici.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Flusso &amp; Obiettivi</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Modalità Focus Zen:</strong> Schermo intero senza elementi di disturbo per massimizzare la concentrazione.</li>
+                <li><strong>Obiettivo Giornaliero:</strong> Contatore dinamico di parole per sessione e stima del tempo di lettura.</li>
+                <li><strong>Esportazione Completa:</strong> DOCX pronto per gli editor, PDF impaginato e testo semplice.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Fantasy Card -->
+        <div class="niche-display-card" id="niche-fantasy">
+          <div class="niche-card-header">
+            <div class="niche-header-title">
+              <h3>Per Autori Fantasy, Fantascienza &amp; Worldbuilder</h3>
+              <p>Costruisci universi complessi senza smarrire nessun dettaglio tra centinaia di fogli sparsi.</p>
+            </div>
+            <span class="niche-pill-badge">Bibbia Lore &amp; Atlante</span>
+          </div>
+          <div class="niche-features-columns">
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Bibbia dell'Ambientazione</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Categorie Strutturate:</strong> Luoghi, Città, Sistemi Magici, Fazioni, Religioni, Culture, Artefatti ed Ere storiche.</li>
+                <li><strong>Regole &amp; Segreti:</strong> Campi dedicati per atmosfera, leggi del mondo, abitanti e retroscena nascosti.</li>
+                <li><strong>Wiki-Interlinking:</strong> Passa il mouse sui nomi nel testo per consultare la scheda del luogo o del reperto in un popup istantaneo.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Mappe Geografiche con Pin</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Mappe ad Alta Risoluzione:</strong> Carica le illustrazioni delle tue mappe regionali o continenti con zoom e pan fluidi.</li>
+                <li><strong>Pin Georeferenziati:</strong> Posiziona indicatori con icone personalizzate (castelli, dungeon, città, monti, navi).</li>
+                <li><strong>Collegamento Diretto al Lore:</strong> Clicca su un pin sulla mappa per aprire istantaneamente la relativa scheda di worldbuilding.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Template Epici</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Strutture Narrative Dedicate:</strong> Template integrati per Fantasy Epico, Viaggio dell'Eroe e Metodo Fiocco di Neve.</li>
+                <li><strong>Archi di Fazione:</strong> Traccia il bilanciamento di potere, guerre e trattati nel corso dei capitoli.</li>
+                <li><strong>Appendici Automatiche:</strong> Includi la bibbia del mondo nell'esportazione finale come guida per i lettori.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TTRPG / D&D Card -->
+        <div class="niche-display-card" id="niche-ttrpg">
+          <div class="niche-card-header">
+            <div class="niche-header-title">
+              <h3>Per Game Master &amp; Creatori di Giochi di Ruolo (D&amp;D 5e / TTRPG)</h3>
+              <p>Il compagno definitivo per gestire campagne, PNG, statblock dei mostri, dungeon e mappe tattiche.</p>
+            </div>
+            <span class="niche-pill-badge">Supporto D&amp;D 5e Nativo</span>
+          </div>
+          <div class="niche-features-columns">
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Schede D&amp;D 5e Integrate</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Caratteristiche Complete:</strong> FOR, DES, COS, INT, SAG, CAR con tiri salvezza, classe armatura, PF e dadi vita.</li>
+                <li><strong>Armi &amp; Incantesimi:</strong> Monitoraggio slot incantesimi per livello, armi con bonus di attacco e proprietà.</li>
+                <li><strong>Inventario &amp; Monete:</strong> Gestione oggetti magici con sintonizzazione, peso e monete (mr, ma, me, mo, mp).</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Statblock Mostri &amp; PNG</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Modalità Mostro/Boss:</strong> Grado di Sfida (CR), taglia, vulnerabilità, resistenze e immunità ai danni.</li>
+                <li><strong>Azioni Leggendarie:</strong> Sezioni per reazioni, bonus action e azioni tana dei nemici principali.</li>
+                <li><strong>Personalizzazione Totale:</strong> Aggiungi classi e razze homebrew create appositamente per la tua ambientazione.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Template per Sessioni</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Modelli di Campagna:</strong> Template nativi per <em>Five Room Dungeon</em>, <em>One-Shot</em>, <em>Sandbox</em>, <em>BBEG (Antagonista)</em> e <em>Intrigo Urbano</em>.</li>
+                <li><strong>Mappe dei Dungeon con Pin:</strong> Segna trappole, stanze segrete, tesori e incontri direttamente sulla mappa.</li>
+                <li><strong>Note di Sessione:</strong> Registra l'esito di ogni giocata senza perdere il filo della trama principale.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Thriller & Gialli Card -->
+        <div class="niche-display-card" id="niche-thriller">
+          <div class="niche-card-header">
+            <div class="niche-header-title">
+              <h3>Per Autori di Gialli, Thriller &amp; Sceneggiatori</h3>
+              <p>Costruisci trame ferree, semina indizi e gestisci il ritmo narrativo con oltre 18 modelli drammaturgici.</p>
+            </div>
+            <span class="niche-pill-badge">Outliner Strutturale &amp; Beat</span>
+          </div>
+          <div class="niche-features-columns">
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>18+ Template di Trama</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Save the Cat! &amp; Dan Harmon:</strong> Struttura ritmata a beat collaudata dai maestri della sceneggiatura moderna.</li>
+                <li><strong>Mystery Beats (Giallo):</strong> Indizio iniziale, indagini, false piste (red herrings), rivelazione e confronto finale.</li>
+                <li><strong>Thriller Beats:</strong> Bombe a orologeria, punto di non ritorno, crisi peggiore e climax al cardiopalma.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Bacheca Corkboard Visiva</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Schede a Parete di Sughero:</strong> Sposta liberamente le scene per testare sequenze alternative e cronologie non lineari.</li>
+                <li><strong>Stato di Avanzamento:</strong> Contrassegna le scene come Idea, Prima bozza, In revisione o Conclusa.</li>
+                <li><strong>Codici Colore:</strong> Assegna etichette cromatiche per punto di vista (POV), sottotrama o livello di tensione.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Idee &amp; Post-It Veloci</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Cattura Lampo:</strong> Salva battute di dialogo, colpi di scena o spunti investigativi in una bacheca apposita.</li>
+                <li><strong>Tag Intelligenti:</strong> Categorizza rapidamente in #Dialogo, #PlotTwist, #Scena, #Ricerca.</li>
+                <li><strong>Nessun Dettaglio Perso:</strong> Trascina le note veloci direttamente nei capitoli quando sei pronto a scriverli.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Indie & Self-Publisher Card -->
+        <div class="niche-display-card" id="niche-indie">
+          <div class="niche-card-header">
+            <div class="niche-header-title">
+              <h3>Per Self-Publisher, Saggisti &amp; Scrittori Indipendenti</h3>
+              <p>Il controllo totale sulla tua opera: nessun abbonamento forzato, nessun cloud invasivo, piena libertà.</p>
+            </div>
+            <span class="niche-pill-badge">100% Locale &amp; Indipendente</span>
+          </div>
+          <div class="niche-features-columns">
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Local-First Assoluto</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>I File Rimangono Tuoi:</strong> Tutti i testi risiedono in locale in cartelle aperte e nel formato trasparente <code>.folia</code>.</li>
+                <li><strong>Zero Telemetria:</strong> Nessun pacchetto di dati inviato a server terzi o società pubblicitarie.</li>
+                <li><strong>Nessuna IA Invasiva:</strong> I tuoi manoscritti non verranno mai usati per addestrare modelli linguistici altrui.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Senza Costi Nascosti</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Attualmente Gratuito:</strong> Nessun canone mensile o annuale obbligatorio per accedere alle tue opere.</li>
+                <li><strong>Funzionalità Complete:</strong> Tutte le feature sono sbloccate e a disposizione di tutti gli autori.</li>
+                <li><strong>Sostegno Spontaneo:</strong> Chi desidera sostenere lo sviluppo può farlo liberamente con un caffè su Ko-fi.</li>
+              </ul>
+            </div>
+            <div class="niche-feat-col">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Esportazione Pronta</span>
+              </h4>
+              <ul class="niche-bullets">
+                <li><strong>Tutti i Formati Principali:</strong> DOCX per lavorare con l'editor, PDF impaginato per la lettura, Markdown e TXT.</li>
+                <li><strong>Backup Automatico:</strong> Autosave programmato ogni 2 minuti per prevenire perdite accidentali di lavoro.</li>
+                <li><strong>Gestione Multi-Progetto:</strong> Crea antologie, saggi accademici, tesi o serie su più volumi separati.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Authentic Folia Application Window Mockup (1:1 with Electron App) -->
+  <section class="container" id="anteprima">
+    <div class="app-mockup-wrapper">
+      <div class="sc-header-flex">
+        <div>
+          <span class="section-label" data-content-key="preview.section_label">Interfaccia Reale al 100%</span>
+          <h3 class="sc-main-heading" data-content-key="preview.title">Folia in azione: catturato direttamente dal programma</h3>
+        </div>
+      </div>
+
+      <!-- Elegant Desktop Slider Window -->
+      <div class="folia-slider-window">
+        
+        <!-- Slider Topbar -->
+        <div class="slider-window-topbar">
+          <div class="sc-window-dots">
+            <span class="topbar-dot dot-close"></span>
+            <span class="topbar-dot dot-min"></span>
+            <span class="topbar-dot dot-max"></span>
+          </div>
+
+          <!-- Active Slide Title & Counter -->
+          <div class="slider-title-center">
+            <span class="slider-title-text" id="slider-title-display">1. Manoscritto &amp; Wiki-Popup</span>
+            <span class="slider-counter-pill" id="slider-counter-display">1 / 4</span>
+          </div>
+
+          <div class="topbar-spacer" style="width: 70px;"></div>
+        </div>
+
+        <!-- Slider Viewport (Overflow Hidden) -->
+        <div class="slider-viewport" id="slider-viewport">
+          
+          <!-- Floating side navigation arrows -->
+          <button class="slider-floating-arrow arrow-prev" id="float-btn-prev" aria-label="Precedente" title="Precedente">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="slider-floating-arrow arrow-next" id="float-btn-next" aria-label="Successiva" title="Successiva">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+
+          <!-- Sliding Track -->
+          <div class="slider-track" id="slider-track">
+
+            <!-- SLIDE 1: MANOSCRITTO -->
+            <div class="slider-slide" data-slide="0" data-title="1. Manoscritto &amp; Wiki-Popup">
+              <div class="sc-image-card" onclick="openFoliaLightbox('assets/screenshots/editor_real.png')">
+                <img src="assets/screenshots/editor_real.png" alt="Folia — Schermata reale Manoscritto con Wiki-Popup del personaggio" class="sc-full-img">
+                
+              </div>
+              <div class="sc-feature-highlights">
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">1</div>
+                  <div>
+                    <strong>Wiki-Interlinking Istantaneo</strong>
+                    <p>Passando il mouse sul nome di qualsiasi personaggio (es. <em>Luke</em> o <em>Lord Douglas</em>), Folia apre un popup con obiettivo, aspetto, ruolo e pulsante <em>Apri scheda</em>.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">2</div>
+                  <div>
+                    <strong>Calcolo Cartelle Editoriali</strong>
+                    <p>In tempo reale a colpo d'occhio: <em>49.7 cartelle (1800 battute)</em>, <em>14.910 parole</em>, sillabazione automatica, caporali e rientro a 1.0 cm.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">3</div>
+                  <div>
+                    <strong>Albero Manoscritto &amp; Ruoli</strong>
+                    <p>A sinistra l'albero capitoli del progetto (<em>La stazione sul mare</em>) e la categorizzazione per ruoli: Protagonisti, Antagonisti, Mentori, Spalle e Comparse.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">4</div>
+                  <div>
+                    <strong>Barra Tipografica da Libro</strong>
+                    <p>Carattere <em>EB Garamond 14pt</em>, controllo ortografico, interruzioni di pagina, commenti a margine e obiettivo giornaliero con barra di avanzamento.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SLIDE 2: PERSONAGGIO -->
+            <div class="slider-slide" data-slide="1" data-title="2. Scheda Personaggio (Psicologia &amp; Tratti)">
+              <div class="sc-image-card" onclick="openFoliaLightbox('assets/screenshots/personaggi_real.png')">
+                <img src="assets/screenshots/personaggi_real.png" alt="Folia — Schermata reale Scheda Personaggio con psicologia profonda e tratti narrativi" class="sc-full-img">
+                
+              </div>
+              <div class="sc-feature-highlights">
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">1</div>
+                  <div>
+                    <strong>Psicologia Profonda del Personaggio</strong>
+                    <p>Campi strutturati per <em>Obiettivo Principale (Cosa vuole?)</em>, <em>Bisogno Interiore (Cosa gli serve davvero?)</em> e <em>Difetto Fatale / Vulnerabilità</em>.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">2</div>
+                  <div>
+                    <strong>Identità, Ruolo &amp; Archetipo</strong>
+                    <p>Ruolo nella narrazione (<em>Protagonista</em>), archetipo drammatico, età (12 anni), occupazione (<em>Studente</em>) e ritratto avatar personalizzato.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">3</div>
+                  <div>
+                    <strong>Caratterizzazione &amp; Voce</strong>
+                    <p>Sezioni dedicate a <em>Punto di forza principale</em>, <em>Aspetto fisico &amp; segni particolari</em> e <em>Psicologia &amp; modo di parlare</em>.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">4</div>
+                  <div>
+                    <strong>Sincronizzazione Automatica</strong>
+                    <p>Ogni dettaglio compilato si riflette istantaneamente nei wiki-popup che compaiono mentre scrivi nel manoscritto del romanzo.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SLIDE 3: D&D 5E -->
+            <div class="slider-slide" data-slide="2" data-title="3. Schede D&amp;D 5e &amp; Party GDR">
+              <div class="sc-image-card" onclick="openFoliaLightbox('assets/screenshots/dnd_real.png')">
+                <img src="assets/screenshots/dnd_real.png" alt="Folia — Schermata reale Schede D&D 5e con Party, Classi, Schermo Master e Statistiche" class="sc-full-img">
+                
+              </div>
+              <div class="sc-feature-highlights">
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">1</div>
+                  <div>
+                    <strong>Campagne D&amp;D &amp; TTRPG Complete</strong>
+                    <p>Progetti dedicati per GDR con gestione <em>Party (PG / Eroi)</em>, <em>Antagonisti &amp; Boss</em>, <em>PNG guida</em>, sessioni audio registrate e bacheca incontri.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">2</div>
+                  <div>
+                    <strong>Regole Ufficiali D&amp;D 5e Integrate</strong>
+                    <p>Classe (<em>Guerriero</em>), Razza (<em>Umano</em>), Allineamento (<em>Neutrale Buono</em>), Livello/GS, Sottoclasse e Background con supporto per classi homebrew.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">3</div>
+                  <div>
+                    <strong>Combattimento, Attacchi &amp; Incantesimi</strong>
+                    <p>Sotto-sezioni dedicate per <em>Statistiche &amp; Combattimento</em>, <em>Attacchi &amp; Equipaggiamento</em>, <em>Incantesimi</em> e <em>Statblock Mostro/Boss</em>.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">4</div>
+                  <div>
+                    <strong>Pulsante "Schermo Master"</strong>
+                    <p>Modalità rapida per il Game Master per consultare le schede degli eroi e i tiri salvezza durante la sessione senza perdere il filo del gioco.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SLIDE 4: MAPPE -->
+            <div class="slider-slide" data-slide="3" data-title="4. Mappe Geografiche &amp; Segnaposti">
+              <div class="sc-image-card" onclick="openFoliaLightbox('assets/screenshots/mappe_real.png')">
+                <img src="assets/screenshots/mappe_real.png" alt="Folia — Schermata reale Mappe geografiche interattive con segnaposti e dettagli luogo" class="sc-full-img">
+                
+              </div>
+              <div class="sc-feature-highlights">
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">1</div>
+                  <div>
+                    <strong>Mappe ad Alta Risoluzione</strong>
+                    <p>Carica mappe fantasy, pergamene o illustrazioni ad alta definizione con zoom millimetrico da 25% a 300% e pan fluido.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">2</div>
+                  <div>
+                    <strong>Segnaposti Georeferenziati</strong>
+                    <p>Posiziona pin con icone tematiche (es. <em>Porto/Mare</em>, monti, torri, castelli), colori personalizzati e dimensione regolabile.</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">3</div>
+                  <div>
+                    <strong>Collegamento alla Scheda Lore</strong>
+                    <p>Il popup <em>Dettagli Luogo</em> connette direttamente il pin geografico alla relativa scheda di worldbuilding (<em>La stazione</em>).</p>
+                  </div>
+                </div>
+                <div class="sc-hl-box">
+                  <div class="sc-hl-num">4</div>
+                  <div>
+                    <strong>Pannello Luoghi Segnati</strong>
+                    <p>Cassetto laterale destro con tutti i punti d'interesse della mappa, coordinate geografiche precise e ricerca rapida.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Slider Bottom Indicator Pills -->
+        <div class="slider-pagination-pills">
+          <button class="slider-pill-dot active" data-gotoslide="0">
+            <span class="pill-dot-circle"></span>
+            <span>1. Manoscritto &amp; Wiki-Popup</span>
+          </button>
+          <button class="slider-pill-dot" data-gotoslide="1">
+            <span class="pill-dot-circle"></span>
+            <span>2. Scheda Personaggio</span>
+          </button>
+          <button class="slider-pill-dot" data-gotoslide="2">
+            <span class="pill-dot-circle"></span>
+            <span>3. D&amp;D 5e &amp; Party</span>
+          </button>
+          <button class="slider-pill-dot" data-gotoslide="3">
+            <span class="pill-dot-circle"></span>
+            <span>4. Mappe &amp; Segnaposti</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Complete Features Breakdown (6 Pillars) -->
+  <section class="section-clean" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Funzionalità Complete</span>
+        <h2 data-content-key="features.title">Ogni strumento al suo posto, senza dispersioni.</h2>
+        <p data-content-key="features.subtitle">
+          Folia racchiude in un unico ambiente leggero e ordinato tutto ciò che gli scrittori solitamente sono costretti 
+          a frammentare tra tre o quattro programmi diversi.
+        </p>
+      </div>
+
+      <div class="grid-features">
+        
+        <!-- Pillar 1 -->
+        <div class="feature-box">
+          <div class="feature-icon-clean">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          </div>
+          <h3 data-content-key="features.f1_title">Scrivere come in un vero libro</h3>
+          <p>
+            Scrivi senza impazzire con le impostazioni: hai già le <strong>cartelle editoriali da 1800 battute</strong> calcolate in tempo reale, 
+            il formato pagina identico ai libri stampati, le note a piè di pagina e i dialoghi con le virgolette giuste (« »).
+          </p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Commenti a margine e revisioni risolvibili</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Trova e sostituisci avanzato</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="feature-box">
+          <div class="feature-icon-clean">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <h3 data-content-key="features.f2_title">Personaggi vivi e schede D&amp;D pronte</h3>
+          <p>
+            Dai spessore a protagonisti e antagonisti: cosa vogliono, cosa temono e i loro difetti. 
+            E se giochi a D&amp;D, trovi le schede dei personaggi e dei mostri già pronte con caratteristiche, dadi vita e incantesimi.
+          </p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Archetipi drammatici ed evoluzione dell'arco</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Supporto razze e classi homebrew personalizzate</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="feature-box">
+          <div class="feature-icon-clean">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+          </div>
+          <h3 data-content-key="features.f3_title">Mappe geografiche con segnalini</h3>
+          <p>
+            Carica le immagini dei tuoi regni o delle tue città, piazza i segnalini sui luoghi importanti e collegali alle tue note. 
+            Mentre scrivi il manoscritto, basta passare con il mouse sul nome di un posto per rivederne i dettagli.
+          </p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Wiki-linking istantaneo al passaggio del mouse</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Zoom, pan ed esplorazione fluida della mappa</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="feature-box">
+          <div class="feature-icon-clean">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <h3 data-content-key="features.f4_title">Metti in ordine capitoli e scene</h3>
+          <p>
+            Non restare bloccato davanti alla pagina bianca: trovi schemi semplici da seguire (come il Viaggio dell'Eroe, la struttura del giallo o i modelli per dungeon) 
+            per organizzare l'intreccio passo dopo passo.
+          </p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Beat narrativi con linee guida drammaturgiche</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Collegamento diretto tra snodi e scene dell'editor</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 5 -->
+        <div class="feature-box">
+          <div class="feature-icon-clean">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          </div>
+          <h3 data-content-key="features.f5_title">Bacheca visiva per le tue idee</h3>
+          <p>
+            Sposta le scene come se fossero foglietti su un tavolo per trovare l'ordine perfetto. 
+            E hai sempre a portata di mano un blocco per catturare al volo battute di dialogo o intuizioni prima di dimenticarle.
+          </p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Etichette di colore personalizzate per POV e sottotrame</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Archivio note veloci sempre accessibile</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 6 -->
+        <div class="feature-box">
+          <div class="feature-icon-clean">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          </div>
+          <h3 data-content-key="features.f6_title">Scrivi senza distrazioni ed esporta facile</h3>
+          <p>
+            Attiva la modalità a tutto schermo per concentrarti solo sulle parole, fissa un obiettivo di battute al giorno e, quando hai finito, 
+            esporta il libro in Word (DOCX) pronto per gli editor o in PDF impaginato.
+          </p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Opzione per esportare schede e appendici del mondo</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Nessun lock-in: i file rimangono sul tuo PC</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Local-First Highlight Banner -->
+      <div class="local-banner" id="privacy">
+        <div>
+          <span class="section-label" data-content-key="privacy.section_label">Local-First &amp; Privacy</span>
+          <h3 data-content-key="privacy.title">Le tue storie appartengono solo a te. Senza eccezioni.</h3>
+          <p>
+            Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o 
+            a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. 
+            Con Folia i file di progetto (<code>.folia</code>) risiedono unicamente sul tuo disco rigido: <strong>zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta</strong>.
+          </p>
+          <ul class="local-points">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Funzionamento 100% offline, ovunque ti trovi</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Nessun canone mensile obbligatorio</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Nessuna IA addestrata sulle tue creazioni letterarie</li>
+          </ul>
+        </div>
+
+        <div class="local-box-clean">
+          <div style="margin-bottom: 8px;"><span class="green">✓</span> Cartella locale: Documenti/Folia/Romanzo.folia</div>
+          <div style="margin-bottom: 8px;"><span class="green">✓</span> Pacchetti scambiati via web: 0 byte (offline)</div>
+          <div style="margin-bottom: 8px;"><span class="green">✓</span> Backup automatico di sicurezza: ogni 2 minuti</div>
+          <div><span class="green">✓</span> Proprietà dei testi: 100% dell'Autore</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Community Reviews Section (Genuine & Authentic) -->
+  <section class="container" id="recensioni">
+    <div class="reviews-wrapper">
+      
+      <div class="reviews-cta-card">
+        <span class="reviews-cta-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          La parola alla community
+        </span>
+        
+        <h3>Hai già iniziato a scrivere con Folia?</h3>
+        
+        <p>
+          Folia è un progetto indipendente e cresce ogni giorno grazie ai consigli e alle impressioni di chi lo usa.
+          Che tu stia finendo la prima bozza del tuo romanzo, inventando un mondo fantastico o preparando una sessione di D&amp;D con gli amici, raccontami come ti trovi: ci metti un attimo con Google ed è un aiuto enorme per il progetto!
+        </p>
+
+        <button class="btn btn-primary btn-lg" id="btn-open-review-modal" style="font-size: 1rem; padding: 0.85rem 1.8rem; border-radius: 999px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Lascia la tua recensione con Google</span>
+        </button>
+
+        <!-- Live reviews container populated as users submit -->
+        <div class="reviews-grid" id="reviews-container" style="margin-top: 2.5rem; text-align: left;"></div>
+        <p class="reviews-empty-placeholder" id="reviews-empty-note">Le recensioni degli autori compariranno qui man mano che vengono pubblicate.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Sincere & Refined Ko-fi Section -->
+  <section class="section-clean" id="supporta">
+    <div class="container container-narrow">
+      <div class="kofi-box">
+        <div class="kofi-cup-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+        </div>
+
+        <h3 data-content-key="support.title">Un progetto indipendente, nato dalla passione per la narrazione.</h3>
+        
+        <p data-content-html="support.quote">
+          Ho creato Folia perché sentivo la mancanza di uno strumento che unisse il rigore tipografico necessario a noi autori 
+          alla ricchezza di worldbuilding di cui hanno bisogno romanzieri fantasy, saggisti, giallisti e Game Master, 
+          senza costringere nessuno a pagare abbonamenti mensili per continuare ad accedere ai propri testi.<br><br>
+          Folia è attualmente gratuito da scaricare e utilizzare. Se il programma ti aiuta a scrivere il tuo romanzo, a preparare le tue sessioni di gioco o vuoi sostenere lo sviluppo delle prossime versioni, puoi offrirmi un caffè su Ko-fi: ogni piccolo contributo è una spinta enorme!
+        </p>
+
+        <div class="kofi-action-row">
+          <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            <span data-content-key="support.cta_kofi">Supporta Marco su Ko-fi (ko-fi.com/marcotamby) ↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Minimal Download Center -->
+  <section class="section-clean" id="download">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label" data-content-key="download.section_label">Centro Download</span>
+        <h2 data-content-key="download.title">Scarica Folia sul tuo computer</h2>
+        <p data-content-key="download.subtitle">Disponibile subito per Windows (10 e 11, 64-bit). Gratuito da scaricare e usare senza limiti.</p>
+      </div>
+
+      <div class="download-grid-clean">
+        
+        <!-- Windows Card -->
+        <div class="download-card-clean featured">
+          <div>
+            <div class="dl-platform-top">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.901-1.799"/>
+                </svg>
+                <span style="font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;">Windows</span>
+              </div>
+              <span class="dl-badge dl-badge-available">Disponibile Ora</span>
+            </div>
+            
+            <h4 data-content-key="download.card_title">Folia 1.0.1 per Windows</h4>
+            <div class="dl-meta" data-content-key="download.card_meta">Pacchetto Setup con installazione guidata facile (.exe)</div>
+            
+            <ul class="dl-specs-list">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <strong>Download diretto</strong> (nessun account o abbonamento richiesto)</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Installazione rapida e sicura (.exe)</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Perfettamente compatibile con Windows 10 e Windows 11</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 100% offline: i tuoi file restano salvati sul tuo computer</li>
+            </ul>
+          </div>
+          
+          <div style="margin-top: 1.8rem;">
+            <a href="../Folia-Installer-Setup-1.0.1.exe" class="btn btn-primary btn-large" style="width: 100%; justify-content: center; font-size: 0.98rem; padding: 0.85rem 1.4rem;" download>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-content-key="download.cta_download">Scarica Folia per Windows (.exe)</span>
+            </a>
+
+            <!-- Download counter with exact phrasing requested: "scaricato enne volte" -->
+            <div class="download-counter-pill" id="live-download-counter" style="margin: 0.8rem auto 0; display: flex; justify-content: center;">
+              <span class="counter-pulse"></span>
+              <span>scaricato <strong id="download-count-val">1.483</strong> volte</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="dl-note-clean" data-content-html="download.note_bottom">
+        Folia è un programma indipendente in continua evoluzione. Puoi scaricarlo e usarlo liberamente, oppure fare una piccola donazione su <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); font-weight: 600; text-decoration: underline;">Ko-fi</a> per aiutarmi a dedicare sempre più tempo e cura al suo sviluppo!
+      </p>
+    </div>
+  </section>
+
+  <!-- Clean Notion-style FAQ -->
+  <section class="section-clean" id="faq">
+    <div class="container container-narrow">
+      <div class="section-head">
+        <span class="section-label" data-content-key="faq.section_label">Domande Frequenti</span>
+        <h2 data-content-key="faq.title">Tutto quello che c'è da sapere su Folia.</h2>
+      </div>
+
+      <div class="faq-clean-wrap">
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span>Folia è gratuito?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body">
+              Sì, attualmente Folia è completamente gratuito da scaricare e utilizzare. Non ci sono canoni mensili né funzioni bloccate dietro paywall. Chi lo desidera può sostenere il progetto e il tempo dedicato allo sviluppo tramite una donazione libera su <a href="https://ko-fi.com/marcotamby" target="_blank" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a>.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span>Perché è così importante il calcolo delle "Cartelle Editoriali da 1800 battute"?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body">
+              Nell'editoria italiana ed europea, il conteggio delle parole è spesso fuorviante a causa delle diverse lunghezze dei vocaboli. Case editrici, concorsi letterari e agenzie richiedono quasi sempre la lunghezza espressa in "cartelle" (convenzionalmente 1.800 battute spazi inclusi, corrispondenti a 30 righe per 60 battute). Folia calcola questo valore in tempo reale riga per riga.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span>Come funzionano le mappe geografiche interattive?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body">
+              Puoi caricare qualsiasi immagine di mappa (disegnata a mano, creata con Wonderdraft, Inkarnate o Photoshop). All'interno di Folia potrai posizionare pin con icone (castelli, città, dungeon, monti, porti) e collegarli alle schede dell'ambientazione. Cliccando su un pin sulla mappa si aprirà subito la relativa scheda informativa.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span>Posso usare Folia sia per scrivere romanzi che per preparare campagne di D&amp;D?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body">
+              Sì! Folia supporta diverse tipologie di progetto. Quando crei una scheda personaggio puoi attivare i parametri D&amp;D 5e: caratteristiche (FOR, DES, COS, INT, SAG, CAR), tiri salvezza, punti ferita, dadi vita, armi, inventario, slot incantesimi e perfino statblock mostro con Grado di Sfida (CR) e azioni leggendarie.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span>Dove vengono memorizzati i miei dati? Posso usarlo senza connessione?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body">
+              Folia è un software <strong>local-first</strong>: funziona al 100% offline, senza richiedere connessione internet né login. Tutti i manoscritti, le mappe e le schede risiedono sul disco rigido del tuo computer nei file aperti <code>.folia</code>. Nessun testo viene inviato a server esterni né utilizzato per addestrare modelli IA.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span>Come posso mettermi in contatto per suggerimenti o nuove idee?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body">
+              Puoi inviare messaggi, proporre nuove feature o metterti in contatto con me direttamente tramite la pagina <a href="https://ko-fi.com/marcotamby" target="_blank" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a> oppure aprendo un'issue sul repository GitHub del progetto.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clean Minimal Footer -->
+  <footer class="footer-clean">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <img src="assets/logo.png" alt="Folia">
+        <span data-content-key="footer.copyright">Folia — Creato con dedizione da Marco Tamborrino</span>
+      </div>
+
+      <div class="footer-nav">
+        <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer">Ko-fi</a>
+        <a href="https://github.com/marcotamby/folia" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="#download">Download</a>
+        <a href="#privacy">Privacy Local-First</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="content-manager.js" defer></script>
+
+  <!-- High-Res Lightbox Modal for Real Screenshots -->
+  <div id="folia-lightbox" onclick="closeFoliaLightbox(event)">
+    <button class="lightbox-close-btn" onclick="closeFoliaLightbox(event)" title="Chiudi (Esc)">✕</button>
+    <img id="lightbox-target-img" src="" alt="Folia Schermata Ingrandita">
+  </div>
+
+  <!-- Modal: Lascia una recensione (Google Auth) -->
+  <div class="review-modal-overlay" id="review-modal-overlay" onclick="closeReviewModal(event)">
+    <div class="review-modal-card" onclick="event.stopPropagation()">
+      <button class="review-modal-close" onclick="closeReviewModal()" aria-label="Chiudi" title="Chiudi">✕</button>
+
+      <!-- State 1: Need to sign in with Google -->
+      <div id="review-step-auth">
+        <div class="review-modal-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        </div>
+        <h3>Lascia la tua recensione per Folia</h3>
+        <p class="review-modal-desc">
+          Per garantire la massima trasparenza, proteggere la community da recensioni bot o spam e verificare l'autenticità degli autori, richiediamo l'accesso rapido con il tuo account Google.
+        </p>
+
+        <button class="btn-google-signin" id="btn-google-login">
+          <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.92 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Continua con Google</span>
+        </button>
+
+        <div class="review-modal-privacy-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>Nessun dato viene ceduto a terzi. Verrà mostrato solo il tuo nome e iniziale cognome.</span>
+        </div>
+      </div>
+
+      <!-- State 2: Logged in - Write Review Form -->
+      <div id="review-step-form" style="display: none;">
+        <div class="review-user-connected">
+          <div class="connected-user-avatar" id="connected-user-avatar">U</div>
+          <div>
+            <div class="connected-user-name" id="connected-user-name">Utente Google</div>
+            <span class="connected-user-badge">Account Google Verificato</span>
+          </div>
+          <button class="btn-disconnect-google" id="btn-disconnect-google" title="Cambia account">Disconnetti</button>
+        </div>
+
+        <form id="form-submit-review">
+          <!-- Star Rating Selector -->
+          <div class="form-group">
+            <label class="form-label">La tua valutazione:</label>
+            <div class="star-rating-picker" id="star-rating-picker">
+              <span class="star-btn active" data-rating="1">★</span>
+              <span class="star-btn active" data-rating="2">★</span>
+              <span class="star-btn active" data-rating="3">★</span>
+              <span class="star-btn active" data-rating="4">★</span>
+              <span class="star-btn active" data-rating="5">★</span>
+              <input type="hidden" id="input-review-rating" value="5">
+            </div>
+          </div>
+
+          <!-- Role Selector -->
+          <div class="form-group">
+            <label class="form-label" for="input-review-role">Cosa scrivi principalmente?</label>
+            <select id="input-review-role" class="form-select" required>
+              <option value="Romanziere &amp; Autore">Romanziere &amp; Autore</option>
+              <option value="Autore Fantasy &amp; Worldbuilding">Autore Fantasy &amp; Worldbuilding</option>
+              <option value="Game Master &amp; Giocatore GDR (D&amp;D 5e)">Game Master &amp; Giocatore GDR (D&amp;D 5e)</option>
+              <option value="Scrittore di Gialli &amp; Sceneggiatore">Scrittore di Gialli &amp; Sceneggiatore</option>
+              <option value="Self-Publisher &amp; Saggista">Self-Publisher &amp; Saggista</option>
+            </select>
+          </div>
+
+          <!-- Review Heading -->
+          <div class="form-group">
+            <label class="form-label" for="input-review-title">Titolo della recensione:</label>
+            <input type="text" id="input-review-title" class="form-input" placeholder="Es. L'editor che stavo cercando da anni..." required>
+          </div>
+
+          <!-- Review Text -->
+          <div class="form-group">
+            <label class="form-label" for="input-review-text">La tua esperienza con Folia:</label>
+            <textarea id="input-review-text" class="form-textarea" rows="4" placeholder="Cosa ti piace di più? Come ha cambiato il tuo modo di scrivere o preparare sessioni?" required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-subtle" onclick="closeReviewModal()">Annulla</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-review">Pubblica Recensione</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  
+</body>
+</html>

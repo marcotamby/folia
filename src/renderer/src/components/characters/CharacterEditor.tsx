@@ -14,22 +14,45 @@ import {
   Layers, 
   AlertTriangle,
   X,
-  Sparkles,
+  SlidersHorizontal,
   Shield,
   Maximize2,
-  Camera
+  Camera,
+  Swords,
+  Skull,
+  Users
 } from 'lucide-react';
-import { Character, CharacterTrait, CharacterRole, CharacterRelation } from '../../types';
+import { 
+  Character, 
+  CharacterTrait, 
+  CharacterRole, 
+  CharacterRelation,
+  DndCharacterData,
+  DndStats,
+  DndCombatStats,
+  DndWeapon,
+  DndEquipmentItem,
+  DndCurrency,
+  DndSpellcasting,
+  DndMonsterData
+} from '../../types';
 import { CustomSelect } from '../common/CustomSelect';
 import { ConfirmModal } from '../common/ConfirmModal';
 import { FocusTextModal } from '../common/FocusTextModal';
 import { ImageUploadModal } from '../modals/ImageUploadModal';
+import { ImageLightboxModal } from '../modals/ImageLightboxModal';
+import { DndStatsSection } from './dnd/DndStatsSection';
+import { DndEquipmentSection } from './dnd/DndEquipmentSection';
+import { DndSpellsSection } from './dnd/DndSpellsSection';
+import { DndMonsterStatblock } from './dnd/DndMonsterStatblock';
+import { DndPartyOverview } from './dnd/DndPartyOverview';
 
 interface CharacterEditorProps {
   character: Character | null;
   allCharacters: Character[];
   onUpdateCharacter: (char: Character) => void;
   onDeleteCharacter: (id: string) => void;
+  onSelectCharacter?: (id: string) => void;
   isTtrpg?: boolean;
   customDndClasses?: string[];
   customDndRaces?: string[];
@@ -43,6 +66,7 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
   allCharacters,
   onUpdateCharacter,
   onDeleteCharacter,
+  onSelectCharacter,
   isTtrpg = false,
   customDndClasses = [],
   customDndRaces = [],
@@ -60,6 +84,29 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
     placeholder?: string;
   } | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [selectedTargetCharId, setSelectedTargetCharId] = useState<string>('');
+  const [relationTypeInput, setRelationTypeInput] = useState<string>('');
+
+  // D&D 5e Tab Navigation & Master Screen
+  const [dndTab, setDndTab] = useState<'narrative' | 'stats' | 'equipment' | 'spells' | 'monster'>('narrative');
+  const [showPartyOverview, setShowPartyOverview] = useState(false);
+
+  // If DM Screen / Party Overview is requested, render it
+  if (isTtrpg && showPartyOverview) {
+    return (
+      <DndPartyOverview
+        characters={allCharacters}
+        onSelectCharacter={(id) => {
+          if (onSelectCharacter) onSelectCharacter(id);
+          setShowPartyOverview(false);
+        }}
+        onUpdateCharacter={onUpdateCharacter}
+        onClose={() => setShowPartyOverview(false)}
+      />
+    );
+  }
 
   if (!character) {
     return (
@@ -68,13 +115,23 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
           <User className="w-8 h-8 text-amber-600" />
         </div>
         <h3 className="font-brand text-xl font-semibold text-paper-800 mb-1">
-          {isTtrpg ? 'Nessun PG o PNG selezionato' : 'Nessun personaggio selezionato'}
+          {isTtrpg ? 'Nessun PG o NPC selezionato' : 'Nessun personaggio selezionato'}
         </h3>
-        <p className="text-xs text-paper-500 max-w-xs">
+        <p className="text-xs text-paper-500 max-w-xs mb-4">
           {isTtrpg 
             ? 'Seleziona o crea una scheda personaggio per definire classe, razza, motivazioni e legami del party.'
             : 'Seleziona o crea una scheda personaggio per definire motivazioni, aspetto e relazioni.'}
         </p>
+        {isTtrpg && allCharacters.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowPartyOverview(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+          >
+            <Users className="w-4 h-4" />
+            <span>Apri Schermo del Master (Riepilogo Party)</span>
+          </button>
+        )}
       </div>
     );
   }
@@ -83,6 +140,18 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
     onUpdateCharacter({
       ...character,
       [field]: value,
+      updatedAt: new Date().toISOString()
+    });
+  };
+
+  const handleUpdateDndData = (partial: Partial<DndCharacterData>) => {
+    const currentDnd = character.dndData || {};
+    onUpdateCharacter({
+      ...character,
+      dndData: {
+        ...currentDnd,
+        ...partial
+      },
       updatedAt: new Date().toISOString()
     });
   };
@@ -105,17 +174,32 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
     handleChange('traits', (character.traits || []).filter(t => t.id !== id));
   };
 
-  const handleAddRelation = () => {
-    const other = allCharacters.find(c => c.id !== character.id);
-    if (!other) return;
+  const otherCharacters = allCharacters.filter(c => c.id !== character.id);
+
+  const handleOpenLinkModal = () => {
+    if (otherCharacters.length === 0) return;
+    const existingTargetIds = new Set((character.relationships || []).map(r => r.targetCharacterId));
+    const unlinked = otherCharacters.find(c => !existingTargetIds.has(c.id));
+    const defaultChar = unlinked || otherCharacters[0];
+    setSelectedTargetCharId(defaultChar.id);
+    setRelationTypeInput(isTtrpg ? 'Compagno di party' : 'Alleato');
+    setIsLinkModalOpen(true);
+  };
+
+  const handleConfirmAddRelation = () => {
+    const target = allCharacters.find(c => c.id === selectedTargetCharId);
+    if (!target) return;
 
     const newRel: CharacterRelation = {
       id: 'rel-' + Date.now(),
-      targetCharacterId: other.id,
-      targetCharacterName: other.name,
-      relationType: isTtrpg ? 'Compagno di party' : 'Alleato'
+      targetCharacterId: target.id,
+      targetCharacterName: target.name,
+      relationType: relationTypeInput.trim() || (isTtrpg ? 'Compagno di party' : 'Alleato')
     };
     handleChange('relationships', [...(character.relationships || []), newRel]);
+    setIsLinkModalOpen(false);
+    setSelectedTargetCharId('');
+    setRelationTypeInput('');
   };
 
   const handleDeleteRelation = (id: string) => {
@@ -137,7 +221,7 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
     'Ranger',
     'Stregone',
     'Warlock',
-    'PNG / Mostro'
+    'NPC / Mostro'
   ];
 
   const defaultRaces = [
@@ -187,21 +271,36 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
     { value: 'Senza allineamento', label: 'Senza allineamento' }
   ];
 
-  const roleOptions = isTtrpg ? [
-    { value: 'protagonist', label: 'PG (Personaggio giocante)' },
+  const roleOptions: { value: CharacterRole; label: string }[] = isTtrpg ? [
+    { value: 'protagonist', label: 'PG (Personaggio giocante / Eroe)' },
     { value: 'antagonist', label: 'Boss / Nemico principale' },
+    { value: 'deuteragonist', label: 'PNG Chiave / Co-protagonista' },
+    { value: 'rival', label: 'Rivale / Competitore del party' },
     { value: 'mentor', label: 'PNG Guida / Mentore' },
-    { value: 'sidekick', label: 'Alleato / PNG chiave' },
-    { value: 'love_interest', label: 'Interesse / PNG legato' },
-    { value: 'supporting', label: 'PNG secondario / comparsa' }
+    { value: 'sidekick', label: 'Alleato / Compagno fidato' },
+    { value: 'love_interest', label: 'Interesse sentimentale / Legame' },
+    { value: 'traitor', label: 'Infiltrato / Spia / Falso alleato' },
+    { value: 'herald', label: 'Araldo / Mandante di quest' },
+    { value: 'guardian', label: 'Guardiano / Ostacolo' },
+    { value: 'supporting', label: 'PNG secondario / Comparsa' }
   ] : [
     { value: 'protagonist', label: 'Protagonista' },
     { value: 'antagonist', label: 'Antagonista' },
-    { value: 'mentor', label: 'Mentore / guida' },
-    { value: 'sidekick', label: 'Spalla / alleato' },
+    { value: 'deuteragonist', label: 'Deuteragonista / Co-protagonista' },
+    { value: 'rival', label: 'Rivale' },
+    { value: 'mentor', label: 'Mentore / Guida' },
+    { value: 'sidekick', label: 'Spalla / Alleato fidato' },
     { value: 'love_interest', label: 'Interesse amoroso' },
-    { value: 'supporting', label: 'Secondario / comparsa' }
+    { value: 'traitor', label: 'Traditore / Falso alleato' },
+    { value: 'herald', label: 'Araldo / Messaggero' },
+    { value: 'guardian', label: 'Guardiano / Ostacolo' },
+    { value: 'supporting', label: 'Personaggio secondario / Comparsa' }
   ];
+
+  const getRoleLabel = (role: CharacterRole) => {
+    const found = roleOptions.find(r => r.value === role);
+    return found ? found.label : role;
+  };
 
   const handleConfirmAddOption = () => {
     const val = newOptionValue.trim();
@@ -223,11 +322,17 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
         {/* Header Profile Card */}
         <div className="bg-paper-50 rounded-2xl border border-paper-250 p-6 md:p-8 shadow-page">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-paper-200">
-            <div className="flex items-start gap-4">
-              <div className="flex flex-col items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="w-16 md:w-20 shrink-0 flex flex-col items-center gap-1.5">
                 <div 
-                  onClick={() => setIsImageModalOpen(true)}
-                  title="Clicca per aggiungere o cambiare il ritratto del personaggio"
+                  onClick={() => {
+                    if (character.imageUrl) {
+                      setIsLightboxOpen(true);
+                    } else {
+                      setIsImageModalOpen(true);
+                    }
+                  }}
+                  title={character.imageUrl ? "Clicca per ingrandire il ritratto" : "Clicca per aggiungere il ritratto del personaggio"}
                   className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-amber-100/70 border-2 border-amber-200/80 hover:border-folia-600 flex items-center justify-center text-amber-800 text-2xl font-bold font-brand shadow-xs relative group cursor-pointer transition-all overflow-hidden"
                 >
                   {character.imageUrl ? (
@@ -242,18 +347,27 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
                   
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-150">
-                    <Camera className="w-5 h-5 mb-0.5" />
-                    <span className="text-[9px] font-sans font-bold">Cambia</span>
+                    {character.imageUrl ? (
+                      <>
+                        <Maximize2 className="w-5 h-5 mb-0.5" />
+                        <span className="text-[10px] font-sans font-bold">Ingrandisci</span>
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-5 h-5 mb-0.5" />
+                        <span className="text-[10px] font-sans font-bold">Aggiungi</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setIsImageModalOpen(true)}
-                  className="text-[11px] font-sans font-medium text-folia-700 hover:text-folia-950 hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+                  className="text-xs font-medium text-paper-500 hover:text-folia-800 hover:underline cursor-pointer transition-colors pt-0.5"
+                  title={character.imageUrl ? "Modifica o rimuovi ritratto" : "Carica ritratto"}
                 >
-                  <Camera className="w-3 h-3" />
-                  <span>{character.imageUrl ? 'Modifica' : '+ Foto'}</span>
+                  {character.imageUrl ? 'Modifica' : '+ Foto'}
                 </button>
               </div>
 
@@ -262,7 +376,7 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
                   type="text"
                   value={character.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder={isTtrpg ? 'Nome del PG o PNG' : t('characters.name')}
+                  placeholder={isTtrpg ? 'Nome del PG o NPC' : t('characters.name')}
                   className="text-2xl md:text-3xl font-brand font-bold text-paper-900 bg-transparent border-none focus:outline-hidden focus:ring-1 focus:ring-folia-600 rounded-lg px-1 w-full placeholder-paper-300"
                 />
                 <input
@@ -296,9 +410,20 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
+              {isTtrpg && (
+                <button
+                  type="button"
+                  onClick={() => setShowPartyOverview(true)}
+                  title="Apri Schermo del Master (Riepilogo del Party)"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100/80 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Users className="w-3.5 h-3.5 text-amber-700" />
+                  <span className="hidden sm:inline">Schermo Master</span>
+                </button>
+              )}
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                title={isTtrpg ? 'Elimina PG o PNG' : 'Elimina personaggio'}
+                title={isTtrpg ? 'Elimina PG o NPC' : 'Elimina personaggio'}
                 className="p-2 rounded-xl text-paper-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
@@ -465,6 +590,79 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
             )}
           </div>
         </div>
+
+        {/* D&D 5e Navigation Tabs */}
+        {isTtrpg && (
+          <div className="flex items-center gap-1.5 p-1.5 bg-paper-100/90 rounded-2xl border border-paper-250 shadow-2xs overflow-x-auto">
+            <button
+              type="button"
+              onClick={() => setDndTab('narrative')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                dndTab === 'narrative'
+                  ? 'bg-white text-paper-950 shadow-xs border border-paper-200'
+                  : 'text-paper-600 hover:text-paper-900 hover:bg-paper-200/60'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-700" />
+              <span>Narrazione & Biografia</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDndTab('stats')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                dndTab === 'stats'
+                  ? 'bg-white text-paper-950 shadow-xs border border-paper-200'
+                  : 'text-paper-600 hover:text-paper-900 hover:bg-paper-200/60'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5 text-red-600" />
+              <span>Statistiche & Combattimento</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDndTab('equipment')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                dndTab === 'equipment'
+                  ? 'bg-white text-paper-950 shadow-xs border border-paper-200'
+                  : 'text-paper-600 hover:text-paper-900 hover:bg-paper-200/60'
+              }`}
+            >
+              <Swords className="w-3.5 h-3.5 text-amber-700" />
+              <span>Attacchi & Equipaggiamento</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDndTab('spells')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                dndTab === 'spells'
+                  ? 'bg-white text-paper-950 shadow-xs border border-paper-200'
+                  : 'text-paper-600 hover:text-paper-900 hover:bg-paper-200/60'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 text-purple-600" />
+              <span>Incantesimi</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDndTab('monster')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                dndTab === 'monster'
+                  ? 'bg-red-900 text-white shadow-xs'
+                  : 'text-paper-600 hover:text-paper-900 hover:bg-paper-200/60'
+              }`}
+            >
+              <Skull className="w-3.5 h-3.5 text-red-500" />
+              <span>Statblock Mostro / Boss</span>
+            </button>
+          </div>
+        )}
+
+        {(!isTtrpg || dndTab === 'narrative') && (
+          <>
 
         {/* Story Engine: Goal & Need (The Core Conflict) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -687,7 +885,7 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
         <div className="bg-paper-50 rounded-2xl border border-paper-250 p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-bold text-xs text-paper-700 uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-amber-600" />
+              <SlidersHorizontal className="w-4 h-4 text-amber-600" />
               <span>{isTtrpg ? 'Statistiche & tratti del personaggio' : 'Tratti distintivi & parametri'}</span>
             </div>
             <button
@@ -725,7 +923,7 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
                   />
                   <button
                     onClick={() => handleDeleteTrait(trait.id)}
-                    className="p-1 text-paper-400 hover:text-red-600 transition-colors"
+                    className="p-1 text-paper-400 hover:text-red-600 transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -740,11 +938,11 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-bold text-xs text-paper-700 uppercase tracking-wider">
               <Link2 className="w-4 h-4 text-purple-600" />
-              <span>{isTtrpg ? 'Legami nel party & relazioni con PNG' : 'Rete di relazioni con altri personaggi'}</span>
+              <span>{isTtrpg ? 'Legami nel party & relazioni con NPC' : 'Rete di relazioni con altri personaggi'}</span>
             </div>
-            {allCharacters.length > 1 && (
+            {otherCharacters.length > 0 && (
               <button
-                onClick={handleAddRelation}
+                onClick={handleOpenLinkModal}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-purple-800 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors border border-purple-200 shadow-2xs cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -755,43 +953,262 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
           {(character.relationships || []).length === 0 ? (
             <p className="text-xs text-paper-400 italic py-2">
-              {allCharacters.length <= 1 
+              {otherCharacters.length === 0 
                 ? 'Crea almeno un altro personaggio per stabilire legami, rivalità o parentele.'
                 : 'Nessun legame definito. Clicca su "Collega personaggio" per specificare alleanze o rivalità.'}
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {(character.relationships || []).map((rel) => (
-                <div key={rel.id} className="flex items-center justify-between p-3 bg-paper-100/80 rounded-xl border border-paper-200">
-                  <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-semibold text-xs text-paper-900 truncate">{rel.targetCharacterName}</div>
-                    <input
-                      type="text"
-                      value={rel.relationType}
-                      onChange={(e) => {
-                        const updated = (character.relationships || []).map(r => r.id === rel.id ? { ...r, relationType: e.target.value } : r);
-                        handleChange('relationships', updated);
-                      }}
-                      placeholder="Tipo di legame (es. rivali, fratelli)..."
-                      className="text-[11px] text-paper-600 bg-transparent border-none focus:outline-hidden p-0 w-full"
-                    />
+              {(character.relationships || []).map((rel) => {
+                const targetChar = allCharacters.find(c => c.id === rel.targetCharacterId);
+                const displayName = targetChar ? targetChar.name : rel.targetCharacterName;
+                return (
+                  <div key={rel.id} className="flex items-center gap-3 p-3 bg-paper-100/80 rounded-xl border border-paper-200">
+                    <div className="w-9 h-9 rounded-xl bg-purple-100/80 border border-purple-200 flex items-center justify-center text-purple-800 font-brand font-bold text-xs shrink-0 overflow-hidden shadow-2xs">
+                      {targetChar?.imageUrl ? (
+                        <img src={targetChar.imageUrl} alt={displayName} className="w-full h-full object-cover" />
+                      ) : (
+                        displayName.charAt(0) || 'P'
+                      )}
+                    </div>
+
+                    <div className="min-w-0 flex-1 flex flex-col justify-center">
+                      <div className="font-bold text-xs text-paper-900 truncate leading-snug">
+                        {displayName}
+                      </div>
+                      <input
+                        type="text"
+                        value={rel.relationType}
+                        onChange={(e) => {
+                          const updated = (character.relationships || []).map(r => r.id === rel.id ? { ...r, relationType: e.target.value } : r);
+                          handleChange('relationships', updated);
+                        }}
+                        placeholder="Tipo di legame (es. alleato, rivale)..."
+                        className="text-xs font-medium text-purple-700 placeholder-paper-400 bg-transparent border-none focus:outline-hidden p-0 w-full leading-snug mt-0.5"
+                      />
+                    </div>
+
+                    <button
+                      onClick={() => handleDeleteRelation(rel.id)}
+                      title="Elimina collegamento"
+                      className="p-1.5 rounded-lg text-paper-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer shrink-0"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleDeleteRelation(rel.id)}
-                    className="p-1 rounded text-paper-400 hover:text-red-600 transition-colors"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
+        </>
+        )}
+
+        {/* D&D Stats Section */}
+        {isTtrpg && dndTab === 'stats' && (
+          <DndStatsSection
+            stats={character.dndData?.stats}
+            combat={character.dndData?.combat}
+            characterLevel={character.archetype}
+            featuresAndTraits={character.dndData?.featuresAndTraits}
+            onUpdateStats={(stats) => handleUpdateDndData({ stats })}
+            onUpdateCombat={(combat) => handleUpdateDndData({ combat })}
+            onUpdateFeatures={(featuresAndTraits) => handleUpdateDndData({ featuresAndTraits })}
+          />
+        )}
+
+        {/* D&D Equipment & Weapons Section */}
+        {isTtrpg && dndTab === 'equipment' && (
+          <DndEquipmentSection
+            weapons={character.dndData?.weapons}
+            equipment={character.dndData?.equipment}
+            currency={character.dndData?.currency}
+            onUpdateWeapons={(weapons) => handleUpdateDndData({ weapons })}
+            onUpdateEquipment={(equipment) => handleUpdateDndData({ equipment })}
+            onUpdateCurrency={(currency) => handleUpdateDndData({ currency })}
+          />
+        )}
+
+        {/* D&D Spells Section */}
+        {isTtrpg && dndTab === 'spells' && (
+          <DndSpellsSection
+            spellcasting={character.dndData?.spellcasting}
+            stats={character.dndData?.stats}
+            combat={character.dndData?.combat}
+            characterLevel={character.archetype}
+            onUpdateSpellcasting={(spellcasting) => handleUpdateDndData({ spellcasting })}
+          />
+        )}
+
+        {/* D&D Monster Statblock Section */}
+        {isTtrpg && dndTab === 'monster' && (
+          <DndMonsterStatblock
+            characterName={character.name}
+            monsterData={character.dndData?.monsterData}
+            stats={character.dndData?.stats}
+            combat={character.dndData?.combat}
+            onUpdateMonsterData={(monsterData) => handleUpdateDndData({ monsterData })}
+            onUpdateStats={(stats) => handleUpdateDndData({ stats })}
+            onUpdateCombat={(combat) => handleUpdateDndData({ combat })}
+          />
+        )}
       </div>
+
+      {/* Modal Collega Personaggio */}
+      {isLinkModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay"
+          onClick={() => setIsLinkModalOpen(false)}
+        >
+          <div 
+            className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-md overflow-hidden flex flex-col p-6 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 border border-purple-200 flex items-center justify-center shrink-0 shadow-2xs">
+                  <Link2 className="w-5 h-5 text-purple-700" />
+                </div>
+                <div>
+                  <h3 className="font-brand font-bold text-base text-paper-900 leading-snug">
+                    Collega un personaggio
+                  </h3>
+                  <p className="text-xs text-paper-500">
+                    Scegli con quale personaggio creare un legame
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsLinkModalOpen(false)}
+                className="p-1.5 rounded-lg text-paper-400 hover:text-paper-700 hover:bg-paper-150 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* List of Characters to choose from */}
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold text-paper-700 uppercase tracking-wider">
+                Seleziona personaggio
+              </label>
+              <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
+                {otherCharacters.map((c) => {
+                  const isSelected = selectedTargetCharId === c.id;
+                  const isAlreadyLinked = (character.relationships || []).some(r => r.targetCharacterId === c.id);
+                  return (
+                    <div
+                      key={c.id}
+                      onClick={() => setSelectedTargetCharId(c.id)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
+                        isSelected 
+                          ? 'border-purple-500 bg-purple-50/80 shadow-2xs' 
+                          : 'border-paper-200 bg-white hover:bg-paper-100/70 hover:border-paper-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-amber-100 border border-amber-200 flex items-center justify-center text-amber-800 font-brand font-bold text-sm shrink-0 overflow-hidden">
+                          {c.imageUrl ? (
+                            <img src={c.imageUrl} alt={c.name} className="w-full h-full object-cover" />
+                          ) : (
+                            c.name.charAt(0) || 'P'
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-paper-900 truncate flex items-center gap-1.5">
+                            <span>{c.name || 'Senza nome'}</span>
+                            {isAlreadyLinked && (
+                              <span className="text-[10px] font-normal text-purple-600 bg-purple-100 px-1.5 py-0.5 rounded-sm">
+                                Già collegato
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-paper-500 truncate">
+                            {isTtrpg && (c.dndClass || c.dndRace) 
+                              ? `${c.dndRace || ''} ${c.dndClass || ''}`.trim()
+                              : getRoleLabel(c.role)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                        isSelected ? 'border-purple-600 bg-purple-600' : 'border-paper-300'
+                      }`}>
+                        {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Relationship Type */}
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold text-paper-700 uppercase tracking-wider">
+                Tipo di legame o relazione
+              </label>
+              
+              <div className="flex flex-wrap gap-1.5">
+                {(isTtrpg ? [
+                  'Compagno di party', 'Alleato', 'Rivale', 'Mentore', 'Nemesi', 'Debitore', 'Fratello'
+                ] : [
+                  'Alleato', 'Rivale', 'Mentore', 'Amico fidato', 'Nemesi', 'Interesse amoroso', 'Fratello'
+                ]).map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    onClick={() => setRelationTypeInput(suggestion)}
+                    className={`text-[11px] px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                      relationTypeInput === suggestion
+                        ? 'bg-purple-600 text-white border-purple-600 font-medium'
+                        : 'bg-paper-100 text-paper-700 border-paper-250 hover:bg-paper-200'
+                    }`}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+
+              <input
+                type="text"
+                value={relationTypeInput}
+                onChange={(e) => setRelationTypeInput(e.target.value)}
+                placeholder="es. Migliore amico d'infanzia, Rivalità d'onore..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleConfirmAddRelation();
+                  if (e.key === 'Escape') setIsLinkModalOpen(false);
+                }}
+                className="w-full px-3.5 py-2 text-sm bg-white border border-paper-300 rounded-xl text-paper-900 placeholder-paper-400 focus:outline-hidden focus:border-purple-600 focus:ring-1 focus:ring-purple-600 shadow-2xs font-sans"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-end gap-2 pt-2 border-t border-paper-200">
+              <button
+                type="button"
+                onClick={() => setIsLinkModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-paper-200 hover:bg-paper-300 text-paper-800 text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Annulla
+              </button>
+              <button
+                type="button"
+                disabled={!selectedTargetCharId}
+                onClick={handleConfirmAddRelation}
+                className="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+              >
+                Collega personaggio
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal Aggiungi Classe o Razza Personalizzata */}
       {addOptionType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay"
+          onClick={() => setAddOptionType(null)}
+        >
           <div 
             className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-sm overflow-hidden flex flex-col p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
@@ -871,11 +1288,11 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
           onDeleteCharacter(character.id);
           setShowDeleteConfirm(false);
         }}
-        title={isTtrpg ? 'Elimina PG o PNG' : 'Elimina scheda personaggio'}
+        title={isTtrpg ? 'Elimina PG o NPC' : 'Elimina scheda personaggio'}
         subtitle="Questa azione non può essere annullata"
         message={
           <span>
-            Sei sicuro di voler eliminare la scheda di <strong>"{character.name || (isTtrpg ? 'Nuovo PG / PNG' : 'Nuovo personaggio')}"</strong>?
+            Sei sicuro di voler eliminare la scheda di <strong>"{character.name || (isTtrpg ? 'Nuovo PG / NPC' : 'Nuovo personaggio')}"</strong>?
           </span>
         }
         confirmLabel="Elimina definitivamente"
@@ -889,7 +1306,7 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
           isOpen={!!expandedBox}
           onClose={() => setExpandedBox(null)}
           title={expandedBox.title}
-          subtitle={`Scheda di ${character.name || (isTtrpg ? 'Nuovo PG / PNG' : 'Nuovo personaggio')}`}
+          subtitle={`Scheda di ${character.name || (isTtrpg ? 'Nuovo PG / NPC' : 'Nuovo personaggio')}`}
           icon={expandedBox.icon}
           value={(character[expandedBox.field] as string) || ''}
           onChange={(val) => handleChange(expandedBox.field, val)}
@@ -905,6 +1322,17 @@ export const CharacterEditor: React.FC<CharacterEditorProps> = ({
         currentImage={character.imageUrl}
         onSaveImage={(url) => handleChange('imageUrl', url)}
         onRemoveImage={() => handleChange('imageUrl', undefined)}
+      />
+
+      {/* Image Lightbox Modal */}
+      <ImageLightboxModal
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        src={character.imageUrl}
+        alt={character.name}
+        title={character.name}
+        subtitle={character.alias || (isTtrpg ? (character.dndClass || 'Personaggio D&D') : 'Ritratto Personaggio')}
+        onEdit={() => setIsImageModalOpen(true)}
       />
     </div>
   );

@@ -1,5 +1,6 @@
-﻿import React, { useState, useRef } from 'react';
-import { X, Image as ImageIcon, Upload, Link as LinkIcon, AlertCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Image as ImageIcon, Upload, Link as LinkIcon, AlertCircle, Loader2 } from 'lucide-react';
+import { optimizeImage } from '../../utils/imageOptimizer';
 
 interface InsertImageModalProps {
   isOpen: boolean;
@@ -17,12 +18,27 @@ export const InsertImageModal: React.FC<InsertImageModalProps> = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [caption, setCaption] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (isOpen) {
+      setImagePreview(null);
+      setImageUrl('');
+      setCaption('');
+      setError(null);
+      setActiveTab('upload');
+      setIsOptimizing(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
     const file = e.target.files?.[0];
     if (!file) return;
@@ -32,17 +48,26 @@ export const InsertImageModal: React.FC<InsertImageModalProps> = ({
       return;
     }
 
-    if (file.size > 15 * 1024 * 1024) {
-      setError("L'immagine supera la dimensione massima consentita di 15MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      setError("L'immagine supera la dimensione massima consentita di 20MB.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result as string;
-      setImagePreview(result);
-    };
-    reader.readAsDataURL(file);
+    setIsOptimizing(true);
+    try {
+      const optimized = await optimizeImage(file);
+      setImagePreview(optimized);
+    } catch (err) {
+      console.error('Failed to optimize image, fallback to raw:', err);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setImagePreview(result);
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsOptimizing(false);
+    }
   };
 
   const handleUrlChange = (url: string) => {
@@ -75,7 +100,7 @@ export const InsertImageModal: React.FC<InsertImageModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 animate-in fade-in select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay"
       onClick={onClose}
     >
       <div 
@@ -152,13 +177,23 @@ export const InsertImageModal: React.FC<InsertImageModalProps> = ({
                 onClick={() => fileInputRef.current?.click()}
                 className="border-2 border-dashed border-paper-300 hover:border-folia-600 rounded-2xl p-6 text-center cursor-pointer bg-paper-100/50 hover:bg-paper-100 transition-all flex flex-col items-center justify-center gap-2"
               >
-                <div className="w-12 h-12 rounded-2xl bg-paper-200 flex items-center justify-center text-paper-500">
-                  <Upload className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="font-semibold text-folia-800">Clicca per selezionare un'immagine</span>
-                  <p className="text-[11px] text-paper-500 mt-0.5">Supporta file PNG, JPG, WEBP fino a 15 MB</p>
-                </div>
+                {isOptimizing ? (
+                  <div className="flex flex-col items-center justify-center py-2">
+                    <Loader2 className="w-8 h-8 text-folia-600 animate-spin mb-2" />
+                    <span className="font-semibold text-folia-800 text-xs">Ottimizzazione in corso...</span>
+                    <p className="text-[11px] text-paper-500 mt-0.5">Conversione in formato WebP leggero ad alta qualità</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-12 h-12 rounded-2xl bg-paper-200 flex items-center justify-center text-paper-500">
+                      <Upload className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="font-semibold text-folia-800">Clicca per selezionare un'immagine</span>
+                      <p className="text-[11px] text-paper-500 mt-0.5">PNG, JPG, WEBP fino a 20 MB (ottimizzata automaticamente)</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ) : (
@@ -212,7 +247,7 @@ export const InsertImageModal: React.FC<InsertImageModalProps> = ({
             </button>
             <button
               type="submit"
-              disabled={!imagePreview}
+              disabled={!imagePreview || isOptimizing}
               className="px-5 py-2 bg-folia-800 hover:bg-folia-900 disabled:opacity-35 disabled:hover:bg-folia-800 text-white rounded-xl font-semibold transition-colors cursor-pointer shadow-xs"
             >
               Inserisci immagine

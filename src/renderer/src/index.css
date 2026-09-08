@@ -39,6 +39,16 @@
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.25);
   }
+
+  /* Disable default browser number input spin arrows */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 }
 
 /* Electron Window Drag Utilities */
@@ -120,3 +130,28 @@
   padding-left: 1.5rem;
   margin: 0.75rem 0;
 }
+
+/* Hide spin buttons on number inputs in Folia */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Modals center in the workspace editing area (excluding sidebar) */
+.folia-modal-overlay {
+  padding-left: var(--sidebar-width, 0px) !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .folia-modal-overlay {
+    padding-left: 0 !important;
+  }
+}
+
+

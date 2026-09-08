@@ -48,14 +48,18 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         {hasExistingProject && currentProjectTitle && (
           <button
             onClick={onContinue}
-            className="group w-full bg-folia-700 hover:bg-folia-800 text-white rounded-2xl p-5 flex items-center gap-4 shadow-md hover:shadow-lg transition-all text-left cursor-pointer"
+            className="group w-full bg-gradient-to-r from-folia-50/90 via-folia-50/40 to-paper-50 hover:to-folia-50/70 border border-folia-200/80 hover:border-folia-300 rounded-2xl p-5 flex items-center gap-4 shadow-page hover:shadow-page-lg transition-all text-left cursor-pointer"
           >
-            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <ArrowRight className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 rounded-xl bg-folia-800 text-white flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 group-hover:bg-folia-900 transition-all">
+              <ArrowRight className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-folia-200 text-xs font-semibold uppercase tracking-wide mb-0.5">Continua da dove hai lasciato</div>
-              <div className="font-brand font-bold text-lg leading-tight truncate">{currentProjectTitle}</div>
+              <div className="text-folia-800 text-xs font-bold uppercase tracking-wider mb-0.5">Continua da dove hai lasciato</div>
+              <div className="font-brand font-bold text-lg text-paper-900 leading-tight truncate group-hover:text-folia-950 transition-colors">{currentProjectTitle}</div>
+            </div>
+            <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-folia-900 bg-white/85 group-hover:bg-white border border-folia-200/80 px-3.5 py-1.5 rounded-xl shadow-2xs group-hover:translate-x-0.5 transition-all">
+              <span>Riprendi</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </button>
         )}
@@ -68,19 +72,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             className={`group rounded-2xl p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all text-left cursor-pointer border ${
               hasExistingProject
                 ? 'bg-paper-50 hover:bg-paper-100 border-paper-300 text-paper-900'
-                : 'bg-folia-700 hover:bg-folia-800 text-white border-transparent shadow-md hover:shadow-lg'
+                : 'bg-gradient-to-r from-folia-50/90 via-folia-50/40 to-paper-50 hover:to-folia-50/70 border-folia-200 text-paper-900'
             }`}
           >
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform ${
-              hasExistingProject ? 'bg-folia-100' : 'bg-white/20'
+              hasExistingProject ? 'bg-folia-100' : 'bg-folia-800 text-white shadow-2xs'
             }`}>
               <Plus className={`w-6 h-6 ${hasExistingProject ? 'text-folia-700' : 'text-white'}`} />
             </div>
             <div>
-              <div className={`font-brand font-bold text-lg leading-tight ${hasExistingProject ? 'text-paper-900' : ''}`}>
+              <div className="font-brand font-bold text-lg leading-tight text-paper-900">
                 Nuovo progetto
               </div>
-              <div className={`text-sm mt-0.5 ${hasExistingProject ? 'text-paper-500' : 'text-folia-200'}`}>
+              <div className="text-sm mt-0.5 text-paper-500">
                 Romanzo, racconto, campagna D&D…
               </div>
             </div>

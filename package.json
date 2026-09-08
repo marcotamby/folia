@@ -1,6 +1,6 @@
 {
   "name": "folia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Folia - Writing & Worldbuilding Suite",
   "main": "dist/main/index.js",
   "scripts": {
@@ -13,7 +13,8 @@
     "build:electron": "tsc -p tsconfig.electron.json",
     "start": "electron .",
     "package": "npm run build && electron-builder --win --x64",
-    "package:mac": "npm run build && electron-builder --mac"
+    "package:mac": "npm run build && electron-builder --mac",
+    "website": "npx --yes serve website"
   },
   "dependencies": {
     "@tiptap/extension-character-count": "^2.11.5",
@@ -39,6 +40,7 @@
     "@types/jszip": "^3.4.0",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "hyphen": "^1.14.1",
     "jszip": "^3.10.1",
     "lucide-react": "^1.16.0",
     "react": "^19.0.0",

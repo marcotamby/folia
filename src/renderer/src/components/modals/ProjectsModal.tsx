@@ -88,7 +88,10 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay"
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}

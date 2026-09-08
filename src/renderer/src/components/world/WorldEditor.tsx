@@ -19,6 +19,7 @@ import { WorldEntry } from '../../types';
 import { ConfirmModal } from '../common/ConfirmModal';
 import { FocusTextModal } from '../common/FocusTextModal';
 import { ImageUploadModal } from '../modals/ImageUploadModal';
+import { ImageLightboxModal } from '../modals/ImageLightboxModal';
 
 interface WorldEditorProps {
   entry: WorldEntry | null;
@@ -41,6 +42,7 @@ export const WorldEditor: React.FC<WorldEditorProps> = ({
     placeholder?: string;
   } | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   if (!entry) {
     return (
@@ -79,11 +81,17 @@ export const WorldEditor: React.FC<WorldEditorProps> = ({
         {/* Header Entry Card */}
         <div className="bg-paper-50 rounded-2xl border border-paper-250 p-6 md:p-8 shadow-page">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-paper-200">
-            <div className="flex items-start gap-4">
-              <div className="flex flex-col items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="w-16 md:w-20 shrink-0 flex flex-col items-center gap-1.5">
                 <div 
-                  onClick={() => setIsImageModalOpen(true)}
-                  title="Clicca per aggiungere o cambiare l'illustrazione dell'ambientazione"
+                  onClick={() => {
+                    if (entry.imageUrl) {
+                      setIsLightboxOpen(true);
+                    } else {
+                      setIsImageModalOpen(true);
+                    }
+                  }}
+                  title={entry.imageUrl ? "Clicca per ingrandire l'illustrazione" : "Clicca per aggiungere l'illustrazione"}
                   className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-emerald-100/70 border-2 border-emerald-200/80 hover:border-folia-600 flex items-center justify-center text-emerald-800 text-2xl font-bold font-brand shadow-xs relative group cursor-pointer transition-all overflow-hidden"
                 >
                   {entry.imageUrl ? (
@@ -98,18 +106,27 @@ export const WorldEditor: React.FC<WorldEditorProps> = ({
 
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-150">
-                    <Camera className="w-5 h-5 mb-0.5" />
-                    <span className="text-[9px] font-sans font-bold">Cambia</span>
+                    {entry.imageUrl ? (
+                      <>
+                        <Maximize2 className="w-5 h-5 mb-0.5" />
+                        <span className="text-[10px] font-sans font-bold">Ingrandisci</span>
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-5 h-5 mb-0.5" />
+                        <span className="text-[10px] font-sans font-bold">Aggiungi</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setIsImageModalOpen(true)}
-                  className="text-[11px] font-sans font-medium text-folia-700 hover:text-folia-950 hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+                  className="text-xs font-medium text-paper-500 hover:text-folia-800 hover:underline cursor-pointer transition-colors pt-0.5"
+                  title={entry.imageUrl ? "Modifica o rimuovi illustrazione" : "Carica illustrazione"}
                 >
-                  <Camera className="w-3 h-3" />
-                  <span>{entry.imageUrl ? 'Modifica' : '+ Foto'}</span>
+                  {entry.imageUrl ? 'Modifica' : '+ Foto'}
                 </button>
               </div>
 
@@ -121,9 +138,11 @@ export const WorldEditor: React.FC<WorldEditorProps> = ({
                   placeholder={t('world.name')}
                   className="text-2xl md:text-3xl font-brand font-bold text-paper-900 bg-transparent border-none focus:outline-hidden focus:ring-1 focus:ring-folia-600 rounded-lg px-1 w-full placeholder-paper-300"
                 />
-                <span className="text-xs text-emerald-800 font-semibold px-2.5 py-1 bg-emerald-50 rounded-lg border border-emerald-200 inline-block mt-1">
-                  {categories.find(c => c.value === entry.category)?.label || entry.category}
-                </span>
+                <div className="mt-1 px-1">
+                  <span className="text-xs text-emerald-800 font-semibold px-2.5 py-1 bg-emerald-50 rounded-lg border border-emerald-200 inline-block">
+                    {categories.find(c => c.value === entry.category)?.label || entry.category}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -167,32 +186,64 @@ export const WorldEditor: React.FC<WorldEditorProps> = ({
 
         {/* Location Artwork / Banner (if set) */}
         {entry.imageUrl && (
-          <div className="relative rounded-2xl overflow-hidden border border-paper-300 shadow-page group animate-in fade-in">
-            <img
-              src={entry.imageUrl}
-              alt={entry.name}
-              className="w-full h-56 md:h-72 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
-              <div className="text-white drop-shadow-md">
-                <span className="text-[11px] uppercase tracking-wider font-semibold opacity-80">Illustrazione del luogo</span>
-                <div className="text-base font-bold font-brand">{entry.name}</div>
+          <div className="relative rounded-2xl overflow-hidden border border-paper-300 shadow-page bg-paper-100/60 group animate-in fade-in">
+            {/* Clickable Image Viewport - preserves full aspect ratio, never cut off */}
+            <div 
+              onClick={() => setIsLightboxOpen(true)}
+              title="Clicca per ingrandire l'immagine"
+              className="relative w-full flex items-center justify-center bg-paper-950/5 cursor-pointer group/art overflow-hidden min-h-[220px] max-h-[580px]"
+            >
+              <img
+                src={entry.imageUrl}
+                alt={entry.name}
+                className="w-full max-h-[580px] object-contain transition-transform duration-200 group-hover/art:scale-[1.01]"
+              />
+              {/* Subtle hover overlay hint */}
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/art:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                <div className="px-3.5 py-1.5 rounded-xl bg-black/75 text-white text-xs font-semibold backdrop-blur-xs flex items-center gap-2 shadow-lg">
+                  <Maximize2 className="w-4 h-4" />
+                  <span>Clicca per ingrandire</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+            </div>
+
+            {/* Bottom Bar info & actions */}
+            <div className="px-5 py-3 bg-paper-50 border-t border-paper-250 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="min-w-0">
+                <span className="text-[10.5px] uppercase tracking-wider font-bold text-paper-500">
+                  Illustrazione dell'ambientazione
+                </span>
+                <div className="text-base font-bold font-brand text-paper-900 truncate">
+                  {entry.name}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="px-3 py-1.5 bg-paper-100 hover:bg-paper-200 text-paper-800 text-xs rounded-xl font-semibold transition-colors cursor-pointer border border-paper-250 flex items-center gap-1.5 shadow-2xs"
+                  title="Visualizza a schermo intero"
+                >
+                  <Maximize2 className="w-3.5 h-3.5 text-paper-600" />
+                  <span>Ingrandisci</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => setIsImageModalOpen(true)}
-                  className="px-3 py-1.5 bg-white/90 hover:bg-white text-paper-900 text-xs rounded-xl font-semibold backdrop-blur-xs transition-colors cursor-pointer shadow-xs"
+                  className="px-3 py-1.5 bg-folia-100 hover:bg-folia-200 text-folia-900 text-xs rounded-xl font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                  title="Cambia immagine"
                 >
-                  Cambia
+                  <Camera className="w-3.5 h-3.5 text-folia-700" />
+                  <span>Cambia</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => handleChange('imageUrl', undefined)}
-                  className="px-3 py-1.5 bg-rose-600/90 hover:bg-rose-600 text-white text-xs rounded-xl font-semibold backdrop-blur-xs transition-colors cursor-pointer shadow-xs"
+                  className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs rounded-xl font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                  title="Rimuovi immagine"
                 >
-                  Rimuovi
+                  <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Rimuovi</span>
                 </button>
               </div>
             </div>
@@ -394,6 +445,17 @@ export const WorldEditor: React.FC<WorldEditorProps> = ({
         currentImage={entry.imageUrl}
         onSaveImage={(url) => handleChange('imageUrl', url)}
         onRemoveImage={() => handleChange('imageUrl', undefined)}
+      />
+
+      {/* Image Lightbox Modal */}
+      <ImageLightboxModal
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        src={entry.imageUrl}
+        alt={entry.name}
+        title={entry.name}
+        subtitle={`Illustrazione - ${categories.find(c => c.value === entry.category)?.label || 'Ambientazione'}`}
+        onEdit={() => setIsImageModalOpen(true)}
       />
     </div>
   );

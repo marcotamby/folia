@@ -15,6 +15,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
   t
 }) => {
   const notesList = project.notes || [];
+  const isTtrpg = project.settings?.projectType === 'ttrpg_master';
 
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(
     notesList.length > 0 ? notesList[0].id : null
@@ -27,9 +28,12 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
   const handleAddNote = () => {
     const newNote: ResearchNote = {
       id: 'note-' + Date.now(),
-      title: 'Nuova nota di ricerca',
+      title: isTtrpg ? 'Nuova nota di campagna' : 'Nuova nota di ricerca',
       content: '',
-      tags: ['ricerca'],
+      placeholder: isTtrpg
+        ? 'Regole speciali, note di sessione, dettagli sui PNG o varianti...'
+        : 'Scrivi qui i tuoi appunti di ricerca, riferimenti storici, dettagli tecnici o bozze...',
+      tags: [isTtrpg ? 'campagna' : 'ricerca'],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -117,8 +121,8 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
                     <Trash2 className="w-3 h-3" />
                   </button>
                 </div>
-                <p className="text-[11px] text-paper-500 line-clamp-2 leading-relaxed">
-                  {note.content || 'Nessun contenuto...'}
+                <p className={`text-[11px] line-clamp-2 leading-relaxed ${note.content ? 'text-paper-600' : 'text-paper-400 italic'}`}>
+                  {note.content || note.placeholder || 'Nessun contenuto...'}
                 </p>
               </div>
             ))
@@ -160,9 +164,9 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
             <textarea
               value={activeNote.content || ''}
               onChange={(e) => handleUpdateNote(activeNote.id, 'content', e.target.value)}
-              placeholder="Scrivi qui i tuoi appunti di ricerca, riferimenti storici, dettagli tecnici o bozze..."
+              placeholder={activeNote.placeholder || (isTtrpg ? "Regole speciali della campagna, varianti di riposo, critici e gestione del party..." : "Scrivi qui i tuoi appunti di ricerca, riferimenti storici, dettagli tecnici o bozze...")}
               rows={16}
-              className="w-full p-4 bg-white rounded-2xl border border-paper-250 shadow-xs focus:outline-hidden focus:border-folia-600 text-sm text-paper-800 leading-relaxed font-serif resize-none"
+              className="w-full p-4 bg-white rounded-2xl border border-paper-250 shadow-xs focus:outline-hidden focus:border-folia-600 text-sm text-paper-800 leading-relaxed font-serif resize-none placeholder:text-paper-400 placeholder:italic"
             />
           </div>
         ) : (
@@ -178,12 +182,12 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
         <FocusTextModal
           isOpen={isExpanded}
           onClose={() => setIsExpanded(false)}
-          title={activeNote.title || 'Nota di ricerca'}
-          subtitle="Sezione note e documentazione"
+          title={activeNote.title || (isTtrpg ? 'Nota di campagna' : 'Nota di ricerca')}
+          subtitle={isTtrpg ? "Sezione note e regole della campagna" : "Sezione note e documentazione"}
           icon={<StickyNote className="w-5 h-5 text-teal-700" />}
           value={activeNote.content || ''}
           onChange={(val) => handleUpdateNote(activeNote.id, 'content', val)}
-          placeholder="Scrivi qui i tuoi appunti di ricerca, riferimenti storici, dettagli tecnici o bozze..."
+          placeholder={activeNote.placeholder || (isTtrpg ? "Regole speciali della campagna, varianti di riposo, critici e gestione del party..." : "Scrivi qui i tuoi appunti di ricerca, riferimenti storici, dettagli tecnici o bozze...")}
         />
       )}
     </div>

@@ -26,8 +26,8 @@ export const LinkModal: React.FC<LinkModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setUrl(initialUrl || '');
-      setText(initialText || '');
+      setUrl(typeof initialUrl === 'string' ? initialUrl : '');
+      setText(typeof initialText === 'string' ? initialText : '');
       setTimeout(() => {
         inputRef.current?.focus();
         inputRef.current?.select();
@@ -39,7 +39,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    let cleanUrl = url.trim();
+    let cleanUrl = typeof url === 'string' ? url.trim() : '';
     if (!cleanUrl) return;
 
     // Automatically prepend https:// if missing protocol
@@ -47,12 +47,12 @@ export const LinkModal: React.FC<LinkModalProps> = ({
       cleanUrl = 'https://' + cleanUrl;
     }
 
-    onSave(cleanUrl, text.trim() || undefined);
+    onSave(cleanUrl, typeof text === 'string' ? text.trim() || undefined : undefined);
     onClose();
   };
 
   const handleTestLink = () => {
-    let cleanUrl = url.trim();
+    let cleanUrl = typeof url === 'string' ? url.trim() : '';
     if (!cleanUrl) return;
     if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://') && !cleanUrl.startsWith('mailto:')) {
       cleanUrl = 'https://' + cleanUrl;
@@ -66,7 +66,10 @@ export const LinkModal: React.FC<LinkModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay"
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-md overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}

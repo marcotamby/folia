@@ -1,9 +1,43 @@
-import { app, BrowserWindow, ipcMain, dialog, shell, Menu, MenuItem } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell, Menu, MenuItem, protocol, net, session, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as fsSync from 'fs';
+import { pathToFileURL } from 'url';
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'folia-media',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      stream: true,
+      bypassCSP: true,
+      corsEnabled: true
+    }
+  }
+]);
 
 let mainWindow: BrowserWindow | null = null;
 let splashWindow: BrowserWindow | null = null;
+
+function getFilePathFromArgs(args: string[]): string | null {
+  for (const arg of args) {
+    if (!arg.startsWith('--') && !arg.startsWith('-')) {
+      const lower = arg.toLowerCase();
+      if (lower.endsWith('.folia') || lower.endsWith('.json')) {
+        try {
+          if (fsSync.existsSync(arg)) {
+            return path.resolve(arg);
+          }
+        } catch {}
+      }
+    }
+  }
+  return null;
+}
+
+let initialFilePath: string | null = getFilePathFromArgs(process.argv);
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
@@ -51,11 +85,97 @@ function createSplashWindow() {
 
 let isForceClosing = false;
 
+interface WindowState {
+  width: number;
+  height: number;
+  x?: number;
+  y?: number;
+  isMaximized: boolean;
+}
+
+const DEFAULT_WINDOW_STATE: WindowState = {
+  width: 1360,
+  height: 900,
+  isMaximized: false
+};
+
+function getWindowStateFilePath(): string {
+  return path.join(app.getPath('userData'), 'window-state.json');
+}
+
+function loadWindowState(): WindowState {
+  try {
+    const filePath = getWindowStateFilePath();
+    if (fsSync.existsSync(filePath)) {
+      const raw = fsSync.readFileSync(filePath, 'utf-8');
+      const data = JSON.parse(raw);
+      const width = typeof data.width === 'number' && data.width >= 960 ? data.width : DEFAULT_WINDOW_STATE.width;
+      const height = typeof data.height === 'number' && data.height >= 640 ? data.height : DEFAULT_WINDOW_STATE.height;
+      const isMaximized = Boolean(data.isMaximized);
+
+      let x = typeof data.x === 'number' ? data.x : undefined;
+      let y = typeof data.y === 'number' ? data.y : undefined;
+
+      // Validate coordinates against connected displays to avoid opening off-screen
+      if (x !== undefined && y !== undefined) {
+        const displays = screen.getAllDisplays();
+        const isVisible = displays.some(display => {
+          const { x: dx, y: dy, width: dw, height: dh } = display.bounds;
+          return (
+            x! + 100 > dx &&
+            x! < dx + dw &&
+            y! + 50 > dy &&
+            y! < dy + dh
+          );
+        });
+        if (!isVisible) {
+          x = undefined;
+          y = undefined;
+        }
+      }
+
+      return { width, height, x, y, isMaximized };
+    }
+  } catch (err) {
+    console.error('Failed to load window state:', err);
+  }
+  return { ...DEFAULT_WINDOW_STATE };
+}
+
+let saveStateTimeout: NodeJS.Timeout | null = null;
+let currentWindowState: WindowState = { ...DEFAULT_WINDOW_STATE };
+
+function saveWindowStateDebounced(state: WindowState) {
+  if (saveStateTimeout) {
+    clearTimeout(saveStateTimeout);
+  }
+  saveStateTimeout = setTimeout(() => {
+    saveWindowStateSync(state);
+  }, 300);
+}
+
+function saveWindowStateSync(state: WindowState) {
+  if (saveStateTimeout) {
+    clearTimeout(saveStateTimeout);
+    saveStateTimeout = null;
+  }
+  try {
+    const filePath = getWindowStateFilePath();
+    fsSync.writeFileSync(filePath, JSON.stringify(state, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Failed to save window state:', err);
+  }
+}
+
 function createMainWindow() {
   isForceClosing = false;
+  currentWindowState = loadWindowState();
+
   mainWindow = new BrowserWindow({
-    width: 1360,
-    height: 900,
+    width: currentWindowState.width,
+    height: currentWindowState.height,
+    x: currentWindowState.x,
+    y: currentWindowState.y,
     minWidth: 960,
     minHeight: 640,
     show: false,
@@ -71,15 +191,45 @@ function createMainWindow() {
     }
   });
 
+  const updateNormalBounds = () => {
+    if (!mainWindow || mainWindow.isMaximized() || mainWindow.isMinimized() || mainWindow.isFullScreen()) return;
+    const bounds = mainWindow.getBounds();
+    currentWindowState.width = bounds.width;
+    currentWindowState.height = bounds.height;
+    currentWindowState.x = bounds.x;
+    currentWindowState.y = bounds.y;
+    saveWindowStateDebounced(currentWindowState);
+  };
+
+  mainWindow.on('resize', updateNormalBounds);
+  mainWindow.on('move', updateNormalBounds);
+
   mainWindow.on('maximize', () => {
+    currentWindowState.isMaximized = true;
+    saveWindowStateDebounced(currentWindowState);
     mainWindow?.webContents.send('window:maximized-status', true);
   });
 
   mainWindow.on('unmaximize', () => {
+    currentWindowState.isMaximized = false;
+    saveWindowStateDebounced(currentWindowState);
     mainWindow?.webContents.send('window:maximized-status', false);
   });
 
   mainWindow.on('close', (e) => {
+    if (mainWindow) {
+      if (mainWindow.isMaximized()) {
+        currentWindowState.isMaximized = true;
+      } else if (!mainWindow.isMinimized()) {
+        const bounds = mainWindow.getBounds();
+        currentWindowState.isMaximized = false;
+        currentWindowState.width = bounds.width;
+        currentWindowState.height = bounds.height;
+        currentWindowState.x = bounds.x;
+        currentWindowState.y = bounds.y;
+      }
+      saveWindowStateSync(currentWindowState);
+    }
     if (!isForceClosing) {
       e.preventDefault();
       mainWindow?.webContents.send('app:request-close');
@@ -139,6 +289,9 @@ function createMainWindow() {
         splashWindow.close();
         splashWindow = null;
       }
+      if (currentWindowState.isMaximized) {
+        mainWindow?.maximize();
+      }
       mainWindow?.show();
       mainWindow?.focus();
     }, remaining);
@@ -151,6 +304,37 @@ function createMainWindow() {
 
 // IPC Handlers
 function setupIpcHandlers() {
+  ipcMain.on('app:getInitialFileSync', (event) => {
+    if (initialFilePath) {
+      const p = initialFilePath;
+      initialFilePath = null; // consume once
+      try {
+        const raw = fsSync.readFileSync(p, 'utf-8');
+        const data = JSON.parse(raw);
+        event.returnValue = { filePath: p, data };
+        return;
+      } catch (err: any) {
+        console.error('Failed to load initial file synchronously:', err);
+      }
+    }
+    event.returnValue = null;
+  });
+
+  ipcMain.handle('app:getInitialFile', async () => {
+    if (initialFilePath) {
+      const p = initialFilePath;
+      initialFilePath = null; // consume once
+      try {
+        const raw = await fs.readFile(p, 'utf-8');
+        const data = JSON.parse(raw);
+        return { filePath: p, data };
+      } catch (err: any) {
+        console.error('Failed to load initial file:', err);
+      }
+    }
+    return null;
+  });
+
   ipcMain.handle('app:getSystemLanguage', () => {
     const locale = app.getLocale().toLowerCase();
     if (locale.startsWith('it')) return 'it';
@@ -238,8 +422,8 @@ function setupIpcHandlers() {
       extension = 'html';
       filterName = 'File HTML (*.html)';
     } else if (format === 'docx') {
-      extension = 'doc';
-      filterName = 'Documento Word (*.doc)';
+      extension = 'docx';
+      filterName = 'Documento Microsoft Word (*.docx)';
     } else if (format === 'epub') {
       extension = 'epub';
       filterName = 'E-Book EPUB (*.epub)';
@@ -266,6 +450,53 @@ function setupIpcHandlers() {
     }
   });
 
+  ipcMain.handle('fs:exportPDF', async (_, { defaultName, htmlContent }) => {
+    if (!mainWindow) return { canceled: true };
+
+    const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+      title: 'Esporta in PDF',
+      defaultPath: `${defaultName || 'Manoscritto'}.pdf`,
+      filters: [{ name: 'Documento PDF (*.pdf)', extensions: ['pdf'] }]
+    });
+
+    if (canceled || !filePath) return { canceled: true };
+
+    let printWindow: BrowserWindow | null = null;
+    try {
+      printWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: true
+        }
+      });
+
+      await printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`);
+
+      // Ensure web fonts and layout are completely loaded before generating PDF
+      await printWindow.webContents.executeJavaScript(`
+        Promise.all([
+          document.fonts ? document.fonts.ready : Promise.resolve(),
+          new Promise(resolve => setTimeout(resolve, 400))
+        ])
+      `);
+
+      const pdfBuffer = await printWindow.webContents.printToPDF({
+        printBackground: true,
+        preferCSSPageSize: true
+      });
+
+      await fs.writeFile(filePath, pdfBuffer);
+      return { canceled: false, filePath, success: true };
+    } catch (err: any) {
+      return { canceled: false, error: err.message };
+    } finally {
+      if (printWindow) {
+        printWindow.destroy();
+      }
+    }
+  });
+
   ipcMain.handle('dialog:printToPDF', async () => {
     if (!mainWindow) return;
     mainWindow.webContents.print({ silent: false, printBackground: true });
@@ -287,8 +518,25 @@ function setupIpcHandlers() {
     mainWindow?.webContents.send('app:request-close');
   });
 
+  ipcMain.handle('window:isMaximized', () => {
+    return mainWindow?.isMaximized() ?? false;
+  });
+
   ipcMain.on('window:force-close', () => {
     isForceClosing = true;
+    if (mainWindow) {
+      if (mainWindow.isMaximized()) {
+        currentWindowState.isMaximized = true;
+      } else if (!mainWindow.isMinimized()) {
+        const bounds = mainWindow.getBounds();
+        currentWindowState.isMaximized = false;
+        currentWindowState.width = bounds.width;
+        currentWindowState.height = bounds.height;
+        currentWindowState.x = bounds.x;
+        currentWindowState.y = bounds.y;
+      }
+      saveWindowStateSync(currentWindowState);
+    }
     mainWindow?.close();
   });
 
@@ -324,9 +572,152 @@ function setupIpcHandlers() {
     }
     return false;
   });
+
+  // Audio recordings IPC handlers
+  ipcMain.handle('audio:saveRecording', async (_, { campaignTitle, fileName, buffer }: { campaignTitle: string; fileName: string; buffer: Uint8Array | ArrayBuffer }) => {
+    try {
+      const documentsFolder = app.getPath('documents');
+      const safeCampaign = (campaignTitle || 'Campagna D&D').replace(/[<>:"/\\|?*]/g, '_').trim();
+      const folderPath = path.join(documentsFolder, 'Folia', 'Registrazioni', safeCampaign);
+      await fs.mkdir(folderPath, { recursive: true });
+
+      const safeFileName = (fileName || `Sessione_${Date.now()}.webm`).replace(/[<>:"/\\|?*]/g, '_');
+      const targetFilePath = path.join(folderPath, safeFileName);
+
+      const nodeBuffer = Buffer.from(buffer as any);
+      await fs.writeFile(targetFilePath, nodeBuffer);
+      const stat = await fs.stat(targetFilePath);
+
+      return {
+        success: true,
+        filePath: targetFilePath,
+        fileSizeBytes: stat.size
+      };
+    } catch (err: any) {
+      console.error('Error saving audio recording:', err);
+      return { success: false, error: err.message };
+    }
+  });
+
+  ipcMain.handle('audio:deleteRecording', async (_, filePath: string) => {
+    try {
+      if (!filePath) return { success: false, error: 'Percorso non specificato' };
+      try {
+        await fs.unlink(filePath);
+      } catch (e: any) {}
+      return { success: true };
+    } catch (err: any) {
+      console.error('Error deleting audio recording:', err);
+      return { success: false, error: err.message };
+    }
+  });
+
+  ipcMain.handle('audio:showInFolder', async (_, filePath: string) => {
+    try {
+      if (!filePath) return { success: false };
+      shell.showItemInFolder(filePath);
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  });
+
+  ipcMain.handle('audio:readRecordingBuffer', async (_, filePath: string) => {
+    try {
+      if (!filePath) return { success: false, error: 'Percorso non specificato' };
+      const resolved = path.resolve(filePath);
+      const fileBuffer = await fs.readFile(resolved);
+      const arrayBuffer = fileBuffer.buffer.slice(
+        fileBuffer.byteOffset,
+        fileBuffer.byteOffset + fileBuffer.byteLength
+      );
+      return { success: true, buffer: arrayBuffer };
+    } catch (err: any) {
+      console.error('Error reading audio file buffer:', err);
+      return { success: false, error: err.message };
+    }
+  });
 }
 
-app.whenReady().then(() => {
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+
+if (!gotSingleInstanceLock) {
+  app.quit();
+} else {
+  app.on('second-instance', async (_event, commandLine) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+
+      const secondFilePath = getFilePathFromArgs(commandLine);
+      if (secondFilePath) {
+        try {
+          const raw = await fs.readFile(secondFilePath, 'utf-8');
+          const data = JSON.parse(raw);
+          mainWindow.webContents.send('app:open-file', { filePath: secondFilePath, data });
+        } catch (e) {
+          console.error('Failed to open project file from second instance:', e);
+        }
+      }
+    }
+  });
+
+  app.whenReady().then(() => {
+  // Protocol handler for streaming local audio files smoothly
+  protocol.handle('folia-media', (request) => {
+    try {
+      const url = new URL(request.url);
+      let targetPath = '';
+      if (url.searchParams.has('file')) {
+        targetPath = decodeURIComponent(url.searchParams.get('file') || '');
+      } else if (url.searchParams.has('path')) {
+        targetPath = decodeURIComponent(url.searchParams.get('path') || '');
+      } else {
+        let raw = request.url.slice('folia-media:'.length);
+        while (raw.startsWith('/')) raw = raw.slice(1);
+        if (raw.toLowerCase().startsWith('localhost/')) raw = raw.slice('localhost/'.length);
+        targetPath = decodeURIComponent(raw);
+        if (/^[a-zA-Z]\//.test(targetPath)) {
+          targetPath = targetPath[0] + ':' + targetPath.slice(1);
+        }
+      }
+
+      if (!targetPath) return new Response('File path missing', { status: 400 });
+
+      const resolved = path.resolve(targetPath);
+      const fileUrl = pathToFileURL(resolved).toString();
+      return net.fetch(fileUrl);
+    } catch (err) {
+      console.error('Failed to handle folia-media request:', err);
+      return new Response('Media not found', { status: 404 });
+    }
+  });
+
+  // Ensure ONLY microphone permissions (never camera/video) are handled
+  session.defaultSession.setPermissionCheckHandler((_webContents, permission, _origin, details) => {
+    if (permission === 'media') {
+      const mediaType = (details as any)?.mediaType;
+      // Strictly deny any video/camera check
+      if (mediaType === 'video') return false;
+      if (mediaType === 'audio') return true;
+    }
+    return false;
+  });
+  session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback, details) => {
+    if (permission === 'media') {
+      const mediaTypes = (details as any)?.mediaTypes;
+      // Strictly deny if video/camera is requested
+      if (Array.isArray(mediaTypes) && mediaTypes.includes('video')) {
+        return callback(false);
+      }
+      // Allow microphone only
+      if (Array.isArray(mediaTypes) && mediaTypes.includes('audio')) {
+        return callback(true);
+      }
+    }
+    callback(false);
+  });
+
   setupIpcHandlers();
   createSplashWindow();
   createMainWindow();
@@ -343,3 +734,4 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+}

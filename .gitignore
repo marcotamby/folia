@@ -9,6 +9,16 @@ release/
 *.pkg
 *.zip
 *.blockmap
+*.dll
+*.pak
+*.bin
+*.dat
+LICENSES.*
+LICENSE.electron.*
+locales/
+resources/
+uninstallerIcon.ico
+vk_swiftshader_icd.json
 
 # Environment variables and secrets
 .env

@@ -87,6 +87,6 @@
     "uninstallerIcon": "build/icon.ico",
     "installerHeaderIcon": "build/icon.ico",
     "deleteAppDataOnUninstall": false,
-    "artifactName": "Folia-Installer-Setup-1.0.0.${ext}"
+    "artifactName": "Folia-Installer-Setup-${version}.${ext}"
   }
 }

@@ -28,11 +28,14 @@ import {
   Image as ImageIcon,
   Search,
   MessageSquare,
-  GitBranch
+  GitBranch,
+  FileText,
+  Sliders
 } from 'lucide-react';
 import { Editor } from '@tiptap/react';
-import { PageFormat, PageMargins, FontFamily, ParagraphSpacing, PageNumberPosition, PageNumberFormat } from '../../types';
+import { PageFormat, PageMargins, CustomPageMargins, FontFamily, ParagraphSpacing, PageNumberPosition, PageNumberFormat } from '../../types';
 import { CustomSelect } from '../common/CustomSelect';
+import { Checkbox } from '../common/Checkbox';
 
 interface EditorToolbarProps {
   editor: Editor | null;
@@ -47,6 +50,8 @@ interface EditorToolbarProps {
   onChangePageFormat: (format: PageFormat) => void;
   pageMargins: PageMargins;
   onChangePageMargins: (margins: PageMargins) => void;
+  customMargins?: CustomPageMargins;
+  onOpenCustomMargins?: () => void;
   firstLineIndent: number;
   onChangeFirstLineIndent: (indent: number) => void;
   paragraphSpacing: ParagraphSpacing;
@@ -74,6 +79,10 @@ interface EditorToolbarProps {
   onToggleTrackChanges?: () => void;
   onAcceptAllChanges?: () => void;
   onRejectAllChanges?: () => void;
+  onOpenWordCount?: () => void;
+  isTitleFocused?: boolean;
+  titleAlignment?: 'left' | 'center' | 'right' | 'justify';
+  onChangeTitleAlignment?: (align: 'left' | 'center' | 'right' | 'justify') => void;
   t: (key: string) => string;
 }
 
@@ -90,6 +99,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onChangePageFormat,
   pageMargins,
   onChangePageMargins,
+  customMargins,
+  onOpenCustomMargins,
   firstLineIndent,
   onChangeFirstLineIndent,
   paragraphSpacing,
@@ -117,6 +128,10 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onToggleTrackChanges,
   onAcceptAllChanges,
   onRejectAllChanges,
+  onOpenWordCount,
+  isTitleFocused = false,
+  titleAlignment = 'left',
+  onChangeTitleAlignment,
   t
 }) => {
   const [showPageNumMenu, setShowPageNumMenu] = useState(false);
@@ -128,6 +143,21 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   const textColorRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
   const tableMenuRef = useRef<HTMLDivElement>(null);
+
+  const handleInsertTable = (rows: number, cols: number) => {
+    setShowTableMenu(false);
+    if (!editor) return;
+
+    editor.chain().focus().run();
+    try {
+      const success = editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+      if (!success) {
+        editor.chain().focus().insertContent('<p></p>').insertTable({ rows, cols, withHeaderRow: true }).run();
+      }
+    } catch (err) {
+      console.error('Error inserting table:', err);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -252,7 +282,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   return (
     <div className="border-b border-paper-200 bg-paper-50 px-3 py-2 flex flex-col gap-1.5 text-xs select-none sticky top-0 z-20 shadow-2xs">
       {/* ROW 1: Font Testo, Font Titoli, Dimensione, Stili, Allineamenti ed Elenchi */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-y-1.5 gap-x-2 flex-wrap">
         <div className="flex items-center gap-1.5 flex-wrap">
           {/* Undo / Redo */}
           <div className="flex items-center gap-0.5 pr-1.5 border-r border-paper-200">
@@ -337,7 +367,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
               options={[
                 { value: 'p', label: 'Testo normale' },
                 { value: 'h1', label: 'Titolo 1 (capitolo)' },
-                { value: 'h2', label: 'Titolo 2 (scena)' },
+                { value: 'h2', label: 'Titolo 2 (sezione / scena)' },
                 { value: 'h3', label: 'Titolo 3 (sottosezione)' }
               ]}
               title="Stile paragrafo o intestazione"
@@ -532,7 +562,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             {onOpenLink && (
               <button
                 type="button"
-                onClick={onOpenLink}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => onOpenLink()}
                 title="Inserisci o modifica collegamento web (Ctrl + K)"
                 className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                   editor.isActive('link') ? 'bg-folia-100 text-folia-900 font-semibold' : 'text-paper-700 hover:bg-paper-200'
@@ -546,6 +577,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             <div className="relative" ref={tableMenuRef}>
               <button
                 type="button"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setShowTableMenu(!showTableMenu)}
                 title="Inserisci tabella o gestisci celle"
                 className={`p-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-0.5 ${
@@ -557,14 +589,17 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
               </button>
 
               {showTableMenu && (
-                <div className="absolute left-0 top-full mt-1.5 bg-paper-50 border border-paper-300 rounded-xl shadow-modal p-3 z-50 animate-in fade-in space-y-2.5 select-none w-52">
+                <div 
+                  onMouseDown={(e) => e.preventDefault()}
+                  className="absolute left-0 top-full mt-1.5 bg-paper-50 border border-paper-300 rounded-xl shadow-modal p-3 z-50 animate-in fade-in space-y-2.5 select-none w-56"
+                >
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold text-paper-800">Inserisci tabella</span>
-                    <span className="font-mono text-[10.5px] text-folia-800 font-semibold">{hoverGrid.rows} × {hoverGrid.cols}</span>
+                    <span className="font-mono text-[11px] text-folia-800 font-semibold">{hoverGrid.rows} × {hoverGrid.cols}</span>
                   </div>
 
                   {/* 6x6 Grid Selector */}
-                  <div className="grid grid-cols-6 gap-1 p-1 bg-paper-100/60 rounded-lg border border-paper-250">
+                  <div className="grid grid-cols-6 gap-1 p-1.5 bg-paper-100/70 rounded-lg border border-paper-250">
                     {Array.from({ length: 6 }).map((_, r) => (
                       Array.from({ length: 6 }).map((_, c) => {
                         const isHovered = r < hoverGrid.rows && c < hoverGrid.cols;
@@ -572,10 +607,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                           <div
                             key={`${r}-${c}`}
                             onMouseEnter={() => setHoverGrid({ rows: r + 1, cols: c + 1 })}
-                            onClick={() => {
-                              editor.chain().focus().insertTable({ rows: r + 1, cols: c + 1, withHeaderRow: true }).run();
-                              setShowTableMenu(false);
-                            }}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => handleInsertTable(r + 1, c + 1)}
                             className={`w-6 h-6 rounded border cursor-pointer transition-colors ${
                               isHovered ? 'bg-folia-600 border-folia-700' : 'bg-white border-paper-300 hover:border-paper-400'
                             }`}
@@ -585,6 +618,16 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                     ))}
                   </div>
 
+                  {/* Quick Action Button for Table Insertion */}
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleInsertTable(hoverGrid.rows, hoverGrid.cols)}
+                    className="w-full py-1 px-2 bg-folia-700 hover:bg-folia-800 text-white rounded-lg text-xs font-semibold text-center transition-colors cursor-pointer shadow-xs"
+                  >
+                    Inserisci tabella {hoverGrid.rows} × {hoverGrid.cols}
+                  </button>
+
                   {/* Table active tools */}
                   {editor.isActive('table') && (
                     <div className="pt-2 border-t border-paper-200 space-y-1.5 text-[11px]">
@@ -592,6 +635,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                       <div className="grid grid-cols-2 gap-1 text-[10.5px]">
                         <button
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => { editor.chain().focus().addRowBefore().run(); setShowTableMenu(false); }}
                           className="px-2 py-1 bg-paper-100 hover:bg-paper-200 rounded text-left transition-colors cursor-pointer"
                         >
@@ -599,6 +643,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                         </button>
                         <button
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => { editor.chain().focus().addRowAfter().run(); setShowTableMenu(false); }}
                           className="px-2 py-1 bg-paper-100 hover:bg-paper-200 rounded text-left transition-colors cursor-pointer"
                         >
@@ -606,6 +651,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                         </button>
                         <button
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => { editor.chain().focus().addColumnBefore().run(); setShowTableMenu(false); }}
                           className="px-2 py-1 bg-paper-100 hover:bg-paper-200 rounded text-left transition-colors cursor-pointer"
                         >
@@ -613,6 +659,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                         </button>
                         <button
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => { editor.chain().focus().addColumnAfter().run(); setShowTableMenu(false); }}
                           className="px-2 py-1 bg-paper-100 hover:bg-paper-200 rounded text-left transition-colors cursor-pointer"
                         >
@@ -620,6 +667,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                         </button>
                         <button
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => { editor.chain().focus().deleteRow().run(); setShowTableMenu(false); }}
                           className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded text-left transition-colors cursor-pointer"
                         >
@@ -627,6 +675,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                         </button>
                         <button
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => { editor.chain().focus().deleteColumn().run(); setShowTableMenu(false); }}
                           className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded text-left transition-colors cursor-pointer"
                         >
@@ -635,6 +684,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                       </div>
                       <button
                         type="button"
+                        onMouseDown={(e) => e.preventDefault()}
                         onClick={() => { editor.chain().focus().deleteTable().run(); setShowTableMenu(false); }}
                         className="w-full px-2 py-1 bg-rose-100 hover:bg-rose-200 text-rose-900 rounded font-semibold text-center transition-colors cursor-pointer mt-1"
                       >
@@ -686,37 +736,73 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           {/* Text Alignment */}
           <div className="flex items-center gap-0.5 pr-1.5 border-r border-paper-200">
             <button
-              onClick={() => editor.chain().focus().setTextAlign('left').run()}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                if (isTitleFocused && onChangeTitleAlignment) {
+                  onChangeTitleAlignment('left');
+                } else if (editor) {
+                  editor.chain().focus().setTextAlign('left').run();
+                }
+              }}
               title={t('editor.align_left')}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                editor.isActive({ textAlign: 'left' }) ? 'bg-folia-100 text-folia-900' : 'text-paper-700 hover:bg-paper-200'
+                (isTitleFocused ? titleAlignment === 'left' : editor?.isActive({ textAlign: 'left' }))
+                  ? 'bg-folia-100 text-folia-900 font-semibold' 
+                  : 'text-paper-700 hover:bg-paper-200'
               }`}
             >
               <AlignLeft className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => editor.chain().focus().setTextAlign('center').run()}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                if (isTitleFocused && onChangeTitleAlignment) {
+                  onChangeTitleAlignment('center');
+                } else if (editor) {
+                  editor.chain().focus().setTextAlign('center').run();
+                }
+              }}
               title={t('editor.align_center')}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                editor.isActive({ textAlign: 'center' }) ? 'bg-folia-100 text-folia-900' : 'text-paper-700 hover:bg-paper-200'
+                (isTitleFocused ? titleAlignment === 'center' : editor?.isActive({ textAlign: 'center' }))
+                  ? 'bg-folia-100 text-folia-900 font-semibold' 
+                  : 'text-paper-700 hover:bg-paper-200'
               }`}
             >
               <AlignCenter className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => editor.chain().focus().setTextAlign('right').run()}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                if (isTitleFocused && onChangeTitleAlignment) {
+                  onChangeTitleAlignment('right');
+                } else if (editor) {
+                  editor.chain().focus().setTextAlign('right').run();
+                }
+              }}
               title={t('editor.align_right')}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                editor.isActive({ textAlign: 'right' }) ? 'bg-folia-100 text-folia-900' : 'text-paper-700 hover:bg-paper-200'
+                (isTitleFocused ? titleAlignment === 'right' : editor?.isActive({ textAlign: 'right' }))
+                  ? 'bg-folia-100 text-folia-900 font-semibold' 
+                  : 'text-paper-700 hover:bg-paper-200'
               }`}
             >
               <AlignRight className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                if (isTitleFocused && onChangeTitleAlignment) {
+                  onChangeTitleAlignment('justify');
+                } else if (editor) {
+                  editor.chain().focus().setTextAlign('justify').run();
+                }
+              }}
               title={t('editor.align_justify')}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                editor.isActive({ textAlign: 'justify' }) ? 'bg-folia-100 text-folia-900' : 'text-paper-700 hover:bg-paper-200'
+                (isTitleFocused ? titleAlignment === 'justify' : editor?.isActive({ textAlign: 'justify' }))
+                  ? 'bg-folia-100 text-folia-900 font-semibold' 
+                  : 'text-paper-700 hover:bg-paper-200'
               }`}
             >
               <AlignJustify className="w-3.5 h-3.5" />
@@ -736,7 +822,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             </button>
             <button
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              title={t('editor.ordered_list')}
+              title={t('editor.ordered_list') !== 'editor.ordered_list' ? t('editor.ordered_list') : 'Elenco numerato'}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                 editor.isActive('orderedList') ? 'bg-folia-100 text-folia-900' : 'text-paper-700 hover:bg-paper-200'
               }`}
@@ -745,7 +831,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             </button>
             <button
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
-              title={t('editor.blockquote')}
+              title={t('editor.blockquote') !== 'editor.blockquote' ? t('editor.blockquote') : 'Citazione'}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                 editor.isActive('blockquote') ? 'bg-folia-100 text-folia-900' : 'text-paper-700 hover:bg-paper-200'
               }`}
@@ -764,13 +850,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
       </div>
 
       {/* ROW 2: Special Characters, Indent, Hyphenation, Spellcheck, Page Breaks, Advanced Page Numbers, Formats & Margins */}
-      <div className="flex items-center justify-between gap-2 pt-1 border-t border-paper-200/70">
+      <div className="flex items-center justify-between gap-y-1.5 gap-x-2 pt-1 border-t border-paper-200/70 flex-wrap">
         <div className="flex items-center gap-1.5 flex-wrap relative">
           {/* Special Characters button */}
           <button
             onClick={onOpenSpecialChars}
             title={t('special_chars.title')}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-paper-100 hover:bg-folia-50 text-paper-800 hover:text-folia-900 border border-paper-300 hover:border-folia-400 font-serif font-semibold transition-colors shadow-2xs cursor-pointer"
+            className="h-7 flex items-center gap-1.5 px-2.5 rounded-lg bg-paper-100/90 hover:bg-folia-50 text-paper-800 hover:text-folia-900 border border-paper-300 hover:border-folia-400 font-serif font-semibold transition-colors shadow-2xs cursor-pointer shrink-0"
           >
             <span className="text-folia-800 font-bold text-xs">« » —</span>
             <span className="font-sans font-medium text-[11px]">{t('editor.special_chars')}</span>
@@ -780,6 +866,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <CustomSelect
             value={firstLineIndent.toString()}
             onChange={(val) => onChangeFirstLineIndent(Number(val))}
+            size="sm"
             options={[
               { value: '0', label: 'Rientro: nessuno' },
               { value: '0.5', label: 'Rientro: 0.5 cm' },
@@ -790,17 +877,31 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             title={t('editor.indent')}
           />
 
+          {/* Paragraph spacing */}
+          <CustomSelect
+            value={paragraphSpacing}
+            onChange={(val) => onChangeParagraphSpacing(val as ParagraphSpacing)}
+            size="sm"
+            options={[
+              { value: 'none', label: 'Spaziatura: nessuna (stile libro)' },
+              { value: 'tight', label: 'Spaziatura: stretta' },
+              { value: 'normal', label: 'Spaziatura: media' },
+              { value: 'relaxed', label: 'Spaziatura: ampia' }
+            ]}
+            title="Spazio aggiuntivo tra paragrafi"
+          />
+
           {/* Hyphenation toggle */}
           <button
             onClick={onToggleHyphenation}
             title={`Sillabazione: ${hyphenation ? 'Attiva' : 'Disattiva'}`}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+            className={`h-7 flex items-center gap-1.5 px-2.5 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer shadow-2xs shrink-0 ${
               hyphenation 
-                ? 'bg-folia-100 border-folia-400 text-folia-900' 
-                : 'bg-paper-100 border-paper-300 text-paper-700 hover:bg-paper-150'
+                ? 'bg-folia-100 border-folia-400 text-folia-900 font-semibold' 
+                : 'bg-paper-100/90 border-paper-300 text-paper-700 hover:bg-paper-200 hover:text-paper-900'
             }`}
           >
-            <WrapText className="w-3 h-3 text-folia-700" />
+            <WrapText className="w-3.5 h-3.5 text-folia-700" />
             <span>Sillabazione</span>
           </button>
 
@@ -808,13 +909,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <button
             onClick={onToggleSpellcheck}
             title={`Controllo ortografico: ${spellcheck ? 'Attivo' : 'Disattivo'}`}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+            className={`h-7 flex items-center gap-1.5 px-2.5 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer shadow-2xs shrink-0 ${
               spellcheck 
-                ? 'bg-folia-100 border-folia-400 text-folia-900' 
-                : 'bg-paper-100 border-paper-300 text-paper-700 hover:bg-paper-150'
+                ? 'bg-folia-100 border-folia-400 text-folia-900 font-semibold' 
+                : 'bg-paper-100/90 border-paper-300 text-paper-700 hover:bg-paper-200 hover:text-paper-900'
             }`}
           >
-            <SpellCheck className="w-3 h-3 text-folia-700" />
+            <SpellCheck className="w-3.5 h-3.5 text-folia-700" />
             <span>Ortografia</span>
           </button>
 
@@ -822,10 +923,10 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <button
             onClick={onInsertPageBreak}
             title="Inserisci interruzione di pagina"
-            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium border bg-paper-100 border-paper-300 text-paper-700 hover:bg-paper-150 hover:text-folia-900 transition-colors cursor-pointer shadow-2xs"
+            className="h-7 flex items-center gap-1.5 px-2.5 rounded-lg text-[11px] font-medium border bg-paper-100/90 border-paper-300 text-paper-700 hover:bg-paper-200 hover:text-folia-900 transition-colors cursor-pointer shadow-2xs shrink-0"
           >
-            <SeparatorHorizontal className="w-3 h-3 text-folia-700" />
-            <span>Interruzione pagina</span>
+            <SeparatorHorizontal className="w-3.5 h-3.5 text-folia-700" />
+            <span>Interruzione</span>
           </button>
 
           {/* Advanced Page Numbers Dropdown Trigger */}
@@ -833,14 +934,14 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             <button
               onClick={() => setShowPageNumMenu(!showPageNumMenu)}
               title="Configura numerazione pagine (stile e posizione)"
-              className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+              className={`h-7 flex items-center gap-1.5 px-2.5 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer shadow-2xs shrink-0 ${
                 showPageNumbers && pageNumberPosition !== 'none'
-                  ? 'bg-folia-100 border-folia-400 text-folia-900' 
-                  : 'bg-paper-100 border-paper-300 text-paper-700 hover:bg-paper-150'
+                  ? 'bg-folia-100 border-folia-400 text-folia-900 font-semibold' 
+                  : 'bg-paper-100/90 border-paper-300 text-paper-700 hover:bg-paper-200 hover:text-paper-900'
               }`}
             >
-              <Hash className="w-3 h-3 text-folia-700" />
-              <span>Num. pagine</span>
+              <Hash className="w-3.5 h-3.5 text-folia-700" />
+              <span>Num. pagina</span>
               <ChevronDown className="w-3 h-3 text-paper-500" />
             </button>
 
@@ -852,20 +953,20 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
               >
                 <div className="flex items-center justify-between pb-1.5 border-b border-paper-200">
                   <span className="font-bold text-xs text-paper-900">Numerazione Pagine</span>
-                  <label className="flex items-center gap-1.5 text-[11px] font-medium text-paper-700 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={showPageNumbers && pageNumberPosition !== 'none'}
-                      onChange={(e) => {
-                        onTogglePageNumbers();
-                        if (e.target.checked && pageNumberPosition === 'none') {
+                  <Checkbox
+                    checked={showPageNumbers && pageNumberPosition !== 'none'}
+                    onChange={(isChecked) => {
+                      if (isChecked) {
+                        if (!showPageNumbers) onTogglePageNumbers();
+                        if (pageNumberPosition === 'none') {
                           onChangePageNumberPosition('bottom-right');
                         }
-                      }}
-                      className="rounded text-folia-700"
-                    />
-                    <span>Attiva</span>
-                  </label>
+                      } else {
+                        if (showPageNumbers) onTogglePageNumbers();
+                      }
+                    }}
+                    label="Attiva"
+                  />
                 </div>
 
                 {/* Position selector */}
@@ -906,7 +1007,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                 <div className="pt-1 flex justify-end">
                   <button
                     onClick={() => setShowPageNumMenu(false)}
-                    className="px-3 py-1 bg-folia-700 text-white rounded-lg text-[11px] font-medium"
+                    className="px-3 py-1 bg-folia-700 text-white rounded-lg text-[11px] font-medium cursor-pointer"
                   >
                     Salva opzioni
                   </button>
@@ -915,91 +1016,94 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             )}
           </div>
 
+          {/* Word & Character Count Modal Trigger */}
+          {onOpenWordCount && (
+            <button
+              type="button"
+              onClick={onOpenWordCount}
+              title="Conteggio parole, caratteri e battute (Ctrl + Shift + C)"
+              className="h-7 flex items-center gap-1.5 px-2.5 rounded-lg text-[11px] font-medium border bg-paper-100/90 border-paper-300 text-paper-700 hover:bg-paper-200 hover:text-folia-900 transition-colors cursor-pointer shadow-2xs shrink-0"
+            >
+              <FileText className="w-3.5 h-3.5 text-folia-700" />
+              <span>Conteggio</span>
+            </button>
+          )}
+
           {/* Margin Comments Toggle Button */}
           {onToggleComments && (
             <button
               type="button"
               onClick={onToggleComments}
               title="Mostra o nascondi pannello commenti a margine"
-              className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+              className={`h-7 flex items-center gap-1.5 px-2.5 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer shadow-2xs shrink-0 ${
                 isCommentsOpen 
-                  ? 'bg-folia-100 border-folia-400 text-folia-900 font-semibold shadow-2xs' 
-                  : 'bg-paper-100 border-paper-300 text-paper-700 hover:bg-paper-150'
+                  ? 'bg-folia-100 border-folia-400 text-folia-900 font-semibold' 
+                  : 'bg-paper-100/90 border-paper-300 text-paper-700 hover:bg-paper-200 hover:text-paper-900'
               }`}
             >
-              <MessageSquare className="w-3 h-3 text-folia-700" />
+              <MessageSquare className="w-3.5 h-3.5 text-folia-700" />
               <span>Commenti {commentsCount ? `(${commentsCount})` : ''}</span>
             </button>
-          )}
-
-          {/* Track Changes (Revisioni) Button */}
-          {onToggleTrackChanges && (
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={onToggleTrackChanges}
-                title={isTrackingChanges ? 'Disattiva tracciamento revisioni' : 'Attiva tracciamento revisioni'}
-                className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${
-                  isTrackingChanges 
-                    ? 'bg-emerald-100 border-emerald-500 text-emerald-950 font-bold shadow-2xs' 
-                    : 'bg-paper-100 border-paper-300 text-paper-700 hover:bg-paper-150'
-                }`}
-              >
-                <GitBranch className="w-3 h-3 text-emerald-700" />
-                <span>{isTrackingChanges ? 'Revisioni ON' : 'Revisioni'}</span>
-              </button>
-              {isTrackingChanges && (
-                <div className="flex items-center gap-0.5 animate-in fade-in">
-                  <button
-                    type="button"
-                    onClick={onAcceptAllChanges}
-                    title="Accetta tutte le revisioni"
-                    className="px-1.5 py-0.5 rounded bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold cursor-pointer transition-colors shadow-2xs"
-                  >
-                    ✓ Accetta
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onRejectAllChanges}
-                    title="Rifiuta tutte le revisioni"
-                    className="px-1.5 py-0.5 rounded bg-rose-700 hover:bg-rose-800 text-white text-[10px] font-bold cursor-pointer transition-colors shadow-2xs"
-                  >
-                    ✕ Rifiuta
-                  </button>
-                </div>
-              )}
-            </div>
           )}
         </div>
 
         {/* Right side: Page & Margins layout controls */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5 flex-wrap">
           {/* Page format selector */}
           <CustomSelect
             value={pageFormat}
             onChange={(val) => onChangePageFormat(val as PageFormat)}
+            size="sm"
+            align="right"
             options={[
-              { value: 'a4', label: t('editor.page_a4') },
-              { value: 'cartella', label: t('editor.page_cartella') },
-              { value: 'novel', label: t('editor.page_novel') },
-              { value: 'letter', label: t('editor.page_letter') },
-              { value: 'continuous', label: t('editor.continuous_view') }
+              { value: 'a4', label: 'A4' },
+              { value: 'cartella', label: 'Cartella editoriale' },
+              { value: 'novel', label: 'Romanzo' },
+              { value: 'letter', label: 'Lettera' },
+              { value: 'continuous', label: 'Continuo' }
             ]}
             title={t('editor.page_format')}
           />
 
           {/* Margins selector */}
           {pageFormat !== 'continuous' && (
-            <CustomSelect
-              value={pageMargins}
-              onChange={(val) => onChangePageMargins(val as PageMargins)}
-              options={[
-                { value: 'normal', label: t('editor.margin_normal') },
-                { value: 'narrow', label: t('editor.margin_narrow') },
-                { value: 'wide', label: t('editor.margin_wide') }
-              ]}
-              title={t('editor.margins')}
-            />
+            <div className="flex items-center gap-1">
+              <CustomSelect
+                value={pageMargins}
+                onChange={(val) => {
+                  if (val === 'custom') {
+                    onChangePageMargins('custom');
+                    onOpenCustomMargins?.();
+                  } else {
+                    onChangePageMargins(val as PageMargins);
+                  }
+                }}
+                size="sm"
+                align="right"
+                options={[
+                  { value: 'normal', label: 'Normale (2.5 cm)' },
+                  { value: 'narrow', label: 'Stretto (1.5 cm)' },
+                  { value: 'wide', label: 'Ampio (3.0 cm)' },
+                  { 
+                    value: 'custom', 
+                    label: customMargins 
+                      ? `Personalizzato (${customMargins.left} cm)` 
+                      : 'Personalizzato...' 
+                  }
+                ]}
+                title={t('editor.margins')}
+              />
+              {pageMargins === 'custom' && (
+                <button
+                  type="button"
+                  onClick={onOpenCustomMargins}
+                  title="Modifica margini personalizzati"
+                  className="h-7 w-7 flex items-center justify-center rounded-lg bg-folia-100 hover:bg-folia-200 text-folia-800 transition-colors cursor-pointer border border-folia-300 shadow-2xs"
+                >
+                  <Sliders className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X, FileDown, FileText, Printer, CheckCircle, FileCode, BookOpen } from 'lucide-react';
 import { Project } from '../../types';
-import { compileManuscript, compileToWordDocument, generateEpub } from '../../utils/export';
+import { compileManuscript, generateDocx, generateEpub } from '../../utils/export';
+import { Checkbox } from '../common/Checkbox';
 
 interface ExportModalProps {
   isOpen: boolean;
@@ -9,6 +10,17 @@ interface ExportModalProps {
   project: Project;
   t: (key: string) => string;
 }
+
+const uint8ArrayToBase64 = (bytes: Uint8Array): string => {
+  let binary = '';
+  const len = bytes.byteLength;
+  const chunkSize = 8192;
+  for (let i = 0; i < len; i += chunkSize) {
+    const chunk = bytes.subarray(i, Math.min(i + chunkSize, len));
+    binary += String.fromCharCode.apply(null, chunk as any);
+  }
+  return window.btoa(binary);
+};
 
 export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, project, t }) => {
   const [format, setFormat] = useState<'pdf' | 'docx' | 'epub' | 'markdown' | 'txt'>('pdf');
@@ -23,32 +35,39 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, proje
     setExportSuccess(false);
 
     try {
-      const { text, markdown } = compileManuscript(project, includeMetadata);
+      const { text, markdown, html } = compileManuscript(project, includeMetadata);
 
       if (format === 'pdf') {
-        if ((window as any).foliaAPI?.printToPDF) {
+        if ((window as any).foliaAPI?.exportPDF) {
+          const res = await (window as any).foliaAPI.exportPDF(project.title, html);
+          if (res?.success) setExportSuccess(true);
+        } else if ((window as any).foliaAPI?.printToPDF) {
           await (window as any).foliaAPI.printToPDF();
+          setExportSuccess(true);
         } else {
           window.print();
+          setExportSuccess(true);
         }
-        setExportSuccess(true);
       } else if (format === 'docx') {
-        const wordDoc = compileToWordDocument(project, includeMetadata);
+        const docxData = await generateDocx(project, includeMetadata);
+        const base64Docx = uint8ArrayToBase64(docxData);
+
         if ((window as any).foliaAPI?.exportDocument) {
-          const res = await (window as any).foliaAPI.exportDocument('docx', project.title, wordDoc);
+          const res = await (window as any).foliaAPI.exportDocument('docx', project.title, `base64:${base64Docx}`);
           if (res?.success) setExportSuccess(true);
         } else {
-          downloadBlob(wordDoc, `${project.title}.doc`, 'application/msword');
+          const blob = new Blob([docxData], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${project.title}.docx`;
+          a.click();
+          URL.revokeObjectURL(url);
           setExportSuccess(true);
         }
       } else if (format === 'epub') {
         const epubData = await generateEpub(project, includeMetadata);
-        let binary = '';
-        const len = epubData.byteLength;
-        for (let i = 0; i < len; i++) {
-          binary += String.fromCharCode(epubData[i]);
-        }
-        const base64Epub = window.btoa(binary);
+        const base64Epub = uint8ArrayToBase64(epubData);
 
         if ((window as any).foliaAPI?.exportDocument) {
           const res = await (window as any).foliaAPI.exportDocument('epub', project.title, `base64:${base64Epub}`);
@@ -98,7 +117,10 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, proje
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs p-4 animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs p-4 animate-in fade-in folia-modal-overlay"
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-lg overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -211,16 +233,12 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, proje
             </div>
           </div>
 
-          <div className="pt-2 border-t border-paper-200">
-            <label className="flex items-center gap-2.5 cursor-pointer text-xs text-paper-700 font-medium select-none">
-              <input
-                type="checkbox"
-                checked={includeMetadata}
-                onChange={(e) => setIncludeMetadata(e.target.checked)}
-                className="h-4 w-4 rounded-md border-paper-300 text-folia-700 focus:ring-folia-600"
-              />
-              <span>{t('export_modal.include_characters')}</span>
-            </label>
+          <div className="pt-3 border-t border-paper-200">
+            <Checkbox
+              checked={includeMetadata}
+              onChange={setIncludeMetadata}
+              label={t('export_modal.include_characters')}
+            />
           </div>
 
           {exportSuccess && (

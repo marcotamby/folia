@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, 
   Users, 
@@ -27,7 +27,9 @@ import {
   Award,
   GraduationCap,
   Mail,
-  Compass
+  Compass,
+  GripVertical,
+  Radio
 } from 'lucide-react';
 import { Project, ViewMode, ManuscriptItem, Character, WorldEntry, CharacterRole } from '../../types';
 import { ConfirmModal } from '../common/ConfirmModal';
@@ -54,6 +56,10 @@ interface SidebarProps {
   onDeleteChar: (id: string) => void;
   onDeleteWorld: (id: string) => void;
   onDeleteMap?: (id: string) => void;
+  onReorderManuscript?: (newManuscript: ManuscriptItem[]) => void;
+  onReorderCharacters?: (newCharacters: Character[]) => void;
+  onReorderWorld?: (newWorld: WorldEntry[]) => void;
+  onUpdateCharacterRole?: (charId: string, newRole: CharacterRole) => void;
   onUpdateDailyGoal: (goal: number) => void;
   onUpdateProjectTitle: (newTitle: string) => void;
   onOpenProjectsModal: () => void;
@@ -82,6 +88,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onDeleteChar,
   onDeleteWorld,
   onDeleteMap,
+  onReorderManuscript,
+  onReorderCharacters,
+  onReorderWorld,
+  onUpdateCharacterRole,
   onUpdateDailyGoal,
   onUpdateProjectTitle,
   onOpenProjectsModal,
@@ -92,14 +102,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [worldExpanded, setWorldExpanded] = useState(true);
   const [mapsExpanded, setMapsExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Distinctive dot styling exclusively for protagonists & antagonists
+  const getCharacterDotClass = (role?: CharacterRole) => {
+    if (role === 'protagonist') {
+      return 'bg-[#0284c7] ring-1 ring-[#0369a1]/35'; // Tono Folia tendente al blu elegante
+    }
+    if (role === 'antagonist') {
+      return 'bg-[#a21caf] ring-1 ring-[#86198f]/35'; // Tono viola/magenta elegante
+    }
+    return 'bg-emerald-500 ring-1 ring-emerald-600/20'; // Standard verde Folia per tutti gli altri ruoli
+  };
   
   // Role group collapse states for Character Submenus
   const [roleGroupExpanded, setRoleGroupExpanded] = useState<Record<string, boolean>>({
     protagonist: true,
     antagonist: true,
+    deuteragonist: true,
+    rival: true,
     mentor: true,
     sidekick: true,
     love_interest: true,
+    traitor: true,
+    herald: true,
+    guardian: true,
     supporting: true
   });
 
@@ -117,6 +143,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
     id: string;
     title: string;
   } | null>(null);
+
+  // Drag & Drop state: Manuscript
+  const [draggedDocId, setDraggedDocId] = useState<string | null>(null);
+  const [docDropIndicator, setDocDropIndicator] = useState<{ targetId: string; position: 'before' | 'after' } | null>(null);
+
+  // Drag & Drop state: Characters
+  const [draggedCharId, setDraggedCharId] = useState<string | null>(null);
+  const [charDropIndicator, setCharDropIndicator] = useState<{ targetId: string; position: 'before' | 'after' } | null>(null);
+  const [hoveredRoleGroup, setHoveredRoleGroup] = useState<CharacterRole | null>(null);
+
+  // Drag & Drop state: Worldbuilding
+  const [draggedWorldId, setDraggedWorldId] = useState<string | null>(null);
+  const [worldDropIndicator, setWorldDropIndicator] = useState<{ targetId: string; position: 'before' | 'after' } | null>(null);
+
+  // Stable set of active role categories so DOM elements never shift during drag gestures
+  const [activeRoles, setActiveRoles] = useState<Set<CharacterRole>>(() => {
+    const initial = new Set<CharacterRole>(['protagonist']);
+    (project.characters || []).forEach(c => {
+      if (c.role) initial.add(c.role);
+    });
+    return initial;
+  });
+
+  useEffect(() => {
+    setActiveRoles(prev => {
+      const next = new Set(prev);
+      next.add('protagonist');
+      (project.characters || []).forEach(c => {
+        if (c.role) next.add(c.role);
+      });
+      return next;
+    });
+  }, [project.characters]);
 
   const toggleRoleGroup = (role: string) => {
     setRoleGroupExpanded(prev => ({
@@ -259,6 +318,101 @@ export const Sidebar: React.FC<SidebarProps> = ({
     (w.name || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleDropDoc = (targetId: string, position: 'before' | 'after') => {
+    if (!draggedDocId || draggedDocId === targetId) {
+      setDraggedDocId(null);
+      setDocDropIndicator(null);
+      return;
+    }
+
+    const currentList = [...manuscriptList];
+    const draggedIndex = currentList.findIndex(d => d.id === draggedDocId);
+    if (draggedIndex === -1) return;
+
+    const [draggedItem] = currentList.splice(draggedIndex, 1);
+    const targetIndex = currentList.findIndex(d => d.id === targetId);
+    if (targetIndex === -1) return;
+
+    const insertIndex = position === 'after' ? targetIndex + 1 : targetIndex;
+    currentList.splice(insertIndex, 0, draggedItem);
+
+    onReorderManuscript?.(currentList);
+    setDraggedDocId(null);
+    setDocDropIndicator(null);
+  };
+
+  const handleDropCharOnChar = (targetId: string, position: 'before' | 'after', targetRole: CharacterRole, charIdToMove?: string) => {
+    const id = charIdToMove || draggedCharId;
+    if (!id || id === targetId) {
+      setDraggedCharId(null);
+      setCharDropIndicator(null);
+      setHoveredRoleGroup(null);
+      return;
+    }
+
+    const currentList = [...charactersList];
+    const draggedIndex = currentList.findIndex(c => c.id === id);
+    if (draggedIndex === -1) return;
+
+    const draggedItem = { ...currentList[draggedIndex], role: targetRole };
+    currentList.splice(draggedIndex, 1);
+
+    const targetIndex = currentList.findIndex(c => c.id === targetId);
+    const insertIndex = targetIndex === -1 
+      ? currentList.length 
+      : (position === 'after' ? targetIndex + 1 : targetIndex);
+
+    currentList.splice(insertIndex, 0, draggedItem);
+
+    onReorderCharacters?.(currentList);
+    setRoleGroupExpanded(prev => ({ ...prev, [targetRole]: true }));
+    setDraggedCharId(null);
+    setCharDropIndicator(null);
+    setHoveredRoleGroup(null);
+  };
+
+  const handleDropCharOnGroup = (newRole: CharacterRole, charIdToMove?: string) => {
+    const id = charIdToMove || draggedCharId;
+    if (!id) return;
+
+    const currentList = [...charactersList];
+    const draggedIndex = currentList.findIndex(c => c.id === id);
+    if (draggedIndex === -1) return;
+
+    const updatedChar = { ...currentList[draggedIndex], role: newRole };
+    currentList.splice(draggedIndex, 1);
+    currentList.push(updatedChar);
+
+    onReorderCharacters?.(currentList);
+    setRoleGroupExpanded(prev => ({ ...prev, [newRole]: true }));
+    setDraggedCharId(null);
+    setCharDropIndicator(null);
+    setHoveredRoleGroup(null);
+  };
+
+  const handleDropWorld = (targetId: string, position: 'before' | 'after') => {
+    if (!draggedWorldId || draggedWorldId === targetId) {
+      setDraggedWorldId(null);
+      setWorldDropIndicator(null);
+      return;
+    }
+
+    const currentList = [...worldList];
+    const draggedIndex = currentList.findIndex(w => w.id === draggedWorldId);
+    if (draggedIndex === -1) return;
+
+    const [draggedItem] = currentList.splice(draggedIndex, 1);
+    const targetIndex = currentList.findIndex(w => w.id === targetId);
+    if (targetIndex === -1) return;
+
+    const insertIndex = position === 'after' ? targetIndex + 1 : targetIndex;
+    currentList.splice(insertIndex, 0, draggedItem);
+
+    onReorderWorld?.(currentList);
+    setDraggedWorldId(null);
+    setWorldDropIndicator(null);
+  };
+
   const projectType = project.settings?.projectType || 'novel';
   const isTtrpg = projectType === 'ttrpg_master';
   const isThesis = projectType === 'academic_thesis';
@@ -315,14 +469,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       key: 'protagonist',
       label: isTtrpg ? 'Party (PG / Eroi)' : 'Protagonisti',
-      color: 'text-amber-700 bg-amber-50',
+      color: 'text-sky-700 bg-sky-50',
       items: filteredCharacters.filter(c => c.role === 'protagonist')
     },
     {
       key: 'antagonist',
       label: isTtrpg ? 'Antagonisti & boss' : 'Antagonisti',
-      color: 'text-rose-700 bg-rose-50',
+      color: 'text-fuchsia-700 bg-fuchsia-50',
       items: filteredCharacters.filter(c => c.role === 'antagonist')
+    },
+    {
+      key: 'deuteragonist',
+      label: isTtrpg ? 'Co-protagonisti & PNG chiave' : 'Deuteragonisti & co-protagonisti',
+      color: 'text-indigo-700 bg-indigo-50',
+      items: filteredCharacters.filter(c => c.role === 'deuteragonist')
+    },
+    {
+      key: 'rival',
+      label: isTtrpg ? 'Rivali & competitori' : 'Rivali',
+      color: 'text-amber-700 bg-amber-50',
+      items: filteredCharacters.filter(c => c.role === 'rival')
     },
     {
       key: 'mentor',
@@ -332,15 +498,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       key: 'sidekick',
-      label: isTtrpg ? 'Alleati & PNG chiave' : 'Spalle & alleati',
+      label: isTtrpg ? 'Alleati & compagni' : 'Spalle & alleati',
       color: 'text-emerald-700 bg-emerald-50',
       items: filteredCharacters.filter(c => c.role === 'sidekick')
     },
     {
       key: 'love_interest',
-      label: isTtrpg ? 'Mostri & incontri' : 'Interessi amorosi',
+      label: isTtrpg ? 'Interessi & legami' : 'Interessi amorosi',
       color: 'text-pink-700 bg-pink-50',
       items: filteredCharacters.filter(c => c.role === 'love_interest')
+    },
+    {
+      key: 'traitor',
+      label: isTtrpg ? 'Infiltrati & doppiogiochisti' : 'Traditori & falsi alleati',
+      color: 'text-purple-700 bg-purple-50',
+      items: filteredCharacters.filter(c => c.role === 'traitor')
+    },
+    {
+      key: 'herald',
+      label: isTtrpg ? 'Araldi & mandanti quest' : 'Araldi & messaggeri',
+      color: 'text-yellow-700 bg-yellow-50',
+      items: filteredCharacters.filter(c => c.role === 'herald')
+    },
+    {
+      key: 'guardian',
+      label: isTtrpg ? 'Guardiani & ostacoli' : 'Guardiani & ostacoli',
+      color: 'text-stone-700 bg-stone-50',
+      items: filteredCharacters.filter(c => c.role === 'guardian')
     },
     {
       key: 'supporting',
@@ -480,18 +664,62 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 filteredManuscript.map((doc) => (
                   <div
                     key={doc.id}
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('text/plain', doc.id);
+                      e.dataTransfer.effectAllowed = 'move';
+                      setDraggedDocId(doc.id);
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!draggedDocId || draggedDocId === doc.id) return;
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const midY = rect.top + rect.height / 2;
+                      const position = e.clientY < midY ? 'before' : 'after';
+                      setDocDropIndicator({ targetId: doc.id, position });
+                    }}
+                    onDragLeave={() => {
+                      if (docDropIndicator?.targetId === doc.id) {
+                        setDocDropIndicator(null);
+                      }
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (docDropIndicator && docDropIndicator.targetId === doc.id) {
+                        handleDropDoc(doc.id, docDropIndicator.position);
+                      }
+                    }}
+                    onDragEnd={() => {
+                      setDraggedDocId(null);
+                      setDocDropIndicator(null);
+                    }}
                     onClick={() => {
                       onSelectView('editor');
                       onSelectDoc(doc.id);
+                      if (activeView === 'editor' && selectedDocId === doc.id) {
+                        window.dispatchEvent(new CustomEvent('folia-scroll-editor-top'));
+                      }
                     }}
-                    className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-pointer transition-colors group ${
+                    className={`relative flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-grab active:cursor-grabbing transition-all select-none group ${
                       activeView === 'editor' && selectedDocId === doc.id
                         ? 'bg-folia-100/90 text-folia-950 font-medium'
                         : 'hover:bg-paper-200 text-paper-700'
-                    }`}
+                    } ${draggedDocId === doc.id ? 'opacity-35 scale-[0.98]' : ''}`}
                   >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <FileText className="w-3.5 h-3.5 text-paper-400 group-hover:text-folia-700" />
+                    {/* Visual Drop Indicator */}
+                    {docDropIndicator?.targetId === doc.id && (
+                      <div
+                        className={`absolute left-0 right-0 h-0.5 bg-folia-600 z-30 pointer-events-none rounded-full shadow-xs ${
+                          docDropIndicator.position === 'before' ? '-top-0.5' : '-bottom-0.5'
+                        }`}
+                      />
+                    )}
+
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <GripVertical className="w-3 h-3 text-paper-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 -ml-1" />
+                      <FileText className="w-3.5 h-3.5 text-paper-400 group-hover:text-folia-700 shrink-0" />
                       <span className="truncate text-[13px]">{doc.title || defaultDocTitle}</span>
                     </div>
                     <button
@@ -529,7 +757,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-2 min-w-0">
                 {charactersExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
-                <Users className="w-4 h-4 text-amber-600" />
+                <Users className="w-4 h-4 text-emerald-600" />
                 <span className="truncate">{isTtrpg ? 'Personaggi & party' : t('sections.characters')}</span>
                 <span className="text-[11px] text-paper-400 font-normal">({charactersList.length})</span>
               </div>
@@ -538,7 +766,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   e.stopPropagation();
                   onAddCharacter();
                 }}
-                title={isTtrpg ? 'Aggiungi PG o PNG' : t('sidebar.add_character')}
+                title={isTtrpg ? 'Aggiungi PG o NPC' : t('sidebar.add_character')}
                 className="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-paper-300 text-paper-600 transition-opacity cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -548,18 +776,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {charactersExpanded && (
               <div className="pl-3 pr-1 py-1 space-y-2">
                 {charactersList.length === 0 ? (
-                  <p className="text-xs text-paper-400 italic px-2 py-1">{isTtrpg ? 'Nessun PG o PNG creato' : 'Nessun personaggio creato'}</p>
+                  <p className="text-xs text-paper-400 italic px-2 py-1">{isTtrpg ? 'Nessun PG o NPC creato' : 'Nessun personaggio creato'}</p>
                 ) : (
                   charGroups.map(group => {
-                    if (group.items.length === 0) return null;
+                    // Stable check: only show categories in activeRoles (layout NEVER shifts during drag)
+                    if (!activeRoles.has(group.key)) return null;
+
+                    const hasItems = group.items.length > 0;
                     const isGrpExpanded = roleGroupExpanded[group.key] ?? true;
 
                     return (
                       <div key={group.key} className="space-y-0.5">
-                        {/* Submenu Header */}
+                        {/* Submenu Header (drop target for moving character to this category) */}
                         <div 
                           onClick={() => toggleRoleGroup(group.key)}
-                          className="flex items-center justify-between px-2.5 py-1 rounded-lg text-[12px] font-bold text-paper-700 hover:bg-paper-200 cursor-pointer select-none"
+                          onDragOver={(e) => {
+                            if (draggedCharId) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              e.dataTransfer.dropEffect = 'move';
+                              setHoveredRoleGroup(group.key);
+                            }
+                          }}
+                          onDragLeave={() => {
+                            if (hoveredRoleGroup === group.key) {
+                              setHoveredRoleGroup(null);
+                            }
+                          }}
+                          onDrop={(e) => {
+                            if (draggedCharId) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const charId = draggedCharId || e.dataTransfer.getData('text/plain');
+                              if (charId) {
+                                handleDropCharOnGroup(group.key, charId);
+                              }
+                            }
+                          }}
+                          className={`flex items-center justify-between px-2.5 py-1 rounded-lg text-[12px] font-bold cursor-pointer select-none transition-all ${
+                            hoveredRoleGroup === group.key 
+                              ? 'bg-folia-100/90 text-folia-950 ring-2 ring-folia-500 shadow-xs' 
+                              : 'text-paper-700 hover:bg-paper-200'
+                          }`}
                         >
                           <div className="flex items-center gap-1.5">
                             {isGrpExpanded ? <ChevronDown className="w-3.5 h-3.5 text-paper-400" /> : <ChevronRight className="w-3.5 h-3.5 text-paper-400" />}
@@ -568,25 +826,100 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           <span className="text-[10px] text-paper-400 font-normal">({group.items.length})</span>
                         </div>
 
+                        {/* If category is empty and expanded, show a stable dropzone */}
+                        {isGrpExpanded && !hasItems && (
+                          <div
+                            onDragOver={(e) => {
+                              if (draggedCharId) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                e.dataTransfer.dropEffect = 'move';
+                                setHoveredRoleGroup(group.key);
+                              }
+                            }}
+                            onDragLeave={() => {
+                              if (hoveredRoleGroup === group.key) setHoveredRoleGroup(null);
+                            }}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const charId = draggedCharId || e.dataTransfer.getData('text/plain');
+                              if (charId) {
+                                handleDropCharOnGroup(group.key, charId);
+                              }
+                            }}
+                            className={`ml-4 mr-1 my-1 py-1.5 px-2 rounded-lg border border-dashed text-center text-xs transition-all select-none ${
+                              hoveredRoleGroup === group.key
+                                ? 'border-folia-600 bg-folia-50 text-folia-800 ring-2 ring-folia-400'
+                                : 'border-paper-250 text-paper-400 hover:border-folia-500 hover:text-folia-700'
+                            }`}
+                          >
+                            {draggedCharId ? `+ Rilascia per assegnare a ${group.label}` : 'Nessun personaggio'}
+                          </div>
+                        )}
+
                         {/* Submenu Character Cards */}
-                        {isGrpExpanded && (
+                        {isGrpExpanded && hasItems && (
                           <div className="pl-3 space-y-0.5">
                             {group.items.map((char) => (
                               <div
                                 key={char.id}
+                                draggable
+                                onDragStart={(e) => {
+                                  e.dataTransfer.setData('text/plain', char.id);
+                                  e.dataTransfer.effectAllowed = 'move';
+                                  setDraggedCharId(char.id);
+                                }}
+                                onDragOver={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  if (!draggedCharId || draggedCharId === char.id) return;
+                                  const rect = e.currentTarget.getBoundingClientRect();
+                                  const midY = rect.top + rect.height / 2;
+                                  const position = e.clientY < midY ? 'before' : 'after';
+                                  setCharDropIndicator({ targetId: char.id, position });
+                                }}
+                                onDragLeave={() => {
+                                  if (charDropIndicator?.targetId === char.id) {
+                                    setCharDropIndicator(null);
+                                  }
+                                }}
+                                onDrop={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  const charId = draggedCharId || e.dataTransfer.getData('text/plain');
+                                  if (charDropIndicator && charDropIndicator.targetId === char.id && charId) {
+                                    handleDropCharOnChar(char.id, charDropIndicator.position, group.key, charId);
+                                  }
+                                }}
+                                onDragEnd={() => {
+                                  setDraggedCharId(null);
+                                  setCharDropIndicator(null);
+                                  setHoveredRoleGroup(null);
+                                }}
                                 onClick={() => {
                                   onSelectView('characters');
                                   onSelectChar(char.id);
                                 }}
-                                className={`flex items-center justify-between px-2.5 py-1 rounded-lg cursor-pointer transition-colors group ${
+                                className={`relative flex items-center justify-between px-2.5 py-1 rounded-lg cursor-grab active:cursor-grabbing transition-all select-none group ${
                                   activeView === 'characters' && selectedCharId === char.id
                                     ? 'bg-folia-100/90 text-folia-950 font-medium'
                                     : 'hover:bg-paper-200 text-paper-700'
-                                }`}
+                                } ${draggedCharId === char.id ? 'opacity-35 scale-[0.98]' : ''}`}
                               >
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-                                  <span className="truncate text-[13px]">{char.name || (isTtrpg ? 'Nuovo PG / PNG' : t('sidebar.untitled_character'))}</span>
+                                {/* Drop indicator line */}
+                                {charDropIndicator?.targetId === char.id && (
+                                  <div
+                                    className={`absolute left-0 right-0 h-0.5 bg-folia-600 z-30 pointer-events-none rounded-full shadow-xs ${
+                                      charDropIndicator.position === 'before' ? '-top-0.5' : '-bottom-0.5'
+                                    }`}
+                                  />
+                                )}
+
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  <GripVertical className="w-3 h-3 text-paper-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 -ml-1" />
+                                  <div className={`w-2 h-2 rounded-full shrink-0 ${getCharacterDotClass(char.role)}`} />
+                                  <span className="truncate text-[13px]">{char.name || (isTtrpg ? 'Nuovo PG / NPC' : t('sidebar.untitled_character'))}</span>
                                 </div>
                                 <button
                                   onClick={(e) => {
@@ -594,7 +927,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     setDeleteTarget({
                                       type: 'char',
                                       id: char.id,
-                                      title: char.name || (isTtrpg ? 'Nuovo PG / PNG' : t('sidebar.untitled_character'))
+                                      title: char.name || (isTtrpg ? 'Nuovo PG / NPC' : t('sidebar.untitled_character'))
                                     });
                                   }}
                                   title={t('sidebar.delete_item')}
@@ -629,7 +962,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-2 min-w-0">
                 {worldExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
-                <Globe className="w-4 h-4 text-emerald-600" />
+                <Globe className="w-4 h-4 text-folia-700" />
                 <span className="truncate">{isTtrpg ? 'Mondo & luoghi' : t('sections.world')}</span>
                 <span className="text-[11px] text-paper-400 font-normal">({worldList.length})</span>
               </div>
@@ -653,18 +986,59 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   filteredWorld.map((world) => (
                     <div
                       key={world.id}
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('text/plain', world.id);
+                        e.dataTransfer.effectAllowed = 'move';
+                        setDraggedWorldId(world.id);
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (!draggedWorldId || draggedWorldId === world.id) return;
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const midY = rect.top + rect.height / 2;
+                        const position = e.clientY < midY ? 'before' : 'after';
+                        setWorldDropIndicator({ targetId: world.id, position });
+                      }}
+                      onDragLeave={() => {
+                        if (worldDropIndicator?.targetId === world.id) {
+                          setWorldDropIndicator(null);
+                        }
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (worldDropIndicator && worldDropIndicator.targetId === world.id) {
+                          handleDropWorld(world.id, worldDropIndicator.position);
+                        }
+                      }}
+                      onDragEnd={() => {
+                        setDraggedWorldId(null);
+                        setWorldDropIndicator(null);
+                      }}
                       onClick={() => {
                         onSelectView('world');
                         onSelectWorld(world.id);
                       }}
-                      className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-pointer transition-colors group ${
+                      className={`relative flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-grab active:cursor-grabbing transition-all select-none group ${
                         activeView === 'world' && selectedWorldId === world.id
                           ? 'bg-folia-100/90 text-folia-950 font-medium'
                           : 'hover:bg-paper-200 text-paper-700'
-                      }`}
+                      } ${draggedWorldId === world.id ? 'opacity-35 scale-[0.98]' : ''}`}
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      {/* Visual Drop Indicator */}
+                      {worldDropIndicator?.targetId === world.id && (
+                        <div
+                          className={`absolute left-0 right-0 h-0.5 bg-folia-600 z-30 pointer-events-none rounded-full shadow-xs ${
+                            worldDropIndicator.position === 'before' ? '-top-0.5' : '-bottom-0.5'
+                          }`}
+                        />
+                      )}
+
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <GripVertical className="w-3 h-3 text-paper-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 -ml-1" />
+                        <div className="w-2 h-2 rounded-full bg-folia-800 ring-1 ring-folia-900/20 shrink-0" />
                         <span className="truncate text-[13px]">{world.name || (isTtrpg ? 'Nuovo luogo / dungeon' : t('sidebar.untitled_location'))}</span>
                       </div>
                       <button
@@ -703,7 +1077,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-2 min-w-0">
                 {mapsExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
-                <Compass className="w-4 h-4 text-folia-700" />
+                <Compass className="w-4 h-4 text-teal-600" />
                 <span className="truncate">Mappe</span>
               </div>
               <button
@@ -738,7 +1112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-2 h-2 rounded-full bg-folia-700 shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-teal-600 ring-1 ring-teal-700/20 shrink-0" />
                         <span className="truncate text-[13px]">{mapItem.title || 'Nuova Mappa'}</span>
                       </div>
                       <button
@@ -759,6 +1133,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   ))
                 )}
               </div>
+            )}
+          </div>
+        )}
+
+        {/* 3c. SESSIONS RECORDINGS (Only for TTRPG Master) */}
+        {isTtrpg && (
+          <div 
+            onClick={() => onSelectView('sessions')}
+            className={`flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer font-semibold transition-colors ${
+              activeView === 'sessions' ? 'bg-folia-100 text-folia-900' : 'hover:bg-paper-200 text-paper-800'
+            }`}
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <Radio className="w-4 h-4 text-folia-700" />
+              <span className="truncate">Sessioni registrate</span>
+            </div>
+            {(project.sessions || []).length > 0 && (
+              <span className="text-[11px] bg-folia-100 text-folia-800 px-1.5 py-0.5 rounded-full font-mono font-medium border border-folia-200">
+                {(project.sessions || []).length}
+              </span>
             )}
           </div>
         )}
@@ -873,7 +1267,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="w-full bg-paper-200 rounded-full h-2 overflow-hidden">
           <div 
             className={`h-full transition-all duration-500 rounded-full ${
-              isGoalReached ? 'bg-amber-500 animate-pulse' : 'bg-folia-600'
+              isGoalReached 
+                ? 'bg-gradient-to-r from-folia-800 via-emerald-600 to-teal-400 shadow-xs' 
+                : 'bg-gradient-to-r from-folia-700 to-emerald-500'
             }`}
             style={{ width: `${progressPercent}%` }}
           />
@@ -882,8 +1278,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center justify-between text-[11px] text-paper-500">
           <span>{progressPercent}% completato</span>
           {isGoalReached && (
-            <span className="text-amber-700 font-semibold flex items-center gap-1">
-              <Award className="w-3.5 h-3.5" />
+            <span className="text-folia-800 font-semibold flex items-center gap-1">
+              <Award className="w-3.5 h-3.5 text-folia-700" />
               Raggiunto!
             </span>
           )}
@@ -906,7 +1302,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           deleteTarget?.type === 'doc'
             ? (isTtrpg ? 'Elimina sessione' : 'Elimina capitolo')
             : deleteTarget?.type === 'char'
-            ? (isTtrpg ? 'Elimina scheda personaggio/PNG' : 'Elimina scheda personaggio')
+            ? (isTtrpg ? 'Elimina scheda personaggio/NPC' : 'Elimina scheda personaggio')
             : deleteTarget?.type === 'world'
             ? (isTtrpg ? 'Elimina luogo / dungeon' : 'Elimina voce di worldbuilding')
             : 'Elimina mappa'

@@ -12,7 +12,10 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay"
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-md overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -35,7 +38,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
           </div>
           <h2 className="font-brand font-bold text-2xl text-folia-950">Folia</h2>
           <p className="text-xs text-folia-700 font-medium tracking-wide uppercase mt-0.5">Suite di scrittura & worldbuilding</p>
-          <div className="text-[11px] text-paper-500 mt-1">Versione 1.0.0 &bull; Local-First Suite</div>
+          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione 1.0.1 &bull; Aggiornato 03/09/2026</div>
         </div>
 
         {/* Content */}

@@ -48,6 +48,14 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
   const manuscriptList = project.manuscript || [];
   const isTtrpg = project.settings?.projectType === 'ttrpg_master';
 
+  const availableTemplates = PLOT_TEMPLATES.filter(template => {
+    if (isTtrpg) {
+      return template.category === 'dnd' || template.category === 'all';
+    } else {
+      return template.category === 'novel' || template.category === 'all';
+    }
+  });
+
   const toggleCollapseAct = (actId: string) => {
     setCollapsedActs(prev => ({ ...prev, [actId]: !prev[actId] }));
   };
@@ -64,14 +72,14 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
   const addAct = () => {
     const newAct: PlotAct = {
       id: 'act-' + Date.now(),
-      title: `Nuovo atto ${plotActsList.length + 1}`,
-      subtitle: 'Descrizione della fase narrativa',
+      title: isTtrpg ? `Nuova fase ${plotActsList.length + 1}` : `Nuovo atto ${plotActsList.length + 1}`,
+      subtitle: isTtrpg ? 'Obiettivo e posta in gioco di questa fase' : 'Descrizione della fase narrativa',
       beats: [
         {
           id: 'beat-' + Date.now(),
           actId: 'act-' + Date.now(),
-          title: 'Punto di svolta iniziale',
-          description: 'Cosa accade in questo momento cruciale...',
+          title: isTtrpg ? 'Incontro / evento iniziale' : 'Punto di svolta iniziale',
+          description: isTtrpg ? 'Cosa affrontano i personaggi o il party...' : 'Cosa accade in questo momento cruciale...',
           order: 0
         }
       ]
@@ -102,7 +110,7 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
           const newBeat: PlotBeat = {
             id: 'beat-' + Date.now(),
             actId,
-            title: `Punto di svolta ${(act.beats || []).length + 1}`,
+            title: isTtrpg ? `Incontro / evento ${(act.beats || []).length + 1}` : `Punto di svolta ${(act.beats || []).length + 1}`,
             description: '',
             order: (act.beats || []).length
           };
@@ -151,8 +159,14 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
               <Layers className="w-6 h-6 text-folia-800" />
             </div>
             <div>
-              <h2 className="font-brand font-bold text-2xl text-paper-900">{t('plot.title')}</h2>
-              <p className="text-xs text-paper-500 font-sans mt-0.5">Struttura la narrazione, i punti di svolta e gli archi narrativi</p>
+              <h2 className="font-brand font-bold text-2xl text-paper-900">
+                {isTtrpg ? 'Arco della Campagna & Quest' : t('plot.title')}
+              </h2>
+              <p className="text-xs text-paper-500 font-sans mt-0.5">
+                {isTtrpg
+                  ? 'Pianifica la campagna, i piani del BBEG, i dungeon e le quest del party'
+                  : 'Struttura la narrazione, i punti di svolta e gli archi narrativi'}
+              </p>
             </div>
           </div>
 
@@ -162,7 +176,7 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
               className="flex items-center gap-1.5 px-4 py-2 bg-paper-100 hover:bg-paper-200 text-paper-800 rounded-xl text-xs font-semibold border border-paper-300 transition-all cursor-pointer shadow-2xs"
             >
               <Compass className="w-4 h-4 text-folia-700" />
-              <span>Modelli narrativi</span>
+              <span>{isTtrpg ? 'Modelli di campagna D&D' : 'Modelli narrativi'}</span>
             </button>
 
             <button
@@ -170,7 +184,7 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
               className="flex items-center gap-1.5 px-4 py-2 bg-folia-700 hover:bg-folia-800 text-white rounded-xl text-xs font-semibold transition-all shadow-xs cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              <span>Aggiungi atto</span>
+              <span>{isTtrpg ? 'Aggiungi fase' : 'Aggiungi atto'}</span>
             </button>
           </div>
         </div>
@@ -182,9 +196,13 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
               <Layers className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="font-brand font-bold text-xl text-paper-800">Nessuna struttura definita</h3>
+              <h3 className="font-brand font-bold text-xl text-paper-800">
+                {isTtrpg ? 'Nessuna struttura di campagna definita' : 'Nessuna struttura definita'}
+              </h3>
               <p className="text-sm text-paper-500 max-w-md mx-auto mt-1">
-                Scegli uno dei modelli narrativi pronti all'uso (viaggio dell'eroe, 3 atti, salva il gatto, giallo, kishōtenketsu) oppure crea la tua struttura libera.
+                {isTtrpg
+                  ? "Scegli uno dei modelli classici per D&D e GdR (Arco a 4 Tier, Dungeon a 5 Stanze, One-Shot, Sandbox/Hexcrawl, Minaccia del BBEG, Intrigo Urbano) oppure crea una struttura libera per la tua avventura."
+                  : "Scegli uno dei modelli narrativi pronti all'uso (viaggio dell'eroe, 3 atti, salva il gatto, giallo, kishōtenketsu) oppure crea la tua struttura libera."}
               </p>
             </div>
             <div className="flex justify-center gap-3 pt-2">
@@ -192,13 +210,13 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
                 onClick={() => setShowTemplatesModal(true)}
                 className="px-5 py-2.5 bg-folia-700 hover:bg-folia-800 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs"
               >
-                Esplora modelli narrativi
+                {isTtrpg ? 'Esplora modelli D&D' : 'Esplora modelli narrativi'}
               </button>
               <button
                 onClick={addAct}
                 className="px-5 py-2.5 bg-paper-100 hover:bg-paper-200 text-paper-800 rounded-xl text-xs font-semibold border border-paper-300 cursor-pointer shadow-2xs"
               >
-                Crea atto personalizzato
+                {isTtrpg ? 'Crea fase personalizzata' : 'Crea atto personalizzato'}
               </button>
             </div>
           </div>
@@ -227,14 +245,14 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
                           type="text"
                           value={act.title || ''}
                           onChange={(e) => updateActTitle(act.id, e.target.value)}
-                          placeholder="Titolo atto / fase..."
+                          placeholder={isTtrpg ? "Titolo fase / arco di gioco..." : "Titolo atto / fase..."}
                           className="w-full font-brand font-bold text-lg md:text-xl text-paper-900 bg-transparent border-none focus:outline-hidden focus:ring-1 focus:ring-folia-500 rounded px-1"
                         />
                         <input
                           type="text"
                           value={act.subtitle || ''}
                           onChange={(e) => updateActSubtitle(act.id, e.target.value)}
-                          placeholder="Sottotitolo o scopo narrativo della fase..."
+                          placeholder={isTtrpg ? "Obiettivo o posta in gioco di questa fase della campagna..." : "Sottotitolo o scopo narrativo della fase..."}
                           className="w-full text-xs text-paper-500 bg-transparent border-none focus:outline-hidden focus:ring-1 focus:ring-folia-500 rounded px-1"
                         />
                       </div>
@@ -243,11 +261,11 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => addBeat(act.id)}
-                        title="Aggiungi punto di svolta all'atto"
+                        title={isTtrpg ? "Aggiungi incontro o evento alla fase" : "Aggiungi punto di svolta all'atto"}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-folia-50 hover:bg-folia-100 text-folia-800 rounded-xl text-xs font-semibold border border-folia-200 transition-colors cursor-pointer shadow-2xs"
                       >
                         <Plus className="w-3.5 h-3.5" />
-                        <span>Aggiungi punto di svolta</span>
+                        <span>{isTtrpg ? 'Aggiungi incontro / evento' : 'Aggiungi punto di svolta'}</span>
                       </button>
 
                       <button
@@ -352,7 +370,10 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
 
       {/* Narrative Templates Modal */}
       {showTemplatesModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in folia-modal-overlay"
+          onClick={() => setShowTemplatesModal(false)}
+        >
           <div 
             className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh]"
             onClick={(e) => e.stopPropagation()}
@@ -363,8 +384,14 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
                   <Compass className="w-6 h-6 text-folia-800" />
                 </div>
                 <div>
-                  <h3 className="font-brand font-bold text-xl text-paper-900">Scegli modello struttura narrativa</h3>
-                  <p className="text-xs text-paper-500">Seleziona una griglia narrativa classica, moderna o libera</p>
+                  <h3 className="font-brand font-bold text-xl text-paper-900">
+                    {isTtrpg ? 'Modelli di Campagna & Avventura D&D' : 'Scegli modello struttura narrativa'}
+                  </h3>
+                  <p className="text-xs text-paper-500">
+                    {isTtrpg
+                      ? 'Seleziona una struttura classica per guidare la campagna, il dungeon o la singola sessione'
+                      : 'Seleziona una griglia narrativa classica, moderna o libera'}
+                  </p>
                 </div>
               </div>
               <button 
@@ -376,7 +403,7 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
             </div>
 
             <div className="p-6 overflow-y-auto space-y-3.5">
-              {PLOT_TEMPLATES.map(template => (
+              {availableTemplates.map(template => (
                 <div
                   key={template.id}
                   onClick={() => handleApplyTemplate(template)}
@@ -419,11 +446,11 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
             setShowTemplatesModal(false);
           }
         }}
-        title="Applica modello narrativo"
+        title={isTtrpg ? "Applica modello di campagna" : "Applica modello narrativo"}
         subtitle="Conferma sostituzione della struttura"
         message={
           <span>
-            Vuoi applicare la struttura <strong>"{confirmTemplate?.name}"</strong>? Gli atti e i punti di svolta attuali verranno sostituiti con la nuova struttura.
+            Vuoi applicare la struttura <strong>"{confirmTemplate?.name}"</strong>? {isTtrpg ? 'Le fasi e gli incontri attuali verranno sostituiti con il nuovo modello.' : 'Gli atti e i punti di svolta attuali verranno sostituiti con la nuova struttura.'}
           </span>
         }
         confirmLabel="Applica struttura"
@@ -441,11 +468,11 @@ export const PlotOutliner: React.FC<PlotOutlinerProps> = ({
             setDeletingAct(null);
           }
         }}
-        title="Elimina atto narrativo"
-        subtitle="Questa azione eliminerà l'atto e tutti i punti di svolta contenuti"
+        title={isTtrpg ? "Elimina fase di campagna" : "Elimina atto narrativo"}
+        subtitle={isTtrpg ? "Questa azione eliminerà la fase e tutti gli incontri contenuti" : "Questa azione eliminerà l'atto e tutti i punti di svolta contenuti"}
         message={
           <span>
-            Sei sicuro di voler eliminare <strong>"{deletingAct?.title || 'questo atto'}"</strong>?
+            Sei sicuro di voler eliminare <strong>"{deletingAct?.title || (isTtrpg ? 'questa fase' : 'questo atto')}"</strong>?
           </span>
         }
         confirmLabel="Elimina definitivamente"

@@ -26,6 +26,8 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
   t
 }) => {
   const manuscriptList = project.manuscript || [];
+  const isTtrpg = project.settings?.projectType === 'ttrpg_master';
+  const isThesis = project.settings?.projectType === 'academic_thesis';
   const [expandedCard, setExpandedCard] = useState<{
     id: string;
     title: string;
@@ -49,8 +51,16 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
               <LayoutGrid className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="font-brand font-bold text-lg text-paper-900">{t('corkboard.title')}</h2>
-              <p className="text-xs text-paper-500">Panoramica a schede del manoscritto stile Scrivener</p>
+              <h2 className="font-brand font-bold text-lg text-paper-900">
+                {isTtrpg ? 'Bacheca scene & incontri' : isThesis ? 'Scaletta argomenti & struttura tesi' : t('corkboard.title')}
+              </h2>
+              <p className="text-xs text-paper-500">
+                {isTtrpg
+                  ? 'Panoramica visuale a schede di sessioni, scene ed incontri della campagna'
+                  : isThesis
+                  ? 'Panoramica visuale delle parti di struttura, capitoli e sezioni della tesi'
+                  : 'Panoramica visuale e riepilogo a schede dei capitoli'}
+              </p>
             </div>
           </div>
 
@@ -59,7 +69,7 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
             className="flex items-center gap-2 px-4 py-2 bg-folia-700 hover:bg-folia-800 text-white rounded-xl text-xs font-medium shadow-xs hover:shadow-md transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            {t('corkboard.add_card')}
+            {isTtrpg ? 'Aggiungi scena/incontro' : isThesis ? 'Aggiungi capitolo/sezione' : t('corkboard.add_card')}
           </button>
         </div>
 
@@ -71,10 +81,10 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
             return (
               <div
                 key={item.id}
-                className="bg-paper-50 rounded-2xl border border-paper-300 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group hover:border-folia-400"
+                className="bg-paper-50 rounded-2xl border border-paper-300 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:border-folia-400 relative"
               >
                 {/* Card Header with index and title */}
-                <div className="p-4 border-b border-paper-200 bg-paper-100/60 flex items-center justify-between gap-2">
+                <div className="p-4 border-b border-paper-200 bg-paper-100/60 rounded-t-2xl flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     <span className="font-mono text-xs font-bold text-folia-800 bg-folia-100 px-1.5 py-0.5 rounded">
                       #{index + 1}
@@ -83,7 +93,7 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
                       type="text"
                       value={item.title || ''}
                       onChange={(e) => onUpdateDocTitle(item.id, e.target.value)}
-                      placeholder="Titolo capitolo / scena..."
+                      placeholder={isTtrpg ? "Titolo scena o incontro..." : isThesis ? "Titolo capitolo / sezione..." : "Titolo capitolo / scena..."}
                       className="font-brand font-bold text-sm text-paper-900 bg-transparent border-none focus:outline-hidden focus:ring-1 focus:ring-folia-500 rounded px-1 truncate flex-1"
                     />
                   </div>
@@ -93,7 +103,7 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
                       type="button"
                       onClick={() => setExpandedCard({
                         id: item.id,
-                        title: item.title || `Scheda #${index + 1}`,
+                        title: item.title || (isTtrpg ? `Scena #${index + 1}` : isThesis ? `Parte #${index + 1}` : `Scheda #${index + 1}`),
                         synopsis: item.synopsis || ''
                       })}
                       title="Ingrandisci e metti in primo piano"
@@ -116,14 +126,14 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
                   <textarea
                     value={item.synopsis || ''}
                     onChange={(e) => onUpdateDocSynopsis(item.id, e.target.value)}
-                    placeholder="Scrivi qui la sinossi o il riassunto di questa scena..."
+                    placeholder={isTtrpg ? "Note di preparazione, PNG chiave, mostri o svolgimento dell'incontro..." : isThesis ? "Descrivi gli argomenti chiave, metodologia, fonti e contenuto della sezione..." : "Scrivi qui la sinossi o il riassunto di questa scena..."}
                     rows={4}
                     className="w-full text-xs font-sans text-paper-700 bg-transparent border-none focus:outline-hidden resize-none leading-relaxed"
                   />
                 </div>
 
                 {/* Card Footer: Status Selector & Stats */}
-                <div className="px-4 py-2.5 bg-paper-100/80 border-t border-paper-200 flex items-center justify-between text-[11px]">
+                <div className="px-4 py-2.5 bg-paper-100/80 border-t border-paper-200 rounded-b-2xl flex items-center justify-between text-[11px]">
                   {/* Status Dropdown Premium */}
                   <CustomSelect
                     value={currentStatus}

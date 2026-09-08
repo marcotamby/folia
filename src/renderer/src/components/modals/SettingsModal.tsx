@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Settings, Globe, Type, Target, Check, WrapText, Indent, Info, BookOpen, Compass, GraduationCap, Mail, SpellCheck } from 'lucide-react';
+import { X, Settings, Globe, Type, Heading1, Target, Check, WrapText, Indent, AlignJustify, Info, BookOpen, Compass, GraduationCap, Mail, SpellCheck } from 'lucide-react';
 import { Project, Language, FontFamily, PageMargins, PageFormat, ParagraphSpacing, ProjectType } from '../../types';
 import { CustomSelect } from '../common/CustomSelect';
 
@@ -64,7 +64,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in folia-modal-overlay"
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-lg overflow-hidden flex flex-col max-h-[88vh]"
         onClick={(e) => e.stopPropagation()}
@@ -221,26 +224,42 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
 
-          {/* Typography */}
-          <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-paper-700 uppercase tracking-wider mb-2.5">
-              <Type className="w-4 h-4 text-folia-700" />
-              <span>{t('editor.font_family')}</span>
+          {/* Typography: Body & Headings */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-paper-700 uppercase tracking-wider mb-2.5">
+                <Type className="w-4 h-4 text-folia-700" />
+                <span>Carattere Testo</span>
+              </div>
+              <CustomSelect
+                value={project.settings.fontFamily}
+                onChange={(val) => onUpdateSettings({ fontFamily: val as FontFamily })}
+                options={fonts.map((f) => ({ value: f, label: f }))}
+                className="w-full"
+                buttonClassName="w-full py-2 px-3 justify-between"
+              />
             </div>
-            <CustomSelect
-              value={project.settings.fontFamily}
-              onChange={(val) => onUpdateSettings({ fontFamily: val as FontFamily })}
-              options={fonts.map((f) => ({ value: f, label: f }))}
-              className="w-full"
-              buttonClassName="w-full py-2 px-3 justify-between"
-            />
+
+            <div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-paper-700 uppercase tracking-wider mb-2.5">
+                <Heading1 className="w-4 h-4 text-folia-700" />
+                <span>Carattere Titoli & Capitoli</span>
+              </div>
+              <CustomSelect
+                value={project.settings.headingFontFamily || 'Plus Jakarta Sans'}
+                onChange={(val) => onUpdateSettings({ headingFontFamily: val as FontFamily })}
+                options={fonts.map((f) => ({ value: f, label: f }))}
+                className="w-full"
+                buttonClassName="w-full py-2 px-3 justify-between"
+              />
+            </div>
           </div>
 
-          {/* Font size & Line height */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Font size & Line height & Title Size */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-medium text-paper-700 mb-1.5">
-                {t('editor.font_size')}: {project.settings.fontSize} pt
+                Dimensione Testo: {project.settings.fontSize} pt
               </label>
               <input
                 type="range"
@@ -249,6 +268,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 step="1"
                 value={project.settings.fontSize}
                 onChange={(e) => onUpdateSettings({ fontSize: Number(e.target.value) })}
+                className="w-full accent-folia-700"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-paper-700 mb-1.5">
+                Dimensione Titoli: {project.settings.titleFontSize || 26} pt
+              </label>
+              <input
+                type="range"
+                min="18"
+                max="48"
+                step="1"
+                value={project.settings.titleFontSize || 26}
+                onChange={(e) => onUpdateSettings({ titleFontSize: Number(e.target.value) })}
                 className="w-full accent-folia-700"
               />
             </div>
@@ -279,12 +313,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <CustomSelect
                 value={String(project.settings.firstLineIndent ?? 1.0)}
                 onChange={(val) => onUpdateSettings({ firstLineIndent: Number(val) })}
+                align="right"
                 options={[
-                  { value: '0', label: 'Nessuno (0 cm)' },
+                  { value: '0', label: 'Nessuno' },
                   { value: '0.5', label: '0.5 cm' },
-                  { value: '1', label: '1.0 cm (editoriale standard)' },
+                  { value: '1', label: '1.0 cm (standard)' },
                   { value: '1.25', label: '1.25 cm' },
                   { value: '1.5', label: '1.5 cm' }
+                ]}
+                buttonClassName="py-1 px-2.5 text-xs"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs pt-2 border-t border-paper-200">
+              <div className="flex items-center gap-2 font-medium text-paper-800">
+                <AlignJustify className="w-4 h-4 text-folia-700" />
+                <span>Spaziatura tra paragrafi</span>
+              </div>
+              <CustomSelect
+                value={project.settings.paragraphSpacing ?? 'normal'}
+                onChange={(val) => onUpdateSettings({ paragraphSpacing: val as ParagraphSpacing })}
+                align="right"
+                options={[
+                  { value: 'none', label: 'Nessuna (stile libro)' },
+                  { value: 'tight', label: 'Stretta' },
+                  { value: 'normal', label: 'Media (standard)' },
+                  { value: 'relaxed', label: 'Ampia' }
                 ]}
                 buttonClassName="py-1 px-2.5 text-xs"
               />

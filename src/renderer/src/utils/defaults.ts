@@ -27,7 +27,7 @@ export const createDefaultProject = (
         id: 'doc-sess1',
         title: isIt ? 'Sessione 1: L\'inizio dell\'avventura' : 'Session 1: Adventure Begins',
         type: 'chapter',
-        synopsis: isIt ? 'Incontro iniziale del party e prima quest locale.' : 'Initial party encounter and first quest.',
+        synopsis: '',
         status: 'draft',
         color: '#F59E0B',
         parentId: null,
@@ -59,21 +59,14 @@ export const createDefaultProject = (
       {
         id: 'note-rules-1',
         title: isIt ? 'Regole della casa (Homebrew)' : 'House Rules (Homebrew)',
-        content: isIt ? 'Regole speciali della campagna, varianti di riposo, critici e gestione del party.' : 'Special campaign rules, rest variants, criticals, and party management.',
+        content: '',
+        placeholder: isIt ? 'Regole speciali della campagna, varianti di riposo, critici e gestione del party...' : 'Special campaign rules, rest variants, criticals, and party management...',
         tags: [isIt ? 'regole' : 'rules', 'homebrew'],
         createdAt: nowISO,
         updatedAt: nowISO
       }
     ];
-    ideas = [
-      {
-        id: 'idea-loot-1',
-        text: isIt ? 'Oggetto magico raro da far trovare nel primo dungeon.' : 'Rare magic item to find in the first dungeon.',
-        tag: 'world',
-        color: '#FEF08A',
-        createdAt: nowISO
-      }
-    ];
+    ideas = [];
   } else if (projectType === 'academic_thesis') {
     if (!customTitle) defaultTitle = isIt ? 'Tesi di laurea' : 'Academic Thesis';
     totalWordGoal = 35000;
@@ -85,7 +78,7 @@ export const createDefaultProject = (
         id: 'doc-frontespizio',
         title: isIt ? 'Frontespizio & dedica' : 'Title Page & Dedication',
         type: 'chapter',
-        synopsis: isIt ? 'Intestazione ateneo, corso di laurea, relatore, correlatore e candidato.' : 'University header, course, advisor, co-advisor and candidate.',
+        synopsis: '',
         status: 'draft',
         color: '#3B82F6',
         parentId: null,
@@ -99,7 +92,7 @@ export const createDefaultProject = (
         id: 'doc-intro',
         title: isIt ? 'Introduzione generale' : 'Introduction',
         type: 'chapter',
-        synopsis: isIt ? 'Contesto della ricerca, motivazioni, obiettivi e struttura dell\'elaborato.' : 'Research context, motivations, objectives and thesis structure.',
+        synopsis: '',
         status: 'draft',
         color: '#60A5FA',
         parentId: null,
@@ -113,7 +106,7 @@ export const createDefaultProject = (
         id: 'doc-cap1',
         title: isIt ? 'Capitolo 1: Quadro teorico & stato dell\'arte' : 'Chapter 1: Theoretical Framework',
         type: 'chapter',
-        synopsis: isIt ? 'Revisione della letteratura scientifica e modelli teorici di riferimento.' : 'Literature review and theoretical models.',
+        synopsis: '',
         status: 'draft',
         color: '#10B981',
         parentId: null,
@@ -127,7 +120,7 @@ export const createDefaultProject = (
         id: 'doc-cap2',
         title: isIt ? 'Capitolo 2: Metodologia della ricerca' : 'Chapter 2: Research Methodology',
         type: 'chapter',
-        synopsis: isIt ? 'Descrizione del metodo di indagine, raccolta dati, campioni o corpus testuale.' : 'Methodology description, data collection, sample or textual corpus.',
+        synopsis: '',
         status: 'draft',
         color: '#10B981',
         parentId: null,
@@ -141,7 +134,7 @@ export const createDefaultProject = (
         id: 'doc-cap3',
         title: isIt ? 'Capitolo 3: Analisi dei dati & discussione dei risultati' : 'Chapter 3: Data Analysis & Discussion',
         type: 'chapter',
-        synopsis: isIt ? 'Presentazione dei risultati emersi, grafici, analisi critica e confronto.' : 'Results presentation, charts, critical analysis and comparison.',
+        synopsis: '',
         status: 'draft',
         color: '#10B981',
         parentId: null,
@@ -155,7 +148,7 @@ export const createDefaultProject = (
         id: 'doc-conclusioni',
         title: isIt ? 'Conclusioni & sviluppi futuri' : 'Conclusions & Future Work',
         type: 'chapter',
-        synopsis: isIt ? 'Sintesi dei contributi, limiti dell\'indagine e prospettive aperte.' : 'Contribution summary, limitations, and future outlook.',
+        synopsis: '',
         status: 'draft',
         color: '#8B5CF6',
         parentId: null,
@@ -169,7 +162,7 @@ export const createDefaultProject = (
         id: 'doc-bibliografia',
         title: isIt ? 'Bibliografia & sitografia' : 'Bibliography & References',
         type: 'chapter',
-        synopsis: isIt ? 'Riferimenti bibliografici completi in formato standard (APA, Chicago, MLA).' : 'Complete references in standard format (APA, Chicago, MLA).',
+        synopsis: '',
         status: 'draft',
         color: '#6B7280',
         parentId: null,
@@ -184,21 +177,14 @@ export const createDefaultProject = (
       {
         id: 'note-biblio-1',
         title: isIt ? 'Fonti primarie & articoli scientifici' : 'Primary Sources & Academic Papers',
-        content: isIt ? 'Annotazioni e citazioni chiave estratte dai testi di riferimento per la tesi.' : 'Key notes and citations extracted from reference papers.',
+        content: '',
+        placeholder: isIt ? 'Annotazioni e citazioni chiave estratte dai testi di riferimento per la tesi...' : 'Key notes and citations extracted from reference papers...',
         tags: [isIt ? 'bibliografia' : 'bibliography', isIt ? 'citazioni' : 'citations'],
         createdAt: nowISO,
         updatedAt: nowISO
       }
     ];
-    ideas = [
-      {
-        id: 'idea-thesis-1',
-        text: isIt ? 'Domanda di ricerca da discutere al prossimo incontro col relatore.' : 'Research question to discuss at next meeting with thesis advisor.',
-        tag: 'research',
-        color: '#BAE6FD',
-        createdAt: nowISO
-      }
-    ];
+    ideas = [];
   } else if (projectType === 'letter') {
     if (!customTitle) defaultTitle = isIt ? 'Lettera formale' : 'Formal Letter';
     totalWordGoal = 1000;
@@ -210,7 +196,7 @@ export const createDefaultProject = (
         id: 'doc-letter-1',
         title: isIt ? 'Lettera - Prima stesura' : 'Letter - First Draft',
         type: 'chapter',
-        synopsis: isIt ? 'Testo principale della lettera con formule di apertura e chiusura.' : 'Main letter text with opening and closing salutations.',
+        synopsis: '',
         status: 'draft',
         color: '#8B5CF6',
         parentId: null,
@@ -225,21 +211,14 @@ export const createDefaultProject = (
       {
         id: 'note-destinatario',
         title: isIt ? 'Dati destinatario & recapiti' : 'Recipient Details',
-        content: isIt ? 'Destinatario: \nEnte / Società: \nIndirizzo: \nOggetto formale: \nData di invio: ' : 'Recipient: \nOrganization: \nAddress: \nSubject: \nDate: ',
+        content: '',
+        placeholder: isIt ? 'Destinatario:\nEnte / Società:\nIndirizzo:\nOggetto formale:\nData di invio:' : 'Recipient:\nOrganization:\nAddress:\nSubject:\nDate:',
         tags: [isIt ? 'destinatario' : 'recipient', isIt ? 'recapiti' : 'contacts'],
         createdAt: nowISO,
         updatedAt: nowISO
       }
     ];
-    ideas = [
-      {
-        id: 'idea-letter-1',
-        text: isIt ? 'Allegati da includere nella busta o via email.' : 'Attachments to include in the envelope or via email.',
-        tag: 'research',
-        color: '#E9D5FF',
-        createdAt: nowISO
-      }
-    ];
+    ideas = [];
   } else {
     // novel
     manuscript = [
@@ -314,6 +293,7 @@ export const createDefaultProject = (
     plotActs,
     ideas,
     notes,
-    trash: []
+    trash: [],
+    sessions: []
   };
 };

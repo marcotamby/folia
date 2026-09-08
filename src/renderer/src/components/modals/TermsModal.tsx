@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, FileText, Check, Lock } from 'lucide-react';
 import { Language } from '../../types';
+import { Checkbox } from '../common/Checkbox';
 
 interface TermsModalProps {
   isOpen: boolean;
@@ -72,30 +73,28 @@ export const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onAccept, lang, 
           )}
 
           {/* Checkboxes */}
-          <div className="space-y-3 pt-2">
-            <label className="flex items-start gap-3 cursor-pointer select-none group">
-              <input
-                type="checkbox"
-                checked={agreeTerms}
-                onChange={(e) => setAgreeTerms(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded-md border-paper-300 text-folia-700 focus:ring-folia-600"
-              />
-              <span className="text-xs font-medium text-paper-800 group-hover:text-paper-900">
-                {t('terms_modal.agree_terms')} <span className="text-red-500">*</span>
-              </span>
-            </label>
+          <div className="flex flex-col space-y-3 pt-2">
+            <Checkbox
+              align="start"
+              checked={agreeTerms}
+              onChange={setAgreeTerms}
+              label={
+                <span className="text-xs font-medium text-paper-800 group-hover:text-paper-900">
+                  {t('terms_modal.agree_terms')} <span className="text-red-500">*</span>
+                </span>
+              }
+            />
 
-            <label className="flex items-start gap-3 cursor-pointer select-none group">
-              <input
-                type="checkbox"
-                checked={agreePrivacy}
-                onChange={(e) => setAgreePrivacy(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded-md border-paper-300 text-folia-700 focus:ring-folia-600"
-              />
-              <span className="text-xs font-medium text-paper-800 group-hover:text-paper-900">
-                {t('terms_modal.agree_privacy')} <span className="text-red-500">*</span>
-              </span>
-            </label>
+            <Checkbox
+              align="start"
+              checked={agreePrivacy}
+              onChange={setAgreePrivacy}
+              label={
+                <span className="text-xs font-medium text-paper-800 group-hover:text-paper-900">
+                  {t('terms_modal.agree_privacy')} <span className="text-red-500">*</span>
+                </span>
+              }
+            />
           </div>
         </div>
 

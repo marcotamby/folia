@@ -27,12 +27,18 @@ class ErrorBoundary extends React.Component<
     this.setState({ errorInfo });
   }
 
-  handleReset = () => {
-    try {
-      localStorage.clear();
-      sessionStorage.clear();
-    } catch (e) {}
+  handleReload = () => {
     window.location.reload();
+  };
+
+  handleFactoryReset = () => {
+    if (window.confirm("Attenzione: questa operazione azzera la memoria temporanea locale di Folia. I tuoi file di progetto (.folia salvati su disco) non verranno eliminati. Vuoi procedere?")) {
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (e) {}
+      window.location.reload();
+    }
   };
 
   render() {
@@ -42,9 +48,9 @@ class ErrorBoundary extends React.Component<
           <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center mb-4 text-2xl font-bold shadow-xs">
             Folia
           </div>
-          <h2 className="text-xl font-bold mb-2">Si è verificato un problema durante l'avvio</h2>
+          <h2 className="text-xl font-bold mb-2">Si è verificato un problema imprevisto</h2>
           <p className="text-xs text-stone-500 max-w-md mb-4 leading-relaxed">
-            È stato rilevato un dato non valido nei file temporanei. Clicca sul pulsante qui sotto per ripristinare l'ambiente di lavoro.
+            I tuoi progetti salvati sono al sicuro. Puoi ricaricare l'applicazione senza perdere i dati.
           </p>
 
           {/* Detailed Error Box */}
@@ -60,12 +66,18 @@ class ErrorBoundary extends React.Component<
             )}
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
-              onClick={this.handleReset}
+              onClick={this.handleReload}
               className="px-5 py-2.5 bg-[#1B4332] hover:bg-[#2D6A4F] text-white rounded-xl text-xs font-semibold cursor-pointer shadow-sm transition-all"
             >
-              Ripristina e apri
+              Ricarica applicazione (Mantieni dati)
+            </button>
+            <button
+              onClick={this.handleFactoryReset}
+              className="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-700 rounded-xl text-xs font-medium cursor-pointer transition-all"
+            >
+              Ripristino di fabbrica (Cancella temporanei)
             </button>
           </div>
         </div>

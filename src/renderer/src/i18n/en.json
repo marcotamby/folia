@@ -31,7 +31,8 @@
     "corkboard": "Index Cards",
     "ideas": "Ideas & Notes",
     "notes": "Notes & Research",
-    "trash": "Trash"
+    "trash": "Trash",
+    "sessions": "Sessions"
   },
   "sidebar": {
     "add_chapter": "Add Chapter",
@@ -90,7 +91,9 @@
     "h3": "Heading 3",
     "bullet_list": "Bullet List",
     "numbered_list": "Numbered List",
+    "ordered_list": "Numbered List",
     "quote": "Blockquote",
+    "blockquote": "Blockquote",
     "divider": "Divider",
     "table": "Table",
     "highlight": "Highlight",
@@ -143,7 +146,7 @@
     "full_desc": "Detailed description & lore"
   },
   "corkboard": {
-    "title": "Index Cards (Corkboard)",
+    "title": "Index Cards",
     "add_card": "Add Card",
     "synopsis": "Synopsis / Scene Summary",
     "status": "Status",
@@ -213,5 +216,36 @@
     "copyright": "Copyright (©)",
     "degree": "Degree sign (°)",
     "bullet": "Bullet (•)"
+  },
+  "sessions": {
+    "title": "Session Recordings",
+    "subtitle": "Audio archive, timeline bookmarks, and campaign diary",
+    "record_btn": "Record Session",
+    "recording": "Recording in progress",
+    "stop_save": "End & Save",
+    "pause": "Pause",
+    "resume": "Resume",
+    "add_marker": "Bookmark",
+    "no_sessions": "No sessions recorded",
+    "no_sessions_desc": "Start a recording to capture your tabletop sessions with audio, timestamps, and dedicated notes.",
+    "search_placeholder": "Search sessions...",
+    "new_recording_title": "New Session",
+    "markers_title": "Bookmarks & Key Moments",
+    "add_marker_at_playhead": "Add bookmark at current position",
+    "marker_placeholder": "e.g. NPC Encounter, Combat, Loot...",
+    "notes_title": "Session Diary & Notes",
+    "notes_placeholder": "Record your session summary, key decisions, XP or distributed loot here...",
+    "export_to_manuscript": "Create Chapter in Manuscript",
+    "export_success": "Session successfully exported to Manuscript!",
+    "open_in_folder": "Open file folder",
+    "delete_session": "Delete session",
+    "delete_confirm_title": "Delete this recording?",
+    "delete_confirm_desc": "The session and its associated audio file will be deleted from disk.",
+    "duration": "Duration",
+    "date": "Date",
+    "size": "Size",
+    "speed": "Speed",
+    "mic_active": "Microphone active",
+    "marker_added": "Bookmark added!"
   }
 }

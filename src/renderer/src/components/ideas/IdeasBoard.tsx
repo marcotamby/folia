@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Lightbulb, Plus, Trash2, Tag } from 'lucide-react';
+import { Lightbulb, Plus, Trash2, Tag, MessageSquare, Zap, BookOpen, Globe, Search } from 'lucide-react';
 import { Project, IdeaNote } from '../../types';
+import { CustomSelect, CustomSelectOption } from '../common/CustomSelect';
 
 interface IdeasBoardProps {
   project: Project;
@@ -19,12 +20,32 @@ export const IdeasBoard: React.FC<IdeasBoardProps> = ({
 
   const ideasList = project.ideas || [];
 
-  const tags: { value: IdeaNote['tag']; label: string }[] = [
-    { value: 'dialogue', label: t('ideas.tag_dialogue') },
-    { value: 'plot_twist', label: t('ideas.tag_plot_twist') },
-    { value: 'scene', label: t('ideas.tag_scene') },
-    { value: 'world', label: t('ideas.tag_world') },
-    { value: 'research', label: t('ideas.tag_research') },
+  const tags: (CustomSelectOption & { value: IdeaNote['tag'] })[] = [
+    {
+      value: 'dialogue',
+      label: t('ideas.tag_dialogue'),
+      icon: <MessageSquare className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+    },
+    {
+      value: 'plot_twist',
+      label: t('ideas.tag_plot_twist'),
+      icon: <Zap className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+    },
+    {
+      value: 'scene',
+      label: t('ideas.tag_scene'),
+      icon: <BookOpen className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+    },
+    {
+      value: 'world',
+      label: t('ideas.tag_world'),
+      icon: <Globe className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+    },
+    {
+      value: 'research',
+      label: t('ideas.tag_research'),
+      icon: <Search className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+    },
   ];
 
   const colors = [
@@ -86,15 +107,12 @@ export const IdeasBoard: React.FC<IdeasBoardProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div className="flex items-center gap-2">
               <span className="text-[11px] text-paper-500 font-medium">Categoria:</span>
-              <select
+              <CustomSelect
                 value={newTag}
-                onChange={(e) => setNewTag(e.target.value as any)}
-                className="px-2.5 py-1 text-xs bg-white border border-paper-250 rounded-lg text-paper-800 focus:outline-hidden"
-              >
-                {tags.map(tag => (
-                  <option key={tag.value} value={tag.value}>{tag.label}</option>
-                ))}
-              </select>
+                options={tags}
+                onChange={(val) => setNewTag(val as IdeaNote['tag'])}
+                buttonClassName="h-8 px-3 text-xs bg-white hover:bg-paper-50 border-paper-250 rounded-xl text-paper-800 font-medium shadow-2xs hover:border-folia-600 transition-colors"
+              />
             </div>
 
             <div className="flex items-center gap-2">
@@ -144,8 +162,16 @@ export const IdeasBoard: React.FC<IdeasBoardProps> = ({
                 />
 
                 <div className="flex items-center justify-between pt-2 border-t border-black/5 text-[10px] text-stone-600">
-                  <span className="font-semibold uppercase tracking-wider">
-                    {tags.find(t => t.value === idea.tag)?.label || idea.tag}
+                  <span className="font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                    {(() => {
+                      const found = tags.find(t => t.value === idea.tag);
+                      return (
+                        <>
+                          {found?.icon}
+                          <span>{found?.label || idea.tag}</span>
+                        </>
+                      );
+                    })()}
                   </span>
 
                   <button

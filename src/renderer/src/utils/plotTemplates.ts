@@ -4,6 +4,7 @@ export interface PlotTemplateInfo {
   id: PlotTemplateType;
   name: string;
   description: string;
+  category: 'novel' | 'dnd' | 'all';
   createActs: () => PlotAct[];
 }
 
@@ -12,6 +13,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'three_act',
     name: 'Struttura Classica in 3 Atti',
     description: "La struttura narrativa classica dell'occidente: Impostazione, Sviluppo & Crisi, Risoluzione.",
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-1',
@@ -49,6 +51,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'hero_journey',
     name: "Il Viaggio dell'Eroe (Joseph Campbell / Vogler)",
     description: "Il celebre archetipo mitologico in 12 fasi universali, ideale per romanzi d'avventura, fantasy e crescita personale.",
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-hj-1',
@@ -89,6 +92,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'save_the_cat',
     name: 'Salva il Gatto! (Save the Cat! Beat Sheet)',
     description: 'La celebre griglia a 15 beat di Blake Snyder, usata nei migliori romanzi moderni e sceneggiature.',
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-stc-1',
@@ -132,6 +136,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'kishotenketsu',
     name: 'Kishōtenketsu (Struttura Narrativa Orientale)',
     description: 'La celebre struttura in 4 fasi tipica della narrativa asiatica (Giappone/Cina): Introduzione, Sviluppo, Colpo di Scena (Twist) e Risoluzione senza conflitto diretto obbligatorio.',
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-ki-1',
@@ -171,6 +176,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'dan_harmon',
     name: "Story Circle di Dan Harmon (Il Cerchio delle 8 Fasi)",
     description: "La versione semplificata e potentissima del viaggio dell'eroe in 8 passi, usata in Rick & Morty, Community e narrativa moderna.",
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-dh-1',
@@ -214,6 +220,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'seven_point',
     name: 'Struttura a 7 Punti (Dan Wells)',
     description: 'Metodo progressivo in 7 tappe ideale per pianificare a ritroso dal finale al punto di partenza.',
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-7p-1',
@@ -249,6 +256,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'romance_beats',
     name: "Struttura Romance & Romanzo d'Amore",
     description: "La scansione classica degli archi d'amore: Meet Cute, Primi Battibecchi, Avvicinamento, Grande Rottura e Gran Gesto.",
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-rom-1',
@@ -286,6 +294,7 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     id: 'mystery_beats',
     name: 'Giallo & Investigazione (Mystery / Thriller)',
     description: 'La griglia classica per romanzi investigativi: Crimine, Indagine, False Piste, Pericolo e Rivelazione.',
+    category: 'novel',
     createActs: () => [
       {
         id: 'act-my-1',
@@ -321,8 +330,9 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
   },
   {
     id: 'dnd_campaign',
-    name: 'Arco di Campagna D&D / GdR (Tier 1-4)',
-    description: 'Struttura epica a 4 Tier di gioco.',
+    name: 'Arco di Campagna D&D (Tier 1-4, Livelli 1-20)',
+    description: 'Struttura epica completa in 4 Tier: da Eroi Locali di borgo a Campioni del Multiverso.',
+    category: 'dnd',
     createActs: () => [
       {
         id: 'act-dnd-1',
@@ -366,8 +376,9 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
   },
   {
     id: 'five_room_dungeon',
-    name: 'Struttura Dungeon a 5 Stanze (Johnn Four)',
-    description: 'Il celebre schema di design per avventure e dungeon GdR.',
+    name: 'Dungeon a 5 Stanze (Johnn Four)',
+    description: 'Il leggendario schema per creare dungeon dinamici ed equilibrati: Guardiani, Puzzle, Twist, Boss Fight e Ricompensa.',
+    category: 'dnd',
     createActs: () => [
       {
         id: 'act-frd-1',
@@ -404,13 +415,14 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
   {
     id: 'dnd_oneshot',
     name: 'Avventura One-Shot (Sessione Singola 3-4 Ore)',
-    description: 'Struttura perfetta per sessioni singole da completare in una sola serata.',
+    description: 'Struttura perfetta per sessioni singole o introduttive: Incidente iniziale, Viaggio e Climax con Boss.',
+    category: 'dnd',
     createActs: () => [
       {
         id: 'act-os-1',
         title: "Fase 1: L'Aggancio (Hook) & Partenza",
         subtitle: "Minuti 0-45: Ingaggio rapido e avvio dell'azione",
-        beats: [{ id: 'os-1', actId: 'act-os-1', title: "1. Incidente d'Apertura & Richiesta d'Aiuto", description: '', guideline: 'La sessione parte in medias res con una minaccia immediata o un PNG disperato.', order: 0 }]
+        beats: [{ id: 'os-1', actId: 'act-os-1', title: "1. Incidente d'Apertura & Richiesta d'Aiuto", description: '', guideline: 'La sessione parte in medias res con una minaccia immediata o un NPC disperato.', order: 0 }]
       },
       {
         id: 'act-os-2',
@@ -430,16 +442,154 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     ]
   },
   {
+    id: 'dnd_sandbox',
+    name: 'Campagna Sandbox & Hexcrawl (Esplorazione Libera)',
+    description: 'Struttura aperta stile West Marches: Hub di partenza (locanda/borgo), bacheca taglie, esagoni selvaggi inesplorati e fazioni dinamiche.',
+    category: 'dnd',
+    createActs: () => [
+      {
+        id: 'act-sb-1',
+        title: 'Atto 1: Hub di Partenza & Voci della Taverna',
+        subtitle: 'Il borgo sicuro, i PNG alleati e le prime dicerie d\'avventura',
+        beats: [
+          { id: 'sb-1', actId: 'act-sb-1', title: '1. Il Rifugio Sicuro & I PNG Chiave', description: '', guideline: 'La locanda, il fabbro, il magistrato o la gilda che offrono riposo e rifornimenti.', order: 0 },
+          { id: 'sb-2', actId: 'act-sb-1', title: '2. Bacheca Taglie & Dicerie (Rumor Mill)', description: '', guideline: '3-5 dicerie su rovine misteriose, mostri nei boschi o carovane scomparse.', order: 1 },
+          { id: 'sb-3', actId: 'act-sb-1', title: '3. La Mappa Regionale Inesplorata', description: '', guideline: 'I PG scelgono liberamente quale esagono o rotta esplorare per primi.', order: 2 }
+        ]
+      },
+      {
+        id: 'act-sb-2',
+        title: 'Atto 2: Esplorazione delle Terre Selvagge (Wilderness)',
+        subtitle: 'Sopravvivenza, incontri casuali e scoperta di siti dimenticati',
+        beats: [
+          { id: 'sb-4', actId: 'act-sb-2', title: '4. Pericoli Ambientali & Sopravvivenza', description: '', guideline: 'Gestione delle razioni, guadi insidiosi o tempeste magiche.', order: 0 },
+          { id: 'sb-5', actId: 'act-sb-2', title: '5. Incontri Casuali & Pattuglie Territoriali', description: '', guideline: 'Predatori selvaggi, predoni o viandanti con informazioni cruciali.', order: 1 },
+          { id: 'sb-6', actId: 'act-sb-2', title: '6. Scoperta di un Punto d\'Interesse', description: '', guideline: 'Un tempio crollato, una miniera abbandonata o una tomba antica.', order: 2 }
+        ]
+      },
+      {
+        id: 'act-sb-3',
+        title: 'Atto 3: Il Megadungeon / Minaccia Regionale',
+        subtitle: 'La spedizione nel cuore del pericolo scoperto durante i viaggi',
+        beats: [
+          { id: 'sb-7', actId: 'act-sb-3', title: '7. Discesa nel Complesso Sotterraneo', description: '', guideline: 'Mappe a più livelli con ecologia sotterranea, trappole e segreti antichi.', order: 0 },
+          { id: 'sb-8', actId: 'act-sb-3', title: '8. Scontro col Guardiano & Bottino Leggendario', description: '', guideline: 'Il signore del dungeon e gli oggetti magici che cambiano il destino del party.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-sb-4',
+        title: 'Atto 4: Fazioni in Movimento & Frontiera Espansa',
+        subtitle: 'Le conseguenze delle scelte del party sul territorio circostante',
+        beats: [
+          { id: 'sb-9', actId: 'act-sb-4', title: '9. Le Fazioni Reagiscono alle Gesta del Party', description: '', guideline: 'Gilde e lord locali prendono posizione; i territori liberati fioriscono o attraggono nuovi pericoli.', order: 0 },
+          { id: 'sb-10', actId: 'act-sb-4', title: '10. Fondazione Roccaforte o Nuova Mappa', description: '', guideline: 'I PG stabiliscono un avamposto o sbloccano terre ancora più remote.', order: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'dnd_bbeg',
+    name: 'Arco della Minaccia del BBEG (Escalation del Cattivo)',
+    description: 'Struttura a Fronti di Pericolo basata sui piani del Big Bad Evil Guy: presagi, complotti che avanzano e resa dei conti apocalittica.',
+    category: 'dnd',
+    createActs: () => [
+      {
+        id: 'act-bb-1',
+        title: 'Fase 1: Presagi Oscuri & I Cultisti della Trama',
+        subtitle: 'I servi del cattivo agiscono nell\'ombra; primi indizi della cospirazione',
+        beats: [
+          { id: 'bb-1', actId: 'act-bb-1', title: '1. Segnali Insoliti & Creature Fuori Controllo', description: '', guideline: 'Anomalie magiche, rapimenti inspiegabili o simboli esoterici lasciati sui luoghi dei crimini.', order: 0 },
+          { id: 'bb-2', actId: 'act-bb-1', title: '2. Intercettazione della Cellula Minore', description: '', guideline: 'I PG sgominano i mercenari o cultisti e scoprono l\'esistenza di un mandante oscuro (BBEG).', order: 1 }
+        ]
+      },
+      {
+        id: 'act-bb-2',
+        title: 'Fase 2: Il Piano Avanza (Grim Portents)',
+        subtitle: 'Il nemico compie i primi passi del suo empio disegno; la posta in gioco si alza',
+        beats: [
+          { id: 'bb-3', actId: 'act-bb-2', title: '3. Furto dell\'Artefatto o Conquista Strategica', description: '', guideline: 'Il cattivo ottiene una risorsa chiave prima che i PG possano fermarlo.', order: 0 },
+          { id: 'bb-4', actId: 'act-bb-2', title: '4. Scontro col Luogotenente del BBEG', description: '', guideline: 'Battaglia contro il braccio destro del nemico per ottenere informazioni vitali.', order: 1 },
+          { id: 'bb-5', actId: 'act-bb-2', title: '5. Dilemma Morale o Corsa Contro il Tempo', description: '', guideline: 'Salvare degli innocenti o impedire che il BBEG raggiunga il suo prossimo obiettivo.', order: 2 }
+        ]
+      },
+      {
+        id: 'act-bb-3',
+        title: 'Fase 3: Il Cataclisma ha Inizio',
+        subtitle: 'Il rituale è scattato o l\'armata del male assedia le terre libere',
+        beats: [
+          { id: 'bb-6', actId: 'act-bb-3', title: '6. Il Reame Sotto Assedio', description: '', guideline: 'Città in fiamme, cielo oscurato o fessure planari che si spalancano.', order: 0 },
+          { id: 'bb-7', actId: 'act-bb-3', title: '7. La Corsa per la Debolezza Arcana del BBEG', description: '', guideline: 'Spedizione disperata per trovare l\'unico incantesimo, reliquia o punto debole del boss.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-bb-4',
+        title: 'Fase 4: La Resa dei Conti Finale (Showdown)',
+        subtitle: 'Infiltrazione nella roccaforte maledetta e duello leggendario',
+        beats: [
+          { id: 'bb-8', actId: 'act-bb-4', title: '8. Assalto al Sanctum Sanctorum', description: '', guideline: 'Superamento delle difese supreme e delle guardie scelte del castello nemico.', order: 0 },
+          { id: 'bb-9', actId: 'act-bb-4', title: '9. Duello Epico Multistadio col BBEG', description: '', guideline: 'Scontro leggendario in più fasi, trasformazioni e poteri cataclismatici.', order: 1 },
+          { id: 'bb-10', actId: 'act-bb-4', title: '10. Salvezza del Mondo o Nuovo Ordine', description: '', guideline: 'Le conseguenze cosmiche della vittoria e l\'eredità lasciata dal party.', order: 2 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'dnd_urban_intrigue',
+    name: 'Intrigo Urbano & Guerra di Fazioni (Cospirazioni & Gilde)',
+    description: 'Campagna incentrata sulla politica cittadina, crimine organizzato, balli aristocratici, gilde di ladri e colpi di stato.',
+    category: 'dnd',
+    createActs: () => [
+      {
+        id: 'act-ui-1',
+        title: 'Fase 1: Benvenuti nella Metropoli & La Scintilla',
+        subtitle: 'La città tentacolare e l\'evento che rompe la fragile pace tra le fazioni',
+        beats: [
+          { id: 'ui-1', actId: 'act-ui-1', title: '1. Arrivo nella Metropoli & Tensioni Sociali', description: '', guideline: 'La guardia cittadina severa, i mendicanti, i mercanti e le casate nobiliari.', order: 0 },
+          { id: 'ui-2', actId: 'act-ui-1', title: '2. Il Delitto Eccellente o Furto di Stato', description: '', guideline: 'Un omicidio politico o il furto dei sigilli ducali innesca il caos.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-ui-2',
+        title: 'Fase 2: Ragnatela di Gilde & Informatori',
+        subtitle: 'Indagini tra bassifondi, covi di contrabbandieri e salotti della nobiltà',
+        beats: [
+          { id: 'ui-3', actId: 'act-ui-2', title: '3. Discesa nelle Fogne / Gilda dei Ladri', description: '', guideline: 'Contrattazioni con il boss malavitoso, pedinamenti e ricettatori.', order: 0 },
+          { id: 'ui-4', actId: 'act-ui-2', title: '4. Il Gran Ballo in Maschera / Salotti Nobili', description: '', guideline: 'Infiltrazione mondana per origliare segreti tra senatori, patrizi e spie.', order: 1 },
+          { id: 'ui-5', actId: 'act-ui-2', title: '5. Il Doppio Gioco & Tradimento Inatteso', description: '', guideline: 'Il patrono che ha ingaggiato i PG si rivela complice o vittima designata.', order: 2 }
+        ]
+      },
+      {
+        id: 'act-ui-3',
+        title: 'Fase 3: La Città sull\'Orlo della Guerra Civile',
+        subtitle: 'Le fazioni scendono in strada; congiura per rovesciare il governo',
+        beats: [
+          { id: 'ui-6', actId: 'act-ui-3', title: '6. Rivolta nelle Strade & Mercenari Fuori Controllo', description: '', guideline: 'Barricate nei quartieri, incendi dolosi e magistrati corrotti.', order: 0 },
+          { id: 'ui-7', actId: 'act-ui-3', title: '7. Corsa Contro il Colpo di Stato', description: '', guideline: 'I PG scoprono il piano per avvelenare il consiglio durante la parata solenne.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-ui-4',
+        title: 'Fase 4: Resa dei Conti nei Palazzi del Potere',
+        subtitle: 'Inseguimento all\'ultimo respiro e smascheramento dei cospiratori',
+        beats: [
+          { id: 'ui-8', actId: 'act-ui-4', title: '8. Duello sui Tetti & Corsa alle Prove Chiave', description: '', guideline: 'Inseguimento acrobatico sopra i tetti o nelle cripte del parlamento.', order: 0 },
+          { id: 'ui-9', actId: 'act-ui-4', title: '9. Giudizio Finale & Nuovo Equilibrio Cittadino', description: '', guideline: 'I cospiratori vengono smascherati pubblicamente e il party riceve titoli o onori.', order: 1 }
+        ]
+      }
+    ]
+  },
+  {
     id: 'custom',
     name: 'Struttura Libera & Personalizzata',
-    description: 'Inizia con un foglio completamente vuoto e costruisci la tua struttura personalizzata.',
+    description: 'Inizia con un foglio completamente vuoto e costruisci la tua struttura da zero.',
+    category: 'all',
     createActs: () => [
       {
         id: 'act-custom-1',
-        title: 'Sezione 1',
-        subtitle: 'Descrizione della prima parte della tua storia',
+        title: 'Fase 1',
+        subtitle: 'Descrizione della prima parte della tua avventura o storia',
         beats: [
-          { id: 'beat-custom-1', actId: 'act-custom-1', title: 'Punto di Trama 1', description: '', guideline: 'Descrivi cosa accade in questa fase...', order: 0 }
+          { id: 'beat-custom-1', actId: 'act-custom-1', title: 'Punto di Svolta 1', description: '', guideline: 'Descrivi cosa accade in questo momento...', order: 0 }
         ]
       }
     ]

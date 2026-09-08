@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { X, Upload, Link as LinkIcon, Image as ImageIcon, Trash2, Check } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Upload, Link as LinkIcon, Image as ImageIcon, Trash2, Check, Loader2 } from 'lucide-react';
+import { optimizeImage } from '../../utils/imageOptimizer';
 
 interface ImageUploadModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface ImageUploadModalProps {
   title?: string;
   currentImage?: string;
   onRemoveImage?: () => void;
+  contained?: boolean;
 }
 
 export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
@@ -16,18 +18,35 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
   onSaveImage,
   title = 'Carica Immagine',
   currentImage,
-  onRemoveImage
+  onRemoveImage,
+  contained = false
 }) => {
   const [tab, setTab] = useState<'upload' | 'url'>('upload');
   const [imageUrl, setImageUrl] = useState('');
   const [previewSrc, setPreviewSrc] = useState<string | null>(currentImage || null);
   const [fileName, setFileName] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [isOptimizing, setIsOptimizing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync state whenever the modal opens or currentImage changes
+  useEffect(() => {
+    if (isOpen) {
+      setPreviewSrc(currentImage || null);
+      setImageUrl('');
+      setFileName('');
+      setError(null);
+      setTab('upload');
+      setIsOptimizing(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }, [isOpen, currentImage]);
 
   if (!isOpen) return null;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -36,19 +55,28 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
       return;
     }
 
-    if (file.size > 15 * 1024 * 1024) {
-      setError("L'immagine è troppo grande (massimo 15 MB).");
+    if (file.size > 20 * 1024 * 1024) {
+      setError("L'immagine è troppo grande (massimo 20 MB).");
       return;
     }
 
     setError(null);
     setFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const res = event.target?.result as string;
-      setPreviewSrc(res);
-    };
-    reader.readAsDataURL(file);
+    setIsOptimizing(true);
+    try {
+      const optimizedUrl = await optimizeImage(file);
+      setPreviewSrc(optimizedUrl);
+    } catch (err) {
+      console.error('Failed to optimize image, using fallback:', err);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const res = event.target?.result as string;
+        setPreviewSrc(res);
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsOptimizing(false);
+    }
   };
 
   const handleUrlChange = (val: string) => {
@@ -81,7 +109,10 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none">
+    <div 
+      className={`${contained ? 'absolute' : 'fixed'} inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in select-none folia-modal-overlay`}
+      onClick={onClose}
+    >
       <div 
         className="bg-paper-50 rounded-2xl shadow-modal border border-paper-300 w-full max-w-lg overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -149,13 +180,27 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
                 onClick={() => fileInputRef.current?.click()}
                 className="border-2 border-dashed border-paper-300 hover:border-folia-600 rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white/60 hover:bg-folia-50/40"
               >
-                <Upload className="w-8 h-8 text-paper-400 mx-auto mb-2" />
-                <div className="text-xs font-semibold text-paper-800 mb-1">
-                  {fileName ? fileName : "Clicca per scegliere un'immagine"}
-                </div>
-                <div className="text-[11px] text-paper-500">
-                  PNG, JPG, WebP fino a 15 MB
-                </div>
+                {isOptimizing ? (
+                  <div className="flex flex-col items-center justify-center py-2">
+                    <Loader2 className="w-8 h-8 text-folia-600 animate-spin mb-2" />
+                    <div className="text-xs font-semibold text-folia-800 mb-1">
+                      Ottimizzazione in corso...
+                    </div>
+                    <div className="text-[11px] text-paper-500">
+                      Conversione in formato WebP ad alta qualità e peso ridotto
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <Upload className="w-8 h-8 text-paper-400 mx-auto mb-2" />
+                    <div className="text-xs font-semibold text-paper-800 mb-1">
+                      {fileName ? fileName : "Clicca per scegliere un'immagine"}
+                    </div>
+                    <div className="text-[11px] text-paper-500">
+                      PNG, JPG, WebP fino a 20 MB (ottimizzata automaticamente)
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ) : (
@@ -223,7 +268,7 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
             <button
               type="button"
               onClick={handleConfirm}
-              disabled={!previewSrc}
+              disabled={!previewSrc || isOptimizing}
               className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-folia-700 hover:bg-folia-800 disabled:opacity-40 text-white text-xs font-medium transition-colors cursor-pointer shadow-xs"
             >
               <Check className="w-3.5 h-3.5" />

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Search, 
   ChevronDown, 
@@ -10,6 +10,8 @@ import {
   CheckCheck
 } from 'lucide-react';
 import { Editor } from '@tiptap/react';
+import { searchHighlightPluginKey } from './SearchHighlightExtension';
+import { hyphenationPluginKey } from './HyphenationExtension';
 
 interface FindReplaceBarProps {
   editor: Editor | null;
@@ -39,6 +41,24 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // Dispatch search highlights to ProseMirror plugin
+  const updateEditorHighlight = useCallback((mList: MatchRange[], idx: number) => {
+    if (!editor || editor.isDestroyed) return;
+    editor.view.dispatch(
+      editor.state.tr
+        .setMeta(searchHighlightPluginKey, {
+          matches: mList,
+          currentIndex: idx
+        })
+        .setMeta(hyphenationPluginKey, true)
+    );
+  }, [editor]);
+
+  const handleClose = useCallback(() => {
+    updateEditorHighlight([], -1);
+    onClose();
+  }, [updateEditorHighlight, onClose]);
+
   // Focus search input when bar opens
   useEffect(() => {
     if (isOpen) {
@@ -53,8 +73,16 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
       setSearchTerm('');
       setMatches([]);
       setCurrentIndex(-1);
+      updateEditorHighlight([], -1);
     }
-  }, [isOpen, showReplaceInitially]);
+  }, [isOpen, showReplaceInitially, updateEditorHighlight]);
+
+  // Clean up highlights on unmount
+  useEffect(() => {
+    return () => {
+      updateEditorHighlight([], -1);
+    };
+  }, [updateEditorHighlight]);
 
   // Compute matches whenever search criteria or doc changes
   const computeMatches = useCallback((): MatchRange[] => {
@@ -97,32 +125,112 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
     return results;
   }, [editor, searchTerm, caseSensitive, wholeWord]);
 
+  const scrollToMatch = useCallback((_from: number) => {
+    if (!editor) return;
+    // Use requestAnimationFrame to let decorations render
+    requestAnimationFrame(() => {
+      try {
+        const activeEl = editor.view.dom.querySelector('.folia-search-match-active') as HTMLElement | null;
+        if (activeEl) {
+          let scrollParent: HTMLElement | null = activeEl.parentElement;
+          while (scrollParent) {
+            const style = window.getComputedStyle(scrollParent);
+            if (style.overflowY === 'auto' || style.overflowY === 'scroll') break;
+            scrollParent = scrollParent.parentElement;
+          }
+          if (scrollParent) {
+            const nodeRect = activeEl.getBoundingClientRect();
+            const parentRect = scrollParent.getBoundingClientRect();
+            const offsetTop = nodeRect.top - parentRect.top + scrollParent.scrollTop;
+            const targetScroll = offsetTop - parentRect.height / 2 + nodeRect.height / 2;
+            scrollParent.scrollTo({ top: targetScroll, behavior: 'smooth' });
+          } else {
+            activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        const domAtPos = editor.view.domAtPos(_from);
+        let node = domAtPos.node as HTMLElement;
+        while (node && node.nodeType !== 1) {
+          node = node.parentElement as HTMLElement;
+        }
+        if (!node) return;
+        let scrollParent: HTMLElement | null = node.parentElement;
+        while (scrollParent) {
+          const style = window.getComputedStyle(scrollParent);
+          if (style.overflowY === 'auto' || style.overflowY === 'scroll') break;
+          scrollParent = scrollParent.parentElement;
+        }
+        if (scrollParent) {
+          const nodeRect = node.getBoundingClientRect();
+          const parentRect = scrollParent.getBoundingClientRect();
+          const offsetTop = nodeRect.top - parentRect.top + scrollParent.scrollTop;
+          const targetScroll = offsetTop - parentRect.height / 2 + nodeRect.height / 2;
+          scrollParent.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        } else {
+          node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch {
+        // fallback: noop
+      }
+    });
+  }, [editor]);
+
   // Update matches and jump to first
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      updateEditorHighlight([], -1);
+      return;
+    }
     const newMatches = computeMatches();
     setMatches(newMatches);
 
     if (newMatches.length > 0) {
-      // Find closest match to current selection
       const currentPos = editor?.state.selection.from ?? 0;
       let nextIdx = newMatches.findIndex(m => m.from >= currentPos);
       if (nextIdx === -1) nextIdx = 0;
       setCurrentIndex(nextIdx);
 
       const target = newMatches[nextIdx];
-      editor?.chain().setTextSelection({ from: target.from, to: target.to }).scrollIntoView().run();
+      updateEditorHighlight(newMatches, nextIdx);
+      editor?.chain().setTextSelection({ from: target.from, to: target.to }).run();
+      scrollToMatch(target.from);
     } else {
       setCurrentIndex(-1);
+      updateEditorHighlight([], -1);
     }
-  }, [searchTerm, caseSensitive, wholeWord, computeMatches, isOpen]);
+  }, [searchTerm, caseSensitive, wholeWord, computeMatches, isOpen, scrollToMatch, updateEditorHighlight]);
+
+  // Sync matches if document content changes while search bar is open
+  useEffect(() => {
+    if (!isOpen || !editor) return;
+    const handleUpdate = () => {
+      const refreshed = computeMatches();
+      setMatches(refreshed);
+      if (refreshed.length > 0) {
+        const nextIdx = Math.min(Math.max(0, currentIndex), refreshed.length - 1);
+        setCurrentIndex(nextIdx);
+        updateEditorHighlight(refreshed, nextIdx);
+      } else {
+        setCurrentIndex(-1);
+        updateEditorHighlight([], -1);
+      }
+    };
+    editor.on('update', handleUpdate);
+    return () => {
+      editor.off('update', handleUpdate);
+    };
+  }, [isOpen, editor, computeMatches, currentIndex, updateEditorHighlight]);
 
   const goToNext = () => {
     if (matches.length === 0) return;
     const next = (currentIndex + 1) % matches.length;
     setCurrentIndex(next);
     const target = matches[next];
-    editor?.chain().setTextSelection({ from: target.from, to: target.to }).scrollIntoView().run();
+    updateEditorHighlight(matches, next);
+    editor?.chain().setTextSelection({ from: target.from, to: target.to }).run();
+    scrollToMatch(target.from);
   };
 
   const goToPrev = () => {
@@ -130,7 +238,9 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
     const prev = (currentIndex - 1 + matches.length) % matches.length;
     setCurrentIndex(prev);
     const target = matches[prev];
-    editor?.chain().setTextSelection({ from: target.from, to: target.to }).scrollIntoView().run();
+    updateEditorHighlight(matches, prev);
+    editor?.chain().setTextSelection({ from: target.from, to: target.to }).run();
+    scrollToMatch(target.from);
   };
 
   const replaceCurrent = () => {
@@ -148,9 +258,12 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
         const nextIdx = Math.min(currentIndex, refreshed.length - 1);
         setCurrentIndex(nextIdx);
         const nextTarget = refreshed[nextIdx];
-        editor.chain().setTextSelection({ from: nextTarget.from, to: nextTarget.to }).scrollIntoView().run();
+        updateEditorHighlight(refreshed, nextIdx);
+        editor.chain().setTextSelection({ from: nextTarget.from, to: nextTarget.to }).run();
+        scrollToMatch(nextTarget.from);
       } else {
         setCurrentIndex(-1);
+        updateEditorHighlight([], -1);
       }
     }, 20);
   };
@@ -169,6 +282,7 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
     setTimeout(() => {
       setMatches([]);
       setCurrentIndex(-1);
+      updateEditorHighlight([], -1);
     }, 20);
   };
 
@@ -182,7 +296,7 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
       }
     } else if (e.key === 'Escape') {
       e.preventDefault();
-      onClose();
+      handleClose();
       editor?.commands.focus();
     }
   };
@@ -241,7 +355,7 @@ export const FindReplaceBar: React.FC<FindReplaceBarProps> = ({
         {/* Close */}
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           title="Chiudi (Esc)"
           className="p-1.5 rounded-lg text-paper-400 hover:text-paper-800 hover:bg-paper-200 transition-colors cursor-pointer ml-0.5"
         >

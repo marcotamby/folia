@@ -31,7 +31,8 @@
     "corkboard": "Bacheca schede",
     "ideas": "Idee & note",
     "notes": "Appunti & ricerca",
-    "trash": "Cestino"
+    "trash": "Cestino",
+    "sessions": "Sessioni"
   },
   "sidebar": {
     "add_chapter": "Aggiungi capitolo",
@@ -90,7 +91,9 @@
     "h3": "Titolo 3",
     "bullet_list": "Elenco puntato",
     "numbered_list": "Elenco numerato",
+    "ordered_list": "Elenco numerato",
     "quote": "Citazione",
+    "blockquote": "Citazione",
     "divider": "Linea divisoria",
     "table": "Tabella",
     "highlight": "Evidenziatore",
@@ -143,7 +146,7 @@
     "full_desc": "Descrizione dettagliata & storia"
   },
   "corkboard": {
-    "title": "Bacheca schede (corkboard)",
+    "title": "Bacheca schede",
     "add_card": "Aggiungi scheda",
     "synopsis": "Sinossi / riassunto scena",
     "status": "Stato",
@@ -214,5 +217,36 @@
     "copyright": "Copyright (©)",
     "degree": "Grado (°)",
     "bullet": "Punto elenco (•)"
+  },
+  "sessions": {
+    "title": "Registrazioni Sessioni",
+    "subtitle": "Archivio audio, segnalibri temporali e diario di campagna",
+    "record_btn": "Registra sessione",
+    "recording": "Registrazione in corso",
+    "stop_save": "Termina & Salva",
+    "pause": "Pausa",
+    "resume": "Riprendi",
+    "add_marker": "Segnalibro",
+    "no_sessions": "Nessuna sessione registrata",
+    "no_sessions_desc": "Avvia una registrazione per catturare le tue sessioni al tavolo con audio, timestamp e appunti dedicati.",
+    "search_placeholder": "Cerca tra le sessioni...",
+    "new_recording_title": "Nuova Sessione",
+    "markers_title": "Segnalibri & Momenti Salienti",
+    "add_marker_at_playhead": "Aggiungi segnalibro al punto attuale",
+    "marker_placeholder": "Es. Incontro PNG, Combattimento, Loot...",
+    "notes_title": "Diario & Appunti di Sessione",
+    "notes_placeholder": "Annota qui il riassunto della sessione, decisioni chiave, XP o bottino distribuito...",
+    "export_to_manuscript": "Crea capitolo nel Manoscritto",
+    "export_success": "Sessione esportata con successo nel Manoscritto!",
+    "open_in_folder": "Apri cartella file",
+    "delete_session": "Elimina sessione",
+    "delete_confirm_title": "Eliminare questa registrazione?",
+    "delete_confirm_desc": "La registrazione e il file audio associato verranno eliminati dal disco.",
+    "duration": "Durata",
+    "date": "Data",
+    "size": "Dimensione",
+    "speed": "Velocità",
+    "mic_active": "Microfono attivo",
+    "marker_added": "Segnalibro aggiunto!"
   }
 }

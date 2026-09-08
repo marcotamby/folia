@@ -13,6 +13,7 @@ import {
   RotateCcw, 
   Hand, 
   Plus, 
+  Minus,
   Trash2, 
   ExternalLink, 
   Layers, 
@@ -21,13 +22,15 @@ import {
   Maximize2, 
   Minimize2, 
   Edit3, 
-  Check,
   Image as ImageIcon,
-  Skull
+  Skull,
+  GripHorizontal,
+  Crosshair
 } from 'lucide-react';
 import { MapEntry, MapPin as MapPinType, MapPinIcon, WorldEntry } from '../../types';
 import { ImageUploadModal } from '../modals/ImageUploadModal';
 import { ConfirmModal } from '../common/ConfirmModal';
+import { CustomSelect, CustomSelectOption } from '../common/CustomSelect';
 
 interface InteractiveMapEditorProps {
   map: MapEntry | null;
@@ -46,8 +49,16 @@ const PIN_COLORS = [
   { value: '#B45309', label: 'Ambra Dorata' },
   { value: '#1E40AF', label: 'Blu Zaffiro' },
   { value: '#6B21A8', label: 'Viola Ametista' },
-  { value: '#374151', label: 'Grigio Ardesia' }
+  { value: '#374151', label: 'Grigio Ardesia' },
+  { value: '#111827', label: 'Nero Ossidiana' },
+  { value: '#FFFFFF', label: 'Bianco Perla' }
 ];
+
+const isLightPinColor = (color?: string): boolean => {
+  if (!color) return false;
+  const c = color.toLowerCase();
+  return c === '#ffffff' || c === '#fff' || c === '#f9fafb' || c === '#f3f4f6';
+};
 
 const PIN_ICONS: { value: MapPinIcon; label: string; icon: React.FC<{ className?: string }> }[] = [
   { value: 'pin', label: 'Spilla', icon: MapPin },
@@ -70,8 +81,65 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
   onNavigateToWorld,
   t
 }) => {
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const getInitialZoom = (targetMap: MapEntry | null): number => {
+    if (targetMap?.zoom && typeof targetMap.zoom === 'number' && !isNaN(targetMap.zoom) && targetMap.zoom >= 0.4 && targetMap.zoom <= 4.0) {
+      return targetMap.zoom;
+    }
+    if (targetMap?.id) {
+      const saved = localStorage.getItem(`folia_map_zoom_${targetMap.id}`);
+      if (saved) {
+        const val = parseFloat(saved);
+        if (!isNaN(val) && val >= 0.4 && val <= 4.0) return val;
+      }
+    }
+    const globalSaved = localStorage.getItem('folia_map_last_zoom');
+    if (globalSaved) {
+      const val = parseFloat(globalSaved);
+      if (!isNaN(val) && val >= 0.4 && val <= 4.0) return val;
+    }
+    return 1;
+  };
+
+  const getInitialPan = (targetMap: MapEntry | null): { x: number; y: number } => {
+    if (targetMap?.pan && typeof targetMap.pan.x === 'number' && typeof targetMap.pan.y === 'number') {
+      return targetMap.pan;
+    }
+    if (targetMap?.id) {
+      const savedPan = localStorage.getItem(`folia_map_pan_${targetMap.id}`);
+      if (savedPan) {
+        try {
+          const parsed = JSON.parse(savedPan);
+          if (typeof parsed.x === 'number' && typeof parsed.y === 'number') {
+            return parsed;
+          }
+        } catch {}
+      }
+    }
+    return { x: 0, y: 0 };
+  };
+
+  const getInitialPinScale = (targetMap: MapEntry | null): number => {
+    if (targetMap?.pinScale && typeof targetMap.pinScale === 'number' && targetMap.pinScale >= 0.7) {
+      return targetMap.pinScale;
+    }
+    if (targetMap?.id) {
+      const perMap = localStorage.getItem(`folia_map_pin_scale_${targetMap.id}`);
+      if (perMap) {
+        const val = parseFloat(perMap);
+        if (!isNaN(val) && val >= 0.7 && val <= 3.0) return val;
+      }
+    }
+    const globalSaved = localStorage.getItem('folia_map_pin_scale');
+    if (globalSaved) {
+      const val = parseFloat(globalSaved);
+      if (!isNaN(val) && val >= 0.7 && val <= 3.0) return val;
+    }
+    return 1;
+  };
+
+  const [zoom, setZoom] = useState<number>(() => getInitialZoom(map));
+  const [pan, setPan] = useState<{ x: number; y: number }>(() => getInitialPan(map));
+  const [pinScale, setPinScale] = useState<number>(() => getInitialPinScale(map));
   const [isPanning, setIsPanning] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [toolMode, setToolMode] = useState<'pan' | 'add_pin'>('pan');
@@ -88,13 +156,139 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapImageRef = useRef<HTMLImageElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
 
-  // Reset zoom & pan when switching maps
+  // Draggable popover position state
+  const [popoverPos, setPopoverPos] = useState<{ x: number; y: number } | null>(null);
+  const isDraggingPopoverRef = useRef(false);
+  const popoverDragStartRef = useRef<{ mouseX: number; mouseY: number; initialX: number; initialY: number }>({
+    mouseX: 0,
+    mouseY: 0,
+    initialX: 0,
+    initialY: 0
+  });
+
+  // When switching maps: restore that map's saved zoom & pan & pinScale
   useEffect(() => {
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
+    if (map?.id) {
+      setZoom(getInitialZoom(map));
+      setPan(getInitialPan(map));
+      setPinScale(getInitialPinScale(map));
+    }
     setSelectedPinId(null);
+    setPopoverPos(null);
   }, [map?.id]);
+
+  // Filter pins based on drawer search query - must be at top-level before any return
+  const filteredPins = useMemo(() => {
+    if (!map) return [];
+    const pins = map.pins || [];
+    if (!drawerSearch.trim()) return pins;
+    const q = drawerSearch.toLowerCase();
+    return pins.filter(p => 
+      (p.label && p.label.toLowerCase().includes(q)) || (p.description && p.description.toLowerCase().includes(q))
+    );
+  }, [map?.pins, drawerSearch]);
+
+  const getCategoryBadge = (cat?: string): string => {
+    switch (cat) {
+      case 'location': return 'Luogo';
+      case 'city': return 'Città';
+      case 'faction': return 'Fazione';
+      case 'culture': return 'Cultura';
+      case 'magic': return 'Magia';
+      case 'religion': return 'Religione';
+      case 'item': return 'Oggetto';
+      case 'history': return 'Storia';
+      default: return cat || 'Luogo';
+    }
+  };
+
+  // Options for worldbuilding custom dropdown
+  const worldOptions: CustomSelectOption[] = useMemo(() => {
+    const opts: CustomSelectOption[] = [
+      { value: '', label: '-- Nessun collegamento --' }
+    ];
+    (worldEntries || []).forEach(w => {
+      opts.push({
+        value: w.id,
+        label: w.name || 'Senza nome',
+        badge: getCategoryBadge(w.category)
+      });
+    });
+    return opts;
+  }, [worldEntries]);
+
+  // Options for pin icon custom dropdown
+  const pinIconOptions: CustomSelectOption[] = useMemo(() => {
+    return PIN_ICONS.map(ic => {
+      const IconComponent = ic.icon;
+      return {
+        value: ic.value,
+        label: ic.label,
+        icon: <IconComponent className="w-3.5 h-3.5 text-folia-800" />
+      };
+    });
+  }, []);
+
+  // Handler for dragging the details popover box
+  const handlePopoverHeaderMouseDown = (e: React.MouseEvent) => {
+    if (
+      (e.target as HTMLElement).closest('button') ||
+      (e.target as HTMLElement).closest('input') ||
+      (e.target as HTMLElement).closest('textarea')
+    ) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+
+    const popoverEl = popoverRef.current;
+    if (!popoverEl) return;
+    const parentRect = containerRef.current?.getBoundingClientRect() || {
+      left: 0,
+      top: 0,
+      width: window.innerWidth,
+      height: window.innerHeight
+    };
+    const popoverRect = popoverEl.getBoundingClientRect();
+
+    const currentX = popoverRect.left - parentRect.left;
+    const currentY = popoverRect.top - parentRect.top;
+
+    popoverDragStartRef.current = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      initialX: currentX,
+      initialY: currentY
+    };
+    isDraggingPopoverRef.current = true;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!isDraggingPopoverRef.current) return;
+      const dx = moveEvent.clientX - popoverDragStartRef.current.mouseX;
+      const dy = moveEvent.clientY - popoverDragStartRef.current.mouseY;
+
+      const parentWidth = containerRef.current?.clientWidth || window.innerWidth;
+      const parentHeight = containerRef.current?.clientHeight || window.innerHeight;
+      const maxX = Math.max(0, parentWidth - popoverRect.width - 12);
+      const maxY = Math.max(0, parentHeight - popoverRect.height - 12);
+
+      const newX = Math.max(12, Math.min(popoverDragStartRef.current.initialX + dx, maxX));
+      const newY = Math.max(12, Math.min(popoverDragStartRef.current.initialY + dy, maxY));
+
+      setPopoverPos({ x: newX, y: newY });
+    };
+
+    const handleMouseUp = () => {
+      isDraggingPopoverRef.current = false;
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
 
   if (!map) {
     return (
@@ -118,22 +312,53 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
     );
   }
 
-  const selectedPin = map.pins.find(p => p.id === selectedPinId) || null;
+  const selectedPin = (map.pins || []).find(p => p.id === selectedPinId) || null;
 
   // Zoom handlers
-  const handleZoomIn = () => setZoom(prev => Math.min(prev + 0.25, 3.5));
-  const handleZoomOut = () => setZoom(prev => Math.max(prev - 0.25, 0.5));
+  const applyZoom = (newZoom: number) => {
+    const clamped = Math.min(Math.max(Number(newZoom.toFixed(2)), 0.4), 4.0);
+    setZoom(clamped);
+    if (map?.id) {
+      localStorage.setItem(`folia_map_zoom_${map.id}`, clamped.toString());
+      localStorage.setItem('folia_map_last_zoom', clamped.toString());
+      onUpdateMap({ ...map, zoom: clamped, updatedAt: new Date().toISOString() });
+    }
+  };
+
+  const handleZoomIn = () => applyZoom(zoom + 0.25);
+  const handleZoomOut = () => applyZoom(zoom - 0.25);
   const handleResetZoom = () => {
     setZoom(1);
     setPan({ x: 0, y: 0 });
+    if (map?.id) {
+      localStorage.setItem(`folia_map_zoom_${map.id}`, '1');
+      localStorage.setItem('folia_map_last_zoom', '1');
+      localStorage.setItem(`folia_map_pan_${map.id}`, JSON.stringify({ x: 0, y: 0 }));
+      onUpdateMap({ ...map, zoom: 1, pan: { x: 0, y: 0 }, updatedAt: new Date().toISOString() });
+    }
   };
 
   // Wheel zoom
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? -0.15 : 0.15;
-    setZoom(prev => Math.min(Math.max(prev + delta, 0.4), 4.0));
+    applyZoom(zoom + delta);
   };
+
+  // Pin & Font Scale handlers
+  const applyPinScale = (newScale: number) => {
+    const clamped = Math.min(Math.max(Number(newScale.toFixed(2)), 0.75), 2.75);
+    setPinScale(clamped);
+    if (map?.id) {
+      localStorage.setItem(`folia_map_pin_scale_${map.id}`, clamped.toString());
+      localStorage.setItem('folia_map_pin_scale', clamped.toString());
+      onUpdateMap({ ...map, pinScale: clamped, updatedAt: new Date().toISOString() });
+    }
+  };
+
+  const handlePinSizeUp = () => applyPinScale(pinScale + 0.25);
+  const handlePinSizeDown = () => applyPinScale(pinScale - 0.25);
+  const handleResetPinSize = () => applyPinScale(1);
 
   // Pan handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -158,7 +383,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
       const xPercent = Math.min(Math.max(((e.clientX - rect.left) / rect.width) * 100, 0), 100);
       const yPercent = Math.min(Math.max(((e.clientY - rect.top) / rect.height) * 100, 0), 100);
 
-      const updatedPins = map.pins.map(p => 
+      const updatedPins = (map.pins || []).map(p => 
         p.id === draggingPinId ? { ...p, x: Number(xPercent.toFixed(2)), y: Number(yPercent.toFixed(2)) } : p
       );
       onUpdateMap({ ...map, pins: updatedPins });
@@ -166,6 +391,10 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
   };
 
   const handleMouseUp = () => {
+    if (isPanning && map?.id) {
+      localStorage.setItem(`folia_map_pan_${map.id}`, JSON.stringify(pan));
+      onUpdateMap({ ...map, pan, updatedAt: new Date().toISOString() });
+    }
     setIsPanning(false);
     setDraggingPinId(null);
   };
@@ -196,7 +425,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
 
     const updated = {
       ...map,
-      pins: [...map.pins, newPin],
+      pins: [...(map.pins || []), newPin],
       updatedAt: new Date().toISOString()
     };
     onUpdateMap(updated);
@@ -205,7 +434,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
   };
 
   const handleUpdatePin = (pinId: string, updates: Partial<MapPinType>) => {
-    const updatedPins = map.pins.map(p => p.id === pinId ? { ...p, ...updates } : p);
+    const updatedPins = (map.pins || []).map(p => p.id === pinId ? { ...p, ...updates } : p);
     onUpdateMap({
       ...map,
       pins: updatedPins,
@@ -214,7 +443,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
   };
 
   const handleDeletePin = (pinId: string) => {
-    const updatedPins = map.pins.filter(p => p.id !== pinId);
+    const updatedPins = (map.pins || []).filter(p => p.id !== pinId);
     onUpdateMap({
       ...map,
       pins: updatedPins,
@@ -223,33 +452,55 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
     if (selectedPinId === pinId) setSelectedPinId(null);
   };
 
-  const handleCenterOnPin = (pin: MapPinType) => {
+  // Select a pin from the drawer list without jerking or jumping the map down if already visible
+  const handleSelectPinFromList = (pin: MapPinType) => {
     setSelectedPinId(pin.id);
     setActiveHighlightedPinId(pin.id);
-    setTimeout(() => setActiveHighlightedPinId(null), 2000);
+    setTimeout(() => setActiveHighlightedPinId(null), 2500);
 
+    // Only pan if the pin is currently NOT visible inside the map viewport
     if (containerRef.current && mapImageRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect();
-      const imgWidth = mapImageRef.current.naturalWidth || 1000;
-      const imgHeight = mapImageRef.current.naturalHeight || 700;
+      const imgRect = mapImageRef.current.getBoundingClientRect();
 
-      const targetX = (pin.x / 100) * imgWidth;
-      const targetY = (pin.y / 100) * imgHeight;
+      const pinScreenX = imgRect.left + (pin.x / 100) * imgRect.width;
+      const pinScreenY = imgRect.top + (pin.y / 100) * imgRect.height;
 
-      const newPanX = (containerRect.width / 2) - (targetX * zoom);
-      const newPanY = (containerRect.height / 2) - (targetY * zoom);
+      const isVisible = (
+        pinScreenX >= containerRect.left + 60 &&
+        pinScreenX <= containerRect.right - 60 &&
+        pinScreenY >= containerRect.top + 60 &&
+        pinScreenY <= containerRect.bottom - 60
+      );
 
-      setPan({ x: newPanX, y: newPanY });
+      // If the pin is already visible, keep map position steady!
+      if (!isVisible) {
+        const imgWidth = mapImageRef.current.clientWidth || 1000;
+        const imgHeight = mapImageRef.current.clientHeight || 700;
+        const newPanX = -(pin.x / 100 - 0.5) * imgWidth * zoom;
+        const newPanY = -(pin.y / 100 - 0.5) * imgHeight * zoom;
+        setPan({ x: Math.round(newPanX), y: Math.round(newPanY) });
+      }
     }
   };
 
-  const filteredPins = useMemo(() => {
-    if (!drawerSearch.trim()) return map.pins;
-    const q = drawerSearch.toLowerCase();
-    return map.pins.filter(p => 
-      p.label.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q))
-    );
-  }, [map.pins, drawerSearch]);
+  const handleCenterOnPin = (pin: MapPinType) => {
+    setSelectedPinId(pin.id);
+    setActiveHighlightedPinId(pin.id);
+    setTimeout(() => setActiveHighlightedPinId(null), 2500);
+
+    if (mapImageRef.current) {
+      // Use the actual rendered CSS dimensions of the image on screen (not naturalWidth)
+      const imgWidth = mapImageRef.current.clientWidth || mapImageRef.current.offsetWidth || 1000;
+      const imgHeight = mapImageRef.current.clientHeight || mapImageRef.current.offsetHeight || 700;
+
+      // Center the viewport on the selected pin
+      const newPanX = -(pin.x / 100 - 0.5) * imgWidth * zoom;
+      const newPanY = -(pin.y / 100 - 0.5) * imgHeight * zoom;
+
+      setPan({ x: Math.round(newPanX), y: Math.round(newPanY) });
+    }
+  };
 
   const getPinIconComponent = (iconName?: MapPinIcon) => {
     const found = PIN_ICONS.find(i => i.value === iconName);
@@ -312,6 +563,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
 
           {/* Zoom controls */}
           <div className="flex items-center gap-1 bg-paper-100 p-1 rounded-xl border border-paper-300 text-xs">
+            <span className="text-[10px] uppercase font-bold text-paper-400 pl-1 hidden sm:inline">Zoom</span>
             <button
               type="button"
               onClick={handleZoomOut}
@@ -338,6 +590,40 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
             </button>
           </div>
 
+          {/* Pin & Font Size controls */}
+          <div className="flex items-center gap-1 bg-paper-100 p-1 rounded-xl border border-paper-300 text-xs" title="Dimensione segnaposto e testi sulla mappa">
+            <span className="text-[10px] uppercase font-bold text-paper-500 pl-1.5 flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-folia-800" />
+              <span className="font-semibold text-paper-800 hidden sm:inline">Segnaposto:</span>
+            </span>
+            <button
+              type="button"
+              onClick={handlePinSizeDown}
+              disabled={pinScale <= 0.75}
+              title="Rimpicciolisci segnaposto e testi (-)"
+              className="p-1 rounded-lg text-paper-600 hover:text-paper-900 hover:bg-paper-200 disabled:opacity-30 transition-colors cursor-pointer"
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleResetPinSize}
+              title="Ripristina dimensione segnaposto standard (100%)"
+              className="px-1.5 py-0.5 text-[11px] font-mono text-paper-700 font-semibold hover:text-folia-800 cursor-pointer"
+            >
+              {Math.round(pinScale * 100)}%
+            </button>
+            <button
+              type="button"
+              onClick={handlePinSizeUp}
+              disabled={pinScale >= 2.5}
+              title="Ingrandisci segnaposto e testi (+)"
+              className="p-1 rounded-lg text-paper-600 hover:text-paper-900 hover:bg-paper-200 disabled:opacity-30 transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
           {/* Change Image button */}
           <button
             type="button"
@@ -361,7 +647,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5 text-folia-700" />
-            <span className="hidden sm:inline">Luoghi ({map.pins.length})</span>
+            <span className="hidden sm:inline">Luoghi ({(map.pins || []).length})</span>
           </button>
 
           {/* Fullscreen Toggle */}
@@ -447,7 +733,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
               />
 
               {/* Pins Rendered Across Coordinates */}
-              {map.pins.map((pin) => {
+              {(map.pins || []).map((pin) => {
                 const isSelected = selectedPinId === pin.id;
                 const isPulse = activeHighlightedPinId === pin.id;
                 const IconComponent = getPinIconComponent(pin.icon);
@@ -479,16 +765,31 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
 
                     {/* Teardrop Marker Pin Shape */}
                     <div
-                      style={{ backgroundColor: pin.color || '#1B4332' }}
-                      className="w-8 h-8 rounded-full rounded-br-none -rotate-45 shadow-lg flex items-center justify-center border-2 border-white text-white transition-all"
+                      style={{
+                        backgroundColor: pin.color || '#1B4332',
+                        width: `${Math.round(32 * pinScale)}px`,
+                        height: `${Math.round(32 * pinScale)}px`
+                      }}
+                      className={`rounded-full rounded-br-none rotate-45 shadow-lg flex items-center justify-center border-2 transition-all ${
+                        isLightPinColor(pin.color)
+                          ? 'border-paper-600 text-paper-900 shadow-md'
+                          : 'border-white text-white'
+                      }`}
                     >
-                      <div className="rotate-45 flex items-center justify-center">
-                        <IconComponent className="w-3.5 h-3.5" />
+                      <div className="-rotate-45 flex items-center justify-center">
+                        <IconComponent style={{ width: `${Math.round(14 * pinScale)}px`, height: `${Math.round(14 * pinScale)}px` }} />
                       </div>
                     </div>
 
                     {/* Pin Label underneath */}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-0.5 rounded-md bg-paper-900/90 text-white font-sans font-bold text-[10px] whitespace-nowrap shadow-md pointer-events-none transition-opacity">
+                    <div
+                      style={{
+                        fontSize: `${Math.round(10 * pinScale)}px`,
+                        padding: `${Math.max(2, Math.round(2 * pinScale))}px ${Math.max(4, Math.round(6 * pinScale))}px`,
+                        marginTop: `${Math.max(2, Math.round(4 * pinScale))}px`
+                      }}
+                      className="absolute left-1/2 -translate-x-1/2 top-full rounded-md bg-paper-900/90 text-white font-sans font-bold whitespace-nowrap shadow-md pointer-events-none transition-all"
+                    >
                       {pin.label}
                     </div>
                   </div>
@@ -506,21 +807,35 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
           )}
         </div>
 
-        {/* Selected Pin Details Popover Floating Card */}
+        {/* Selected Pin Details Popover Floating Card (Draggable) */}
         {selectedPin && (
-          <div className="folia-pin-popover absolute left-6 bottom-6 w-80 sm:w-96 bg-paper-50 rounded-2xl shadow-modal border border-paper-300 p-4 z-40 animate-in slide-in-from-bottom-3 duration-200 select-none">
-            <div className="flex items-center justify-between pb-2 border-b border-paper-200">
-              <div className="flex items-center gap-2">
+          <div 
+            ref={popoverRef}
+            style={popoverPos ? { left: `${popoverPos.x}px`, top: `${popoverPos.y}px` } : undefined}
+            className={`folia-pin-popover absolute ${popoverPos ? '' : 'left-6 bottom-6'} w-80 sm:w-96 bg-paper-50 rounded-2xl shadow-modal border border-paper-300 p-4 z-40 animate-in slide-in-from-bottom-3 duration-200 select-none`}
+          >
+            {/* Draggable Header */}
+            <div 
+              onMouseDown={handlePopoverHeaderMouseDown}
+              className="flex items-center justify-between pb-2 border-b border-paper-200 cursor-grab active:cursor-grabbing group/header"
+              title="Trascina per spostare questo pannello sulla mappa"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <GripHorizontal className="w-4 h-4 text-paper-400 group-hover/header:text-folia-800 transition-colors shrink-0" />
                 <div 
                   style={{ backgroundColor: selectedPin.color || '#1B4332' }} 
-                  className="w-6 h-6 rounded-lg text-white flex items-center justify-center shadow-2xs"
+                  className={`w-6 h-6 rounded-lg flex items-center justify-center shadow-2xs shrink-0 ${
+                    isLightPinColor(selectedPin.color)
+                      ? 'border border-paper-400 text-paper-900'
+                      : 'text-white'
+                  }`}
                 >
                   {React.createElement(getPinIconComponent(selectedPin.icon), { className: 'w-3.5 h-3.5' })}
                 </div>
-                <span className="font-bold text-xs text-paper-900">Dettagli Luogo</span>
+                <span className="font-bold text-xs text-paper-900 truncate">Dettagli Luogo</span>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
                   onClick={() => handleDeletePin(selectedPin.id)}
@@ -550,7 +865,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                   value={selectedPin.label}
                   onChange={(e) => handleUpdatePin(selectedPin.id, { label: e.target.value })}
                   placeholder="Nome del punto..."
-                  className="w-full px-2.5 py-1.5 bg-white border border-paper-300 rounded-lg text-xs font-semibold text-paper-900 focus:outline-hidden focus:border-folia-600"
+                  className="w-full px-2.5 py-1.5 bg-white border border-paper-300 rounded-xl text-xs font-semibold text-paper-900 focus:outline-hidden focus:border-folia-600 shadow-2xs"
                 />
               </div>
 
@@ -559,18 +874,15 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                 <label className="block text-[10px] font-bold text-paper-500 uppercase tracking-wider mb-1">
                   Collega a scheda Ambientazione
                 </label>
-                <select
+                <CustomSelect
                   value={selectedPin.worldEntryId || ''}
-                  onChange={(e) => handleUpdatePin(selectedPin.id, { worldEntryId: e.target.value || undefined })}
-                  className="w-full px-2.5 py-1.5 bg-white border border-paper-300 rounded-lg text-xs text-paper-800 focus:outline-hidden focus:border-folia-600"
-                >
-                  <option value="">-- Nessun collegamento --</option>
-                  {worldEntries.map(w => (
-                    <option key={w.id} value={w.id}>
-                      {w.name} ({w.category})
-                    </option>
-                  ))}
-                </select>
+                  options={worldOptions}
+                  onChange={(val) => handleUpdatePin(selectedPin.id, { worldEntryId: val || undefined })}
+                  placeholder="-- Nessun collegamento --"
+                  className="w-full"
+                  buttonClassName="w-full bg-white text-paper-800 font-medium"
+                  dropdownClassName="w-full"
+                />
 
                 {selectedPin.worldEntryId && (
                   <button
@@ -598,32 +910,31 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                   onChange={(e) => handleUpdatePin(selectedPin.id, { description: e.target.value })}
                   placeholder="Breve descrizione, cenni storici o pericoli..."
                   rows={2}
-                  className="w-full px-2.5 py-1.5 bg-white border border-paper-300 rounded-lg text-xs text-paper-800 focus:outline-hidden focus:border-folia-600 resize-none font-sans"
+                  className="w-full px-2.5 py-1.5 bg-white border border-paper-300 rounded-xl text-xs text-paper-800 focus:outline-hidden focus:border-folia-600 resize-none font-sans shadow-2xs"
                 />
               </div>
 
               {/* Icon & Color selector */}
-              <div className="grid grid-cols-2 gap-3 pt-1 border-t border-paper-200 text-xs">
+              <div className="grid grid-cols-2 gap-3 pt-1 border-t border-paper-200 text-xs items-start">
                 <div>
                   <label className="block text-[10px] font-bold text-paper-500 uppercase tracking-wider mb-1">
                     Icona
                   </label>
-                  <select
+                  <CustomSelect
                     value={selectedPin.icon || 'pin'}
-                    onChange={(e) => handleUpdatePin(selectedPin.id, { icon: e.target.value as MapPinIcon })}
-                    className="w-full px-2 py-1 bg-white border border-paper-300 rounded-lg text-xs text-paper-800 focus:outline-hidden"
-                  >
-                    {PIN_ICONS.map(ic => (
-                      <option key={ic.value} value={ic.value}>{ic.label}</option>
-                    ))}
-                  </select>
+                    options={pinIconOptions}
+                    onChange={(val) => handleUpdatePin(selectedPin.id, { icon: val as MapPinIcon })}
+                    className="w-full"
+                    buttonClassName="w-full bg-white text-paper-800 font-medium"
+                    dropdownClassName="w-48"
+                  />
                 </div>
 
                 <div>
                   <label className="block text-[10px] font-bold text-paper-500 uppercase tracking-wider mb-1">
                     Colore
                   </label>
-                  <div className="flex items-center gap-1.5 pt-1">
+                  <div className="flex items-center gap-1.5 pt-1.5">
                     {PIN_COLORS.map(c => (
                       <button
                         key={c.value}
@@ -631,12 +942,64 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                         onClick={() => handleUpdatePin(selectedPin.id, { color: c.value })}
                         style={{ backgroundColor: c.value }}
                         title={c.label}
-                        className={`w-4 h-4 rounded-full transition-transform cursor-pointer ${
-                          selectedPin.color === c.value ? 'scale-130 ring-2 ring-folia-500' : 'hover:scale-115 opacity-80'
+                        className={`w-4 h-4 rounded-full transition-transform cursor-pointer border ${
+                          c.value === '#FFFFFF' ? 'border-paper-400' : 'border-black/10'
+                        } ${
+                          selectedPin.color === c.value ? 'scale-130 ring-2 ring-folia-500 shadow-xs' : 'hover:scale-115 opacity-80'
                         }`}
                       />
                     ))}
                   </div>
+                </div>
+              </div>
+
+              {/* Marker & Font Size Scaler */}
+              <div className="pt-2.5 border-t border-paper-200">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-[10px] font-bold text-paper-500 uppercase tracking-wider flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-folia-800" />
+                    <span>Dimensione Segnaposto & Testo</span>
+                  </label>
+                  <span className="text-[11px] font-mono font-bold text-folia-800">
+                    {Math.round(pinScale * 100)}%
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handlePinSizeDown}
+                    disabled={pinScale <= 0.75}
+                    className="p-1.5 bg-white hover:bg-paper-150 disabled:opacity-30 rounded-lg text-paper-700 transition-colors cursor-pointer border border-paper-250 shadow-2xs"
+                    title="Rimpicciolisci segnaposto e testo (-)"
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <input
+                    type="range"
+                    min="0.75"
+                    max="2.5"
+                    step="0.1"
+                    value={pinScale}
+                    onChange={(e) => applyPinScale(parseFloat(e.target.value))}
+                    className="flex-1 accent-folia-700 h-1.5 bg-paper-200 rounded-lg cursor-pointer"
+                  />
+                  <button
+                    type="button"
+                    onClick={handlePinSizeUp}
+                    disabled={pinScale >= 2.5}
+                    className="p-1.5 bg-white hover:bg-paper-150 disabled:opacity-30 rounded-lg text-paper-700 transition-colors cursor-pointer border border-paper-250 shadow-2xs"
+                    title="Ingrandisci segnaposto e testo (+)"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResetPinSize}
+                    className="px-2 py-1 text-[10px] font-semibold bg-white hover:bg-paper-150 text-paper-700 rounded-lg border border-paper-250 transition-colors cursor-pointer shadow-2xs"
+                    title="Ripristina 100%"
+                  >
+                    100%
+                  </button>
                 </div>
               </div>
             </div>
@@ -654,7 +1017,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                 </div>
                 <div>
                   <h4 className="font-brand font-bold text-sm text-paper-900">Luoghi Segnati</h4>
-                  <p className="text-[11px] text-paper-500">{map.pins.length} punti d'interesse</p>
+                  <p className="text-[11px] text-paper-500">{(map.pins || []).length} punti d'interesse</p>
                 </div>
               </div>
 
@@ -692,7 +1055,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                   return (
                     <div
                       key={pin.id}
-                      onClick={() => handleCenterOnPin(pin)}
+                      onClick={() => handleSelectPinFromList(pin)}
                       className={`p-2.5 rounded-xl border transition-all cursor-pointer space-y-1 ${
                         isSelected 
                           ? 'bg-folia-50/80 border-folia-400 shadow-2xs' 
@@ -703,7 +1066,11 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                         <div className="flex items-center gap-2 min-w-0">
                           <div 
                             style={{ backgroundColor: pin.color || '#1B4332' }} 
-                            className="w-5 h-5 rounded-md text-white flex items-center justify-center shrink-0 shadow-2xs"
+                            className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 shadow-2xs ${
+                              isLightPinColor(pin.color)
+                                ? 'border border-paper-400 text-paper-900'
+                                : 'text-white'
+                            }`}
                           >
                             <IconComp className="w-3 h-3" />
                           </div>
@@ -712,9 +1079,22 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                           </span>
                         </div>
 
-                        <span className="text-[10px] text-paper-400 font-mono">
-                          {Math.round(pin.x)}%, {Math.round(pin.y)}%
-                        </span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCenterOnPin(pin);
+                            }}
+                            title="Centra la mappa su questo punto"
+                            className="p-1 rounded-md text-paper-400 hover:text-folia-800 hover:bg-paper-200 transition-colors cursor-pointer"
+                          >
+                            <Crosshair className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="text-[10px] text-paper-400 font-mono">
+                            {Math.round(pin.x)}%, {Math.round(pin.y)}%
+                          </span>
+                        </div>
                       </div>
 
                       {linkedWorld && (
@@ -742,6 +1122,56 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Drawer Footer: Pin Scale Control */}
+            <div className="p-3 border-t border-paper-250 bg-paper-100/90 shrink-0">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-bold text-paper-600 uppercase tracking-wider flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-folia-800" />
+                  Dimensione Segnaposti Mappa
+                </span>
+                <span className="text-[11px] font-mono font-bold text-folia-800">
+                  {Math.round(pinScale * 100)}%
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handlePinSizeDown}
+                  disabled={pinScale <= 0.75}
+                  className="p-1.5 bg-white hover:bg-paper-150 disabled:opacity-30 rounded-lg text-paper-700 transition-colors border border-paper-300 cursor-pointer shadow-2xs"
+                  title="Rimpicciolisci (-)"
+                >
+                  <Minus className="w-3 h-3" />
+                </button>
+                <input
+                  type="range"
+                  min="0.75"
+                  max="2.5"
+                  step="0.1"
+                  value={pinScale}
+                  onChange={(e) => applyPinScale(parseFloat(e.target.value))}
+                  className="flex-1 accent-folia-700 h-1.5 bg-paper-200 rounded-lg cursor-pointer"
+                />
+                <button
+                  type="button"
+                  onClick={handlePinSizeUp}
+                  disabled={pinScale >= 2.5}
+                  className="p-1.5 bg-white hover:bg-paper-150 disabled:opacity-30 rounded-lg text-paper-700 transition-colors border border-paper-300 cursor-pointer shadow-2xs"
+                  title="Ingrandisci (+)"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResetPinSize}
+                  className="px-2 py-1 text-[10px] font-semibold bg-white hover:bg-paper-150 text-paper-700 rounded-lg border border-paper-300 cursor-pointer shadow-2xs"
+                  title="Ripristina 100%"
+                >
+                  100%
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -750,10 +1180,15 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
       <ImageUploadModal
         isOpen={isImageModalOpen}
         onClose={() => setIsImageModalOpen(false)}
-        title={`Carica Mappa di ${map.title || 'Mappa'}`}
+        title={
+          map.title && map.title !== 'Nuova Mappa' && map.title !== 'New Map'
+            ? `Carica immagine per "${map.title}"`
+            : 'Carica immagine della mappa'
+        }
         currentImage={map.imageUrl}
         onSaveImage={(url) => onUpdateMap({ ...map, imageUrl: url, updatedAt: new Date().toISOString() })}
         onRemoveImage={() => onUpdateMap({ ...map, imageUrl: '', updatedAt: new Date().toISOString() })}
+        contained={true}
       />
 
       {/* Delete Map Confirmation Modal */}
@@ -774,6 +1209,7 @@ export const InteractiveMapEditor: React.FC<InteractiveMapEditorProps> = ({
         confirmLabel="Elimina mappa"
         cancelLabel="Annulla"
         variant="danger"
+        contained={true}
       />
     </div>
   );

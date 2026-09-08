@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Minimize2, X, FileText } from 'lucide-react';
 
 export interface FocusTextModalProps {
@@ -55,7 +55,7 @@ export const FocusTextModal: React.FC<FocusTextModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 md:p-8 animate-in fade-in select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 md:p-8 animate-in fade-in select-none folia-modal-overlay"
       onClick={onClose}
     >
       <div 
