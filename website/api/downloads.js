@@ -22,7 +22,7 @@ function getFallbackCount() {
     const p2 = path.join(__dirname, '../data/downloads.json');
     if (fs.existsSync(p2)) return JSON.parse(fs.readFileSync(p2, 'utf-8')).count;
   } catch (e) {}
-  return 1482;
+  return 0;
 }
 
 module.exports = async function handler(req, res) {

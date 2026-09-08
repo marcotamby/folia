@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=1.0.3">
+  <link rel="stylesheet" href="style.css?v=1.0.4">
 </head>
 <body>
 
@@ -893,10 +893,10 @@
               <span data-content-key="download.cta_download">Scarica Folia per Windows (.exe)</span>
             </a>
 
-            <!-- Download counter with exact phrasing requested: "scaricato enne volte" -->
-            <div class="download-counter-pill" id="live-download-counter" style="margin: 0.8rem auto 0; display: flex; justify-content: center;">
+            <!-- Contatore download reali: mostrato dinamicamente solo quando count > 0 -->
+            <div class="download-counter-pill" id="live-download-counter" style="margin: 0.8rem auto 0; display: none; justify-content: center;">
               <span class="counter-pulse"></span>
-              <span>scaricato <strong id="download-count-val">1.483</strong> volte</span>
+              <span id="download-count-text">scaricato <strong id="download-count-val">0</strong> volte</span>
             </div>
           </div>
         </div>
@@ -1010,8 +1010,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=1.0.3"></script>
-  <script src="content-manager.js?v=1.0.3" defer></script>
 
   <!-- High-Res Lightbox Modal for Real Screenshots -->
   <div id="folia-lightbox" onclick="closeFoliaLightbox(event)">
@@ -1088,6 +1086,7 @@
 
     </div>
   </div>
-  
+  <script src="app.js?v=1.0.4"></script>
+  <script src="content-manager.js?v=1.0.4" defer></script>
 </body>
 </html>

@@ -84,8 +84,8 @@ body.menu-open {
 }
 
 ::selection {
-  background: #DCFCE7;
-  color: #14532D;
+  background: var(--brand-light);
+  color: var(--brand-dark);
 }
 
 .container {
@@ -835,10 +835,10 @@ p {
 
 .slider-floating-arrow:hover {
   background: #FFFFFF;
-  color: #16A34A;
+  color: var(--brand-green);
   transform: translateY(-50%) scale(1.1);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  border-color: rgba(42, 135, 59, 0.25);
+  border-color: rgba(30, 119, 74, 0.25);
 }
 
 .slider-floating-arrow:active {
@@ -2426,7 +2426,7 @@ p {
   top: 0;
   left: 0;
   width: 100%;
-  background: #16A34A;
+  background: linear-gradient(135deg, #2E935A, #145936);
   color: #FFFFFF;
   padding: 0.65rem 1.5rem;
   z-index: 9999;
@@ -2480,7 +2480,7 @@ p {
 
 .cms-btn-prim {
   background: #FFFFFF;
-  color: #16A34A;
+  color: var(--brand-green);
 }
 
 .cms-btn-prim:hover {
@@ -2514,7 +2514,7 @@ p {
 }
 
 .folia-cms-edit-mode .cms-editable:hover {
-  outline: 2px solid #16A34A;
+  outline: 2px solid var(--brand-green);
   background: rgba(240, 253, 244, 0.6);
   cursor: text;
 }
@@ -2528,7 +2528,7 @@ p {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: #14532D;
+  background: var(--brand-dark);
   color: #FFFFFF;
   padding: 0.8rem 1.4rem;
   border-radius: 8px;
@@ -2706,7 +2706,7 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #16A34A;
+  color: var(--brand-green);
   font-weight: 600;
 }
 
@@ -2773,7 +2773,7 @@ p {
   height: 54px;
   border-radius: 12px;
   background: var(--brand-light);
-  color: #16A34A;
+  color: var(--brand-green);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3049,12 +3049,14 @@ p {
   padding: 1.2rem;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.22s ease, visibility 0.22s ease;
 }
 
 .review-modal-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .review-modal-card {
@@ -3263,6 +3265,6 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #16A34A;
+  color: var(--brand-green);
   font-weight: 600;
 }

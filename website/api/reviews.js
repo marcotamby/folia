@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { name, role, stars, text } = req.body || {};
+    const { name, role, stars, title, text, avatar, avatarClass } = req.body || {};
     if (!name || !text) {
       return res.status(400).json({ error: 'Nome e testo recensione richiesti' });
     }
@@ -60,16 +60,43 @@ module.exports = async function handler(req, res) {
     const reviewObj = {
       id: Date.now(),
       name: String(name).slice(0, 100),
-      role: String(role || 'Scrittore').slice(0, 100),
+      role: String(role || 'Autore').slice(0, 100),
       stars: Math.min(5, Math.max(1, parseInt(stars, 10) || 5)),
-      text: String(text).slice(0, 1000),
+      title: String(title || 'Recensione Folia').slice(0, 150),
+      text: String(text).slice(0, 1500),
+      avatar: String(avatar || name.slice(0, 2).toUpperCase()).slice(0, 4),
+      avatarClass: String(avatarClass || 'avatar-green'),
       date: 'Oggi'
     };
 
     if (supabase) {
       try {
-        const { error } = await supabase.from('site_reviews').insert([reviewObj]);
-        if (!error) {
+        // First try inserting review with title
+        let { error } = await supabase.from('site_reviews').insert([{
+          id: reviewObj.id,
+          name: reviewObj.name,
+          role: reviewObj.role,
+          stars: reviewObj.stars,
+          title: reviewObj.title,
+          text: reviewObj.text,
+          date: reviewObj.date
+        }]);
+
+        if (error) {
+          // If title column is missing in DB schema, insert without title or embed title in text
+          const fallbackObj = {
+            id: reviewObj.id,
+            name: reviewObj.name,
+            role: reviewObj.role,
+            stars: reviewObj.stars,
+            text: reviewObj.text,
+            date: reviewObj.date
+          };
+          const res2 = await supabase.from('site_reviews').insert([fallbackObj]);
+          if (!res2.error) {
+            return res.status(200).json({ success: true, review: reviewObj });
+          }
+        } else {
           return res.status(200).json({ success: true, review: reviewObj });
         }
       } catch (e) {}

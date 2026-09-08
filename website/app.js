@@ -301,19 +301,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-});
-
-// Lightbox Modal Functions (Global Scope)
 
   // =========================================================================
-  // 7. Live Download Counter
-
+  // 7. Live Download Counter (mostrato solo se count > 0)
+  // =========================================================================
+  const dlCounterPill = document.getElementById('live-download-counter');
+  const dlCounterText = document.getElementById('download-count-text');
   const dlCounterVal = document.getElementById('download-count-val');
   const heroDlVal = document.getElementById('hero-download-count');
 
   function updateCounterDisplays(count) {
-    const formatted = Number(count).toLocaleString('it-IT');
-    if (dlCounterVal) dlCounterVal.textContent = formatted;
+    const num = Number(count) || 0;
+    if (num <= 0) {
+      if (dlCounterPill) dlCounterPill.style.display = 'none';
+      return;
+    }
+    const formatted = num.toLocaleString('it-IT');
+    if (dlCounterPill) {
+      dlCounterPill.style.display = 'inline-flex';
+    }
+    const label = num === 1 ? 'volta' : 'volte';
+    if (dlCounterText) {
+      dlCounterText.innerHTML = `scaricato <strong id="download-count-val">${formatted}</strong> ${label}`;
+    } else if (dlCounterVal) {
+      dlCounterVal.textContent = formatted;
+    }
     if (heroDlVal) heroDlVal.textContent = formatted;
   }
 
@@ -321,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/downloads')
       .then(res => res.json())
       .then(data => {
-        if (data && data.count) {
+        if (data && typeof data.count === 'number') {
           updateCounterDisplays(data.count);
         }
       })
@@ -334,18 +346,16 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/downloads', { method: 'POST' })
       .then(res => res.json())
       .then(data => {
-        if (data && data.count) {
+        if (data && typeof data.count === 'number') {
           updateCounterDisplays(data.count);
         }
       })
       .catch(() => {});
   };
 
-
   // Bind click on all download buttons
   document.querySelectorAll('a[href*="Folia"], a[href$=".exe"], .btn-download, a[href="#download"]').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Only track if it's an actual download link
       if (btn.getAttribute('href') && (btn.getAttribute('href').endsWith('.exe') || btn.classList.contains('btn-download-action'))) {
         window.trackFoliaDownload();
       }
@@ -353,24 +363,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // 8. Community Reviews & Google Authentication Modal
+  // 8. Community Reviews (Sistema Recensioni)
   // =========================================================================
-  const reviewModal = document.getElementById('review-modal-overlay');
-  const btnOpenReview = document.getElementById('btn-open-review-modal');
-  const stepAuth = document.getElementById('review-step-auth');
-  const stepForm = document.getElementById('review-step-form');
-  const btnGoogleLogin = document.getElementById('btn-google-login');
-  const btnDisconnectGoogle = document.getElementById('btn-disconnect-google');
-  const connectedUserName = document.getElementById('connected-user-name');
-  const connectedUserAvatar = document.getElementById('connected-user-avatar');
+  const reviewsContainer = document.getElementById('reviews-container');
+  const formReview = document.getElementById('form-submit-review');
   const starPicker = document.getElementById('star-rating-picker');
   const inputRating = document.getElementById('input-review-rating');
-  const formReview = document.getElementById('form-submit-review');
-  const reviewsContainer = document.getElementById('reviews-container');
 
   window.openReviewModal = function() {
-    if (reviewModal) {
-      reviewModal.classList.add('active');
+    const modal = document.getElementById('review-modal-overlay');
+    if (modal) {
+      modal.classList.add('active');
       document.body.style.overflow = 'hidden';
       const nameInput = document.getElementById('input-review-name');
       if (nameInput) setTimeout(() => nameInput.focus(), 150);
@@ -379,14 +382,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.closeReviewModal = function(e) {
     if (e && e.target && e.target.classList.contains('review-modal-card')) return;
-    if (reviewModal) {
-      reviewModal.classList.remove('active');
+    const modal = document.getElementById('review-modal-overlay');
+    if (modal) {
+      modal.classList.remove('active');
       document.body.style.overflow = '';
     }
   };
 
+  const btnOpenReview = document.getElementById('btn-open-review-modal');
   if (btnOpenReview) {
-    btnOpenReview.addEventListener('click', window.openReviewModal);
+    btnOpenReview.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.openReviewModal();
+    });
   }
 
   // Star Picker interaction
@@ -405,10 +413,84 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function renderReviewCard(rev) {
+    const starsNum = Math.min(5, Math.max(1, parseInt(rev.stars, 10) || 5));
+    const starsText = '★'.repeat(starsNum);
+    const name = rev.name || 'Autore';
+    const role = rev.role || 'Autore & Scrittore';
+    const title = rev.title || 'Recensione';
+    const text = rev.text || '';
+    const date = rev.date || 'Recensione verificata';
+    const words = name.trim().split(/\s+/);
+    const initials = rev.avatar || (words.length > 1 ? (words[0][0] + words[1][0]).toUpperCase() : name.slice(0, 2).toUpperCase());
+    const avatarClass = rev.avatarClass || 'avatar-green';
+
+    return `
+      <div class="review-card" style="border-color: #76B583; animation: modalFadeIn 0.35s ease;">
+        <div class="review-card-top">
+          <div class="reviewer-info">
+            <div class="reviewer-avatar ${avatarClass}">${initials}</div>
+            <div>
+              <strong class="reviewer-name">${name}</strong>
+              <span class="reviewer-role">${role}</span>
+            </div>
+          </div>
+          <div class="review-stars">${starsText}</div>
+        </div>
+        <h4 class="review-heading">"${title}"</h4>
+        <p class="review-text">${text}</p>
+        <div class="review-footer">
+          <span class="review-verified"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Recensione autore</span>
+          <span class="review-date">${date}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function loadReviews() {
+    if (!reviewsContainer) return;
+
+    let cached = [];
+    try {
+      cached = JSON.parse(localStorage.getItem('folia_local_reviews') || '[]');
+    } catch (e) {}
+
+    fetch('/api/reviews')
+      .then(res => res.json())
+      .then(serverList => {
+        const list = Array.isArray(serverList) ? serverList : [];
+        const all = [...cached];
+        list.forEach(item => {
+          if (!all.some(c => c.id === item.id || (c.name === item.name && c.text === item.text))) {
+            all.push(item);
+          }
+        });
+
+        const emptyNote = document.getElementById('reviews-empty-note');
+        if (all.length > 0) {
+          if (emptyNote) emptyNote.style.display = 'none';
+          reviewsContainer.innerHTML = all.map(renderReviewCard).join('');
+        } else {
+          if (emptyNote) emptyNote.style.display = 'block';
+        }
+      })
+      .catch(() => {
+        const emptyNote = document.getElementById('reviews-empty-note');
+        if (cached.length > 0) {
+          if (emptyNote) emptyNote.style.display = 'none';
+          reviewsContainer.innerHTML = cached.map(renderReviewCard).join('');
+        }
+      });
+  }
+
+  // Load reviews on startup
+  loadReviews();
+
   // Handle Review Submission
   if (formReview) {
     formReview.addEventListener('submit', (e) => {
       e.preventDefault();
+      const submitBtn = document.getElementById('btn-submit-review');
       const name = (document.getElementById('input-review-name')?.value || '').trim();
       const role = (document.getElementById('input-review-role')?.value || 'Autore').trim();
       const title = (document.getElementById('input-review-title')?.value || '').trim();
@@ -416,11 +498,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const rating = parseInt(inputRating ? inputRating.value : 5, 10);
 
       if (!name || !text) {
-        alert('Inserisci il tuo nome e il testo della recensione.');
+        alert('Compila il tuo nome e il testo della recensione.');
         return;
       }
 
-      // Compute initials for avatar (e.g. "Marco Tamborrino" -> "MT")
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Pubblicazione in corso...';
+      }
+
       const words = name.split(/\s+/);
       const initials = words.length > 1 
         ? (words[0][0] + words[1][0]).toUpperCase()
@@ -433,7 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
         avatar: initials || 'U',
         avatarClass: 'avatar-green',
         title: title || 'Recensione Folia',
-        text: text
+        text: text,
+        date: 'Oggi'
       };
 
       fetch('/api/reviews', {
@@ -443,63 +530,77 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(res => res.json())
       .then(data => {
-        if (data && data.success && data.review && reviewsContainer) {
-          // Render new card at top of grid
-          const starsText = '★'.repeat(data.review.stars);
-          const cardHtml = `
-            <div class="review-card" style="border-color: #76B583; animation: modalFadeIn 0.4s ease;">
-              <div class="review-card-top">
-                <div class="reviewer-info">
-                  <div class="reviewer-avatar avatar-green">${data.review.avatar}</div>
-                  <div>
-                    <strong class="reviewer-name">${data.review.name}</strong>
-                    <span class="reviewer-role">${data.review.role}</span>
-                  </div>
-                </div>
-                <div class="review-stars">${starsText}</div>
-              </div>
-              <h4 class="review-heading">"${data.review.title}"</h4>
-              <p class="review-text">${data.review.text}</p>
-              <div class="review-footer">
-                <span class="review-verified"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Recensione autore</span>
-                <span class="review-date">Appena pubblicata</span>
-              </div>
-            </div>
-          `;
+        const rev = (data && data.review) ? data.review : reviewPayload;
+        // Save to localStorage so it stays visible to the user across reloads
+        try {
+          const cached = JSON.parse(localStorage.getItem('folia_local_reviews') || '[]');
+          cached.unshift(rev);
+          localStorage.setItem('folia_local_reviews', JSON.stringify(cached));
+        } catch (err) {}
+
+        if (reviewsContainer) {
           const emptyNote = document.getElementById('reviews-empty-note');
           if (emptyNote) emptyNote.style.display = 'none';
-          reviewsContainer.insertAdjacentHTML('afterbegin', cardHtml);
-          window.closeReviewModal();
-          formReview.reset();
+          reviewsContainer.insertAdjacentHTML('afterbegin', renderReviewCard(rev));
         }
+
+        window.closeReviewModal();
+        formReview.reset();
+        alert('Grazie mille per la tua recensione! È stata pubblicata con successo.');
       })
       .catch(() => {
+        // Fallback local save in case of offline/network glitch
+        try {
+          const cached = JSON.parse(localStorage.getItem('folia_local_reviews') || '[]');
+          cached.unshift(reviewPayload);
+          localStorage.setItem('folia_local_reviews', JSON.stringify(cached));
+        } catch (err) {}
+
+        if (reviewsContainer) {
+          const emptyNote = document.getElementById('reviews-empty-note');
+          if (emptyNote) emptyNote.style.display = 'none';
+          reviewsContainer.insertAdjacentHTML('afterbegin', renderReviewCard(reviewPayload));
+        }
         window.closeReviewModal();
+        formReview.reset();
+        alert('Grazie per la tua recensione! È stata aggiunta.');
+      })
+      .finally(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Pubblica Recensione';
+        }
       });
     });
   }
 
-window.openFoliaLightbox = function (src) {
-  const lb = document.getElementById('folia-lightbox');
-  const img = document.getElementById('lightbox-target-img');
-  if (lb && img) {
-    img.src = src;
-    lb.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-};
+  // =========================================================================
+  // 9. Lightbox Modal
+  // =========================================================================
+  window.openFoliaLightbox = function (src) {
+    const lb = document.getElementById('folia-lightbox');
+    const img = document.getElementById('lightbox-target-img');
+    if (lb && img) {
+      img.src = src;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  };
 
-window.closeFoliaLightbox = function (e) {
-  if (e && e.target && e.target.id === 'lightbox-target-img') return;
-  const lb = document.getElementById('folia-lightbox');
-  if (lb) {
-    lb.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-};
+  window.closeFoliaLightbox = function (e) {
+    if (e && e.target && e.target.id === 'lightbox-target-img') return;
+    const lb = document.getElementById('folia-lightbox');
+    if (lb) {
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  };
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    window.closeFoliaLightbox();
-  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      window.closeFoliaLightbox();
+      window.closeReviewModal();
+    }
+  });
+
 });
