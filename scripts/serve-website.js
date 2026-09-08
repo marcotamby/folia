@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
     const dlFilePath = path.join(WEBSITE_DIR, 'data/downloads.json');
     if (req.method === 'GET') {
       fs.readFile(dlFilePath, 'utf-8', (err, data) => {
-        const count = (!err && data) ? JSON.parse(data).count : 1482;
+        const count = (!err && data) ? JSON.parse(data).count : 0;
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-cache' });
         res.end(JSON.stringify({ count }));
       });
@@ -36,7 +36,7 @@ const server = http.createServer((req, res) => {
     }
     if (req.method === 'POST') {
       fs.readFile(dlFilePath, 'utf-8', (err, data) => {
-        let count = (!err && data) ? JSON.parse(data).count : 1482;
+        let count = (!err && data) ? JSON.parse(data).count : 0;
         count++;
         fs.writeFile(dlFilePath, JSON.stringify({ count }, null, 2), 'utf-8', () => {
           console.log('[Download Counter] New download tracked! Total:', count);

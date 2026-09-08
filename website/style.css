@@ -61,7 +61,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 72px;
   font-size: 16px;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -73,7 +73,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   position: relative;
   -webkit-tap-highlight-color: transparent;
@@ -124,11 +124,16 @@ p {
 .navbar {
   position: sticky;
   top: 0;
-  background: rgba(250, 250, 248, 0.92);
+  background: rgba(250, 250, 248, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+}
+
+.folia-cms-edit-mode .navbar {
+  top: 43px;
 }
 
 .nav-wrap {
@@ -2505,6 +2510,113 @@ p {
 
 .cms-btn-close:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* CMS Formatting Tools in Top Bar */
+.cms-bar-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 3px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cms-tool-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.cms-tool-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.cms-tool-btn.active {
+  background: #FFFFFF;
+  color: #145936;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Floating Bubble Formatting Toolbar */
+#folia-cms-bubble {
+  position: absolute;
+  display: none;
+  align-items: center;
+  gap: 3px;
+  background: #14281E;
+  border: 1px solid rgba(134, 239, 172, 0.35);
+  padding: 4px 6px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 10001;
+  pointer-events: auto;
+  animation: cmsBubbleFade 0.12s ease-out;
+}
+
+#folia-cms-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #14281E transparent transparent transparent;
+}
+
+#folia-cms-bubble.bubble-below::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent #14281E transparent;
+}
+
+@keyframes cmsBubbleFade {
+  from { opacity: 0; transform: translate(-50%, 6px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.cms-bubble-btn {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #E2E8F0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.12s ease;
+}
+
+.cms-bubble-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+
+.cms-bubble-btn.active {
+  background: #2E935A;
+  color: #FFFFFF;
+}
+
+.cms-bubble-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 2px;
 }
 
 .folia-cms-edit-mode .cms-editable {

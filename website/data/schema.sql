@@ -75,7 +75,7 @@ VALUES ('hero.title', 'hero', 'html', 'L''ambiente di scrittura per chi <em>dà 
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('hero.desc', 'hero', 'html', 'Dalla prima scintilla d''ispirazione all''ultima pagina impaginata. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.', 'Testo per hero.desc')
+VALUES ('hero.desc', 'hero', 'html', 'Dalla prima scintilla d''ispirazione fino all''ultima pagina del tuo libro. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.', 'Testo per hero.desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -103,7 +103,7 @@ VALUES ('hero.badge_free', 'hero', 'text', 'Attualmente gratuito', 'Testo per he
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('niches.section_label', 'niches', 'text', 'Fatto su misura', 'Testo per niches.section_label')
+VALUES ('niches.section_label', 'niches', 'text', 'FATTO SU MISURA', 'Testo per niches.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -235,15 +235,31 @@ VALUES ('features.f1_title', 'features', 'text', 'Editor & Norme Editoriali', 'T
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f1_desc', 'features', 'text', 'Cartelle editoriali da 1.800 battute calcolate in tempo reale. Formato romanzo 14x21 cm, caporali (« »), em-dash (—), rientro prima riga e sillabazione conforme agli standard delle case editrici italiane.', 'Testo per features.f1_desc')
+VALUES ('features.f1_desc', 'features', 'html', 'Scrivi senza impazzire con le impostazioni: hai già le <strong>cartelle editoriali da 1800 battute</strong> calcolate in tempo reale, il formato pagina identico ai libri stampati, le note a piè di pagina e i dialoghi con le virgolette giuste (« »).', 'Testo per features.f1_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f2_title', 'features', 'text', 'Personaggi & Schede D&D 5e', 'Testo per features.f2_title')
+VALUES ('features.f1_b1', 'features', 'text', 'Commenti a margine e revisioni risolvibili', 'Testo per features.f1_b1')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f2_desc', 'features', 'text', 'Organizza in categorie ordinate luoghi, fazioni, sistemi magici, religioni ed ere storiche. Il testo del tuo manoscritto si collega automaticamente alle schede di lore con comode anteprime al passaggio del mouse.', 'Testo per features.f2_desc')
+VALUES ('features.f1_b2', 'features', 'text', 'Trova e sostituisci avanzato', 'Testo per features.f1_b2')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f2_title', 'features', 'text', 'Personaggi & Schede D&D', 'Testo per features.f2_title')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f2_desc', 'features', 'text', 'Dai spessore a protagonisti e antagonisti: cosa vogliono, cosa temono e i loro difetti. E se giochi a D&D, trovi le schede dei personaggi e dei mostri già pronte con caratteristiche, dadi vita e incantesimi.', 'Testo per features.f2_desc')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f2_b1', 'features', 'text', 'Archetipi drammatici ed evoluzione dell''arco', 'Testo per features.f2_b1')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f2_b2', 'features', 'text', 'Supporto razze e classi homebrew personalizzate', 'Testo per features.f2_b2')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -251,35 +267,67 @@ VALUES ('features.f3_title', 'features', 'text', 'Worldbuilding & Mappe con Pin'
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f3_desc', 'features', 'text', 'Dalla psicologia profonda (bisogno, obiettivo, difetto fatale) alle schede statistiche complete per D&D 5e e statblock dei mostri per i Game Master: caratteristiche, CA, PF, slot incantesimi e attacchi.', 'Testo per features.f3_desc')
+VALUES ('features.f3_desc', 'features', 'text', 'Carica le immagini dei tuoi regni o delle tue città, piazza i segnalini sui luoghi importanti e collegali alle tue note. Mentre scrivi il manoscritto, basta passare con il mouse sul nome di un posto per rivederne i dettagli.', 'Testo per features.f3_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f4_title', 'features', 'text', 'Outliner & 18+ Modelli di Trama', 'Testo per features.f4_title')
+VALUES ('features.f3_b1', 'features', 'text', 'Wiki-linking istantaneo al passaggio del mouse', 'Testo per features.f3_b1')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f4_desc', 'features', 'text', 'Save the Cat!, Story Circle di Dan Harmon, Mystery Beats, Viaggio dell''Eroe, Snowflake Method, Five Room Dungeon e molti altri. Struttura ogni beat con conteggio parole raccomandato e note di svolta.', 'Testo per features.f4_desc')
+VALUES ('features.f3_b2', 'features', 'text', 'Zoom, pan ed esplorazione fluida della mappa', 'Testo per features.f3_b2')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f5_title', 'features', 'text', 'Corkboard, Idee & Ricerca', 'Testo per features.f5_title')
+VALUES ('features.f4_title', 'features', 'text', 'Metti in ordine capitoli e scene', 'Testo per features.f4_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f5_desc', 'features', 'text', 'Visualizza i capitoli come schede su un pannello di sughero. Assegna stati di avanzamento (Bozza, In stesura, Da rivedere, Completato) con codici colore e riorganizza la sequenza degli eventi trascinando le card.', 'Testo per features.f5_desc')
+VALUES ('features.f4_desc', 'features', 'text', 'Non restare bloccato davanti alla pagina bianca: trovi schemi semplici da seguire (come il Viaggio dell''Eroe, la struttura del giallo o i modelli per dungeon) per organizzare l''intreccio passo dopo passo.', 'Testo per features.f4_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f6_title', 'features', 'text', 'Metriche, Focus & Esportazione', 'Testo per features.f6_title')
+VALUES ('features.f4_b1', 'features', 'text', 'Beat narrativi con linee guida drammaturgiche', 'Testo per features.f4_b1')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f6_desc', 'features', 'text', 'Monitora le sessioni di scrittura, fissa obiettivi giornalieri con barre di progresso discrete e stima i minuti di lettura. Esporta poi l''opera finita in DOCX Word formattato, PDF per la stampa, Markdown o testo semplice.', 'Testo per features.f6_desc')
+VALUES ('features.f4_b2', 'features', 'text', 'Collegamento diretto tra snodi e scene dell''editor', 'Testo per features.f4_b2')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.section_label', 'privacy', 'text', 'Local-First & Privacy', 'Testo per privacy.section_label')
+VALUES ('features.f5_title', 'features', 'text', 'Bacheca visiva per le tue idee', 'Testo per features.f5_title')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f5_desc', 'features', 'text', 'Sposta le scene come se fossero foglietti su un tavolo per trovare l''ordine perfetto. E hai sempre a portata di mano un blocco per catturare al volo battute di dialogo o intuizioni prima di dimenticarle.', 'Testo per features.f5_desc')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f5_b1', 'features', 'text', 'Etichette di colore personalizzate per POV e sottotrame', 'Testo per features.f5_b1')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f5_b2', 'features', 'text', 'Archivio note veloci sempre accessibile', 'Testo per features.f5_b2')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f6_title', 'features', 'text', 'Scrivi senza distrazioni ed esporta facile', 'Testo per features.f6_title')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f6_desc', 'features', 'text', 'Attiva la modalità a tutto schermo per concentrarti solo sulle parole, fissa un obiettivo di battute al giorno e, quando hai finito, esporta il libro in Word (DOCX) pronto per gli editor o in PDF impaginato.', 'Testo per features.f6_desc')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f6_b1', 'features', 'text', 'Opzione per esportare schede e appendici del mondo', 'Testo per features.f6_b1')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('features.f6_b2', 'features', 'text', 'Nessun lock-in: i file rimangono sul tuo PC', 'Testo per features.f6_b2')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('privacy.section_label', 'privacy', 'text', 'LOCAL-FIRST & PRIVACY', 'Testo per privacy.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -287,7 +335,7 @@ VALUES ('privacy.title', 'privacy', 'text', 'Le tue storie appartengono solo a t
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.desc', 'privacy', 'text', 'Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. Con Folia i file di progetto (.folia) risiedono unicamente sul tuo disco rigido: zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta.', 'Testo per privacy.desc')
+VALUES ('privacy.desc', 'privacy', 'html', 'Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. Con Folia i file di progetto (<code>.folia</code>) risiedono unicamente sul tuo disco rigido: <strong>zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta</strong>.', 'Testo per privacy.desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -303,7 +351,19 @@ VALUES ('privacy.bullet3', 'privacy', 'text', 'Nessuna IA addestrata sulle tue c
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.file_spec', 'privacy', 'text', 'Formato Aperto: File .folia archiviati in locale sul tuo computer', 'Testo per privacy.file_spec')
+VALUES ('privacy.spec1', 'privacy', 'text', 'Cartella locale: Documenti/Folia/Romanzo.folia', 'Testo per privacy.spec1')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('privacy.spec2', 'privacy', 'text', 'Pacchetti scambiati via web: 0 byte (offline)', 'Testo per privacy.spec2')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('privacy.spec3', 'privacy', 'text', 'Backup automatico di sicurezza: ogni 2 minuti', 'Testo per privacy.spec3')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('privacy.spec4', 'privacy', 'text', 'Proprietà dei testi: 100% dell''Autore', 'Testo per privacy.spec4')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -331,7 +391,7 @@ VALUES ('support.cta_kofi', 'support', 'text', 'Supporta Marco', 'Testo per supp
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('download.section_label', 'download', 'text', 'Centro Download', 'Testo per download.section_label')
+VALUES ('download.section_label', 'download', 'text', 'CENTRO DOWNLOAD', 'Testo per download.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -379,7 +439,7 @@ VALUES ('download.note_bottom', 'download', 'text', 'Folia è attualmente in svi
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.section_label', 'faq', 'text', 'Domande Frequenti', 'Testo per faq.section_label')
+VALUES ('faq.section_label', 'faq', 'text', 'DOMANDE FREQUENTI', 'Testo per faq.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -454,5 +514,3 @@ CREATE POLICY "Full access on site_stats" ON site_stats FOR ALL USING (true);
 INSERT INTO site_stats (stat_name, stat_value)
 VALUES ('downloads_count', 1482)
 ON CONFLICT (stat_name) DO NOTHING;
-
-

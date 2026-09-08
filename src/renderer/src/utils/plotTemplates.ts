@@ -217,6 +217,103 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
     ]
   },
   {
+    id: 'freytag',
+    name: 'Piramide di Freytag (Dramma in 5 Atti)',
+    description: 'La celebre architettura teatrale e romanzesca in 5 atti: Esposizione, Azione Crescente, Climax, Azione Calante e Catastrofe/Risoluzione.',
+    category: 'novel',
+    createActs: () => [
+      {
+        id: 'act-fry-1',
+        title: 'Atto 1: Esposizione & Incidente Scatenante',
+        subtitle: "Presentazione del mondo, dei conflitti latenti e rottura dell'equilibrio",
+        beats: [
+          { id: 'fry-1', actId: 'act-fry-1', title: '1. Stato Iniziale & Contesto', description: '', guideline: 'Il mondo, i protagonisti, i desideri profondi e le crepe della situazione di partenza.', order: 0 },
+          { id: 'fry-2', actId: 'act-fry-1', title: '2. Forza Motrice (Inciting Incident)', description: '', guideline: "L'evento scatenante che innesca il conflitto e rende inevitabile l'azione.", order: 1 }
+        ]
+      },
+      {
+        id: 'act-fry-2',
+        title: 'Atto 2: Azione Crescente & Complicazioni (Rising Action)',
+        subtitle: 'Una serie di ostacoli e crisi parziali aumentano costantemente la posta in gioco',
+        beats: [
+          { id: 'fry-3', actId: 'act-fry-2', title: '3. Primi Ostacoli & Reazioni', description: '', guideline: 'Il protagonista tenta soluzioni ordinarie ma le forze antagoniste resistono.', order: 0 },
+          { id: 'fry-4', actId: 'act-fry-2', title: '4. Complicazione & Impegno Irrevocabile', description: '', guideline: 'La posta in gioco si alza e non è più possibile tornare indietro.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-fry-3',
+        title: 'Atto 3: Il Climax (Punto Culminante)',
+        subtitle: "Il punto di non ritorno dove la fortuna dell'eroe cambia irrevocabilmente",
+        beats: [
+          { id: 'fry-5', actId: 'act-fry-3', title: '5. La Crisi Suprema & Ribaltamento (Peripeteia)', description: '', guideline: 'Il momento di massima tensione: la scelta fondamentale che deciderà trionfo o rovina.', order: 0 }
+        ]
+      },
+      {
+        id: 'act-fry-4',
+        title: 'Atto 4: Azione Calante & Falsa Tregua (Falling Action)',
+        subtitle: "Le conseguenze ineluttabili del climax e l'ultimo momento di speranza/sospensione",
+        beats: [
+          { id: 'fry-6', actId: 'act-fry-4', title: '6. Conseguenze del Climax & Spirale', description: '', guideline: 'Le forze messe in moto dal climax precipitano verso l\'epilogo.', order: 0 },
+          { id: 'fry-7', actId: 'act-fry-4', title: '7. Momento di Ultima Sospensione', description: '', guideline: 'Un breve istante in cui sembra possibile una via di scampo alternativa prima della resa finale.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-fry-5',
+        title: 'Atto 5: Risoluzione / Catastrofe (Dénouement)',
+        subtitle: 'Lo scioglimento definitivo del dramma, la purificazione e il nuovo ordine',
+        beats: [
+          { id: 'fry-8', actId: 'act-fry-5', title: '8. La Catastrofe / Risoluzione Finale', description: '', guideline: "Il destino dell'eroe si compie (tragico o trionfale) e il mistero/conflitto si estingue.", order: 0 },
+          { id: 'fry-9', actId: 'act-fry-5', title: "9. Ristabilimento dell'Equilibrio", description: '', guideline: 'Il mondo dopo la tempesta: riflessione morale e nuovo ordine permanente.', order: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'fichtean',
+    name: 'Curva Fichteana (Crisi & Climax a Onde)',
+    description: 'Struttura dinamica a onde di tensione crescente: inizia in medias res e sviluppa una serie di crisi concatenate fino alla Crisi Suprema.',
+    category: 'novel',
+    createActs: () => [
+      {
+        id: 'act-fich-1',
+        title: 'Fase 1: In Medias Res & Prima Crisi',
+        subtitle: 'Nessuna lunga introduzione: la storia si apre nel bel mezzo del problema',
+        beats: [
+          { id: 'fich-1', actId: 'act-fich-1', title: '1. Apertura in Piena Azione', description: '', guideline: 'Il lettore viene catapultato direttamente in una situazione tesa ed urgente.', order: 0 },
+          { id: 'fich-2', actId: 'act-fich-1', title: '2. Prima Crisi & Informazioni Chiave', description: '', guideline: 'Risolvendo o fuggendo dalla prima crisi emergono i retroscena indispensabili.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-fich-2',
+        title: 'Fase 2: Serie di Crisi & Escalation (Rising Crises)',
+        subtitle: 'Onde successive di tensione: ogni crisi è più difficile e personale della precedente',
+        beats: [
+          { id: 'fich-3', actId: 'act-fich-2', title: '3. Seconda Crisi (Ostacolo Fisico / Materiale)', description: '', guideline: 'Una nuova minaccia mette alla prova le risorse pratiche dei protagonisti.', order: 0 },
+          { id: 'fich-4', actId: 'act-fich-2', title: '4. Respiro Temporaneo & Nuova Complicazione', description: '', guideline: 'Breve momento di tregua in cui si rivela un problema ancora più grave.', order: 1 },
+          { id: 'fich-5', actId: 'act-fich-2', title: '5. Terza Crisi (Tradimento o Minaccia Personale)', description: '', guideline: 'Il conflitto colpisce gli affetti o la fiducia del protagonista.', order: 2 },
+          { id: 'fich-6', actId: 'act-fich-2', title: '6. Quarta Crisi (Tutto Sembra Perduto)', description: '', guideline: "La sconfitta parziale più pesante che spinge i personaggi sull'orlo del baratro.", order: 3 }
+        ]
+      },
+      {
+        id: 'act-fich-3',
+        title: 'Fase 3: La Crisi Suprema (Major Climax)',
+        subtitle: 'Tutti i fili delle crisi precedenti esplodono contemporaneamente',
+        beats: [
+          { id: 'fich-7', actId: 'act-fich-3', title: '7. Il Confronto Decisivo', description: '', guideline: 'Lo scontro inevitabile che richiede il superamento definitivo del proprio limite.', order: 0 }
+        ]
+      },
+      {
+        id: 'act-fich-4',
+        title: 'Fase 4: Azione Discendente & Risoluzione',
+        subtitle: "Il ritorno alla calma e l'impatto trasformativo sul protagonista",
+        beats: [
+          { id: 'fich-8', actId: 'act-fich-4', title: '8. Conseguenze Immediate & Riconciliazione', description: '', guideline: 'Le risposte alle domande aperte e il commiato tra i personaggi.', order: 0 },
+          { id: 'fich-9', actId: 'act-fich-4', title: '9. Il Nuovo Equilibrio Raggiunto', description: '', guideline: "L'immagine finale che dimostra la trasformazione irrevocabile avvenuta.", order: 1 }
+        ]
+      }
+    ]
+  },
+  {
     id: 'seven_point',
     name: 'Struttura a 7 Punti (Dan Wells)',
     description: 'Metodo progressivo in 7 tappe ideale per pianificare a ritroso dal finale al punto di partenza.',
@@ -248,6 +345,53 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
         beats: [
           { id: 'p7-6', actId: 'act-7p-3', title: '6. Secondo Punto di Trama (Plot Turn 2)', description: '', guideline: "La rivelazione o l'arma finale che rende possibile la vittoria.", order: 0 },
           { id: 'p7-7', actId: 'act-7p-3', title: '7. Risoluzione (Resolution)', description: '', guideline: 'Lo stato finale in cui il protagonista ha completato la sua evoluzione.', order: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'snowflake',
+    name: 'Metodo Snowflake (Randy Ingermanson)',
+    description: 'La celebre tecnica di progettazione frattale: da una singola frase a una mappa completa di scene, personaggi e sottotrame.',
+    category: 'novel',
+    createActs: () => [
+      {
+        id: 'act-snw-1',
+        title: 'Livello 1: La Premessa & I Tre Disastri',
+        subtitle: 'La frase fondante, il paragrafo riassuntivo e i tre punti di svolta capitali',
+        beats: [
+          { id: 'snw-1', actId: 'act-snw-1', title: "1. La Frase d'Impatto (One-Sentence Summary)", description: '', guideline: 'Chi è il protagonista, cosa vuole, qual è il conflitto e cosa rischia.', order: 0 },
+          { id: 'snw-2', actId: 'act-snw-1', title: '2. Il Primo Disastro (Fine Atto 1)', description: '', guideline: 'Il tentativo iniziale del protagonista fallisce e lo costringe a impegnarsi a fondo.', order: 1 },
+          { id: 'snw-3', actId: 'act-snw-1', title: '3. Il Secondo Disastro (Midpoint)', description: '', guideline: 'Una nuova complicazione ribalta la situazione; il protagonista passa all\'attacco.', order: 2 },
+          { id: 'snw-4', actId: 'act-snw-1', title: '4. Il Terzo Disastro (Crisi Finale)', description: '', guideline: 'Il piano crolla e le circostanze sembrano disperate prima della resa dei conti.', order: 3 }
+        ]
+      },
+      {
+        id: 'act-snw-2',
+        title: 'Livello 2: Profili dei Personaggi & Motivazioni',
+        subtitle: 'Gli archi evolutivi di protagonisti, alleati e antagonisti',
+        beats: [
+          { id: 'snw-5', actId: 'act-snw-2', title: "5. L'Arco del Protagonista (Obiettivo, Bugia & Verità)", description: '', guideline: 'Cosa desidera, quale convinzione errata lo limita e quale verità deve comprendere.', order: 0 },
+          { id: 'snw-6', actId: 'act-snw-2', title: "6. L'Antagonista & Le Forze d'Opposizione", description: '', guideline: 'Le motivazioni coerenti dell\'avversario e perché crede di essere nel giusto.', order: 1 },
+          { id: 'snw-7', actId: 'act-snw-2', title: '7. Personaggi Secondari & Sottotrame Chiave', description: '', guideline: 'Come le vite dei comprimari riflettono e arricchiscono il tema centrale.', order: 2 }
+        ]
+      },
+      {
+        id: 'act-snw-3',
+        title: 'Livello 3: Sinossi Operativa a Scene',
+        subtitle: 'La sequenza frattale di tutte le scene divise in Azione e Reazione',
+        beats: [
+          { id: 'snw-8', actId: 'act-snw-3', title: '8. Sequenza delle Scene Proattive (Obiettivo - Conflitto - Disastro)', description: '', guideline: 'Le scene in cui i personaggi agiscono e subiscono battute d\'arresto.', order: 0 },
+          { id: 'snw-9', actId: 'act-snw-3', title: '9. Sequenza delle Scene Reattive (Reazione - Dilemma - Decisione)', description: '', guideline: 'Le scene intime di rielaborazione emotiva e nuova pianificazione.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-snw-4',
+        title: 'Livello 4: Climax & Risoluzione Frattale',
+        subtitle: 'La convergenza di tutti gli archi narrativi nella stesura finale',
+        beats: [
+          { id: 'snw-10', actId: 'act-snw-4', title: '10. Climax Corale & Risoluzione dei Fili', description: '', guideline: 'Tutti gli archi secondari e la trama principale giungono a compimento.', order: 0 },
+          { id: 'snw-11', actId: 'act-snw-4', title: '11. Risonanza Finale', description: '', guideline: 'L\'ultima nota tematica che lascia un\'impressione duratura nel lettore.', order: 1 }
         ]
       }
     ]
@@ -324,6 +468,101 @@ export const PLOT_TEMPLATES: PlotTemplateInfo[] = [
           { id: 'my-7', actId: 'act-my-3', title: "7. L'Indizio Trascurato & Il Quadro Completo", description: '', guideline: 'Il dettaglio apparentemente insignificante che svela il vero movente.', order: 0 },
           { id: 'my-8', actId: 'act-my-3', title: "8. La Resa dei Conti / L'Interrogatorio Finale", description: '', guideline: 'La trappola scatta e il colpevole viene smascherato.', order: 1 },
           { id: 'my-9', actId: 'act-my-3', title: '9. Epilogo & Conseguenze Morali', description: '', guideline: "La verità viene ristabilita e l'investigatore fa i conti con l'esperienza.", order: 2 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'thriller_beats',
+    name: 'Struttura Thriller & Countdown ad Alta Tensione',
+    description: "Pacing serrato, orologio biologico/temporale che scorre, paranoia, false piste e scontro all'ultimo secondo.",
+    category: 'novel',
+    createActs: () => [
+      {
+        id: 'act-thr-1',
+        title: "Atto 1: L'Innesco & L'Orologio che Scorre (Countdown)",
+        subtitle: 'La minaccia esplode e il tempo per sventarla è contato',
+        beats: [
+          { id: 'thr-1', actId: 'act-thr-1', title: '1. Il Lampo di Minaccia Iniziale', description: '', guideline: 'Un delitto, un rapimento o una falla di sicurezza scuote la normalità.', order: 0 },
+          { id: 'thr-2', actId: 'act-thr-1', title: '2. Il Protagonista Coinvolto & Il Timer', description: '', guideline: 'Il protagonista viene attirato nella rete e si stabilisce il limite di tempo inderogabile.', order: 1 },
+          { id: 'thr-3', actId: 'act-thr-1', title: '3. Nessun Aiuto Esterno (Isolamento)', description: '', guideline: "Le autorità non credono, sono corrotte o impossibilitate ad agire; l'eroe è solo.", order: 2 }
+        ]
+      },
+      {
+        id: 'act-thr-2',
+        title: 'Atto 2: La Caccia, La Paranoia & Il Contro-Attacco',
+        subtitle: "Indagini sotto tiro: la caccia si fa disperata e l'antagonista anticipa ogni mossa",
+        beats: [
+          { id: 'thr-4', actId: 'act-thr-2', title: '4. Prima Pista & Conflitto Diretto', description: '', guideline: 'Il protagonista ottiene un primo vantaggio, pagando un prezzo alto.', order: 0 },
+          { id: 'thr-5', actId: 'act-thr-2', title: '5. La Falsa Pista / Midpoint Esplosivo', description: '', guideline: 'Ciò che sembrava la soluzione si rivela una trappola orchestrata dal vero nemico.', order: 1 },
+          { id: 'thr-6', actId: 'act-thr-2', title: '6. Il Protagonista Diventa la Preda', description: '', guideline: 'I ruoli si ribaltano: il protagonista deve fuggire e difendersi mentre indaga.', order: 2 }
+        ]
+      },
+      {
+        id: 'act-thr-3',
+        title: 'Atto 3: Il Tradimento & Il Punto di Rottura',
+        subtitle: "L'alleato più fidato vacilla e ogni speranza sembra svanire",
+        beats: [
+          { id: 'thr-7', actId: 'act-thr-3', title: '7. Il Tradimento Inaspettato', description: '', guideline: 'Una rivelazione sconcertante fa crollare ogni certezza su chi fidarsi.', order: 0 },
+          { id: 'thr-8', actId: 'act-thr-3', title: '8. Momento di Buio Totale & Intuizione Finale', description: '', guideline: 'Catturato o braccato, il protagonista scopre il punto debole nel piano del cattivo.', order: 1 }
+        ]
+      },
+      {
+        id: 'act-thr-4',
+        title: 'Atto 4: Countdown Finale & Resa dei Conti',
+        subtitle: "Gli ultimi minuti prima dell'esplosione o della catastrofe",
+        beats: [
+          { id: 'thr-9', actId: 'act-thr-4', title: '9. Corsa Contro i Secondi (The Climax)', description: '', guideline: 'Azione frenetica per raggiungere il luogo della minaccia prima che scada il tempo.', order: 0 },
+          { id: 'thr-10', actId: 'act-thr-4', title: '10. Duello Finale Faccia a Faccia', description: '', guideline: "Confronto brutale e risolutivo con l'antagonista principale.", order: 1 },
+          { id: 'thr-11', actId: 'act-thr-4', title: '11. Decompressione & Sollievo', description: '', guideline: 'Il timer si ferma, il pericolo rientra e le conseguenze psicologiche emergono.', order: 2 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'fantasy_epic',
+    name: 'Arco Epico High Fantasy (World, Lore & Guerra per il Fato)',
+    description: 'La grande narrazione corale fantasy: antiche profezie, la compagnia errante, regni caduti e la guerra per la salvezza del mondo.',
+    category: 'novel',
+    createActs: () => [
+      {
+        id: 'act-epi-1',
+        title: "Atto 1: L'Ombra sui Confini & La Chiamata del Destino",
+        subtitle: 'Dalla vita remota ai primi presagi del Male Antico che si risveglia',
+        beats: [
+          { id: 'epi-1', actId: 'act-epi-1', title: '1. Vita nei Feudi & Prime Avvisaglie', description: '', guideline: 'La serenità apparente di un borgo o di un giovane ignaro del proprio retaggio.', order: 0 },
+          { id: 'epi-2', actId: 'act-epi-1', title: "2. L'Ombra Colpisce (L'Attacco Inatteso)", description: '', guideline: 'Mostri antichi o un emissario oscuro distruggono la pace; fuga obbligata.', order: 1 },
+          { id: 'epi-3', actId: 'act-epi-1', title: "3. Raduno dei Primi Alleati & Il Manufatto", description: '', guideline: "Incontro con una guida saggia e scoperta dell'oggetto, segreto o potere ancestrale.", order: 2 }
+        ]
+      },
+      {
+        id: 'act-epi-2',
+        title: 'Atto 2: Il Lungo Viaggio & Le Corti Divise',
+        subtitle: 'Attraversamento di regni mitici, pericoli arcani e tentativi di unire popoli rivali',
+        beats: [
+          { id: 'epi-4', actId: 'act-epi-2', title: '4. La Compagnia si Compone', description: '', guideline: 'Eroi di stirpi e culture diverse si uniscono nonostante vecchi rancori.', order: 0 },
+          { id: 'epi-5', actId: 'act-epi-2', title: '5. Attraversamento delle Terre Proibite', description: '', guideline: 'Montagne infestate, rovine millenarie o foreste incantate mettono a dura prova il gruppo.', order: 1 },
+          { id: 'epi-6', actId: 'act-epi-2', title: '6. Il Consiglio dei Regni (Diplomazia & Diffidenza)', description: '', guideline: "Re ed elfi esitano a scendere in guerra: l'orgoglio divide i popoli liberi.", order: 2 }
+        ]
+      },
+      {
+        id: 'act-epi-3',
+        title: 'Atto 3: La Frattura & La Caduta delle Difese',
+        subtitle: 'La compagnia si divide, una grande roccaforte crolla e il prezzo si fa straziante',
+        beats: [
+          { id: 'epi-7', actId: 'act-epi-3', title: '7. La Morte o Scomparsa del Mentore', description: '', guideline: "La figura guida cade, lasciando gli eroi soli di fronte a una responsabilità immensa.", order: 0 },
+          { id: 'epi-8', actId: 'act-epi-3', title: '8. Sentieri Separati (Trame Parallele)', description: '', guideline: "Il gruppo si divide: chi cerca l'arma sacra, chi guida un esercito disperato.", order: 1 },
+          { id: 'epi-9', actId: 'act-epi-3', title: "9. L'Ora Più Cupa: L'Assedio alle Mura", description: '', guideline: "L'orda nemica soverchiante sembra inarrestabile; le speranze sono al minimo storico.", order: 2 }
+        ]
+      },
+      {
+        id: 'act-epi-4',
+        title: 'Atto 4: La Battaglia per il Fato del Mondo & La Nuova Era',
+        subtitle: 'Il compimento della profezia, la vittoria pagata col sangue e la partenza',
+        beats: [
+          { id: 'epi-10', actId: 'act-epi-4', title: "10. L'Arrivo Inaspettato dei Rinforzi", description: '', guideline: "Un'antica promessa viene onorata e le forze alleate ribaltano la marea dello scontro.", order: 0 },
+          { id: 'epi-11', actId: 'act-epi-4', title: '11. Il Duello nel Cuore delle Tenebre', description: '', guideline: "Il protagonista affronta l'Entità Oscura o distrugge la fonte del suo potere.", order: 1 },
+          { id: 'epi-12', actId: 'act-epi-4', title: "12. L'Incoronazione, Le Cicatrici & La Nuova Era", description: '', guideline: 'Il mondo è salvo ma per sempre mutato: celebrazione, memoria dei caduti e nuovo inizio.', order: 2 }
         ]
       }
     ]

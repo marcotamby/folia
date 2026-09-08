@@ -312,10 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateCounterDisplays(count) {
     const num = Number(count) || 0;
-    if (num <= 0) {
-      if (dlCounterPill) dlCounterPill.style.display = 'none';
-      return;
-    }
     const formatted = num.toLocaleString('it-IT');
     if (dlCounterPill) {
       dlCounterPill.style.display = 'inline-flex';
