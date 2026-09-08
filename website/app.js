@@ -1,6 +1,69 @@
 // Folia Showcase Website — Clean Interactive Scripts
 document.addEventListener('DOMContentLoaded', () => {
 
+  // 0. Mobile Drawer Navigation & Touch Handlers
+  const navToggle = document.getElementById('nav-toggle');
+  const navDrawer = document.getElementById('nav-mobile-drawer');
+  const navBackdrop = document.getElementById('nav-mobile-backdrop');
+  const navClose = document.getElementById('nav-mobile-close');
+  const mobileLinks = document.querySelectorAll('.nav-mobile-link, .nav-mobile-footer a');
+
+  function openMobileNav() {
+    if (!navDrawer || !navBackdrop) return;
+    navDrawer.classList.add('active');
+    navBackdrop.classList.add('active');
+    if (navToggle) {
+      navToggle.classList.add('active');
+      navToggle.setAttribute('aria-expanded', 'true');
+    }
+    navDrawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('menu-open');
+  }
+
+  function closeMobileNav() {
+    if (!navDrawer || !navBackdrop) return;
+    navDrawer.classList.remove('active');
+    navBackdrop.classList.remove('active');
+    if (navToggle) {
+      navToggle.classList.remove('active');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+    navDrawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('menu-open');
+  }
+
+  if (navToggle) {
+    navToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = navDrawer && navDrawer.classList.contains('active');
+      if (isOpen) {
+        closeMobileNav();
+      } else {
+        openMobileNav();
+      }
+    });
+  }
+
+  if (navClose) {
+    navClose.addEventListener('click', closeMobileNav);
+  }
+
+  if (navBackdrop) {
+    navBackdrop.addEventListener('click', closeMobileNav);
+  }
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      closeMobileNav();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileNav();
+    }
+  });
+
   // 1. Niche Selector Tabs (Romanzieri, Fantasy, GM/D&D, Giallisti, Self-publisher)
   const nicheButtons = document.querySelectorAll('.niche-tab-btn');
   const nicheCards = document.querySelectorAll('.niche-display-card');
