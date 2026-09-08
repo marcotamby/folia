@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=1.0.6">
+  <link rel="stylesheet" href="style.css?v=1.0.7">
 </head>
 <body>
 
@@ -793,7 +793,7 @@
         
         <p data-content-html="reviews.desc">
           Folia è un progetto indipendente e cresce ogni giorno grazie ai consigli e alle impressioni di chi lo usa.
-          Che tu stia finendo la prima bozza del tuo romanzo, inventando un mondo fantastico o preparando una sessione di D&amp;D con gli amici, raccontami come ti trovi: ci metti un attimo con Google ed è un aiuto enorme per il progetto!
+          Che tu stia finendo la prima bozza del tuo romanzo, inventando un mondo fantastico o preparando una sessione di D&amp;D con gli amici, raccontami come ti trovi: ci metti meno di un minuto ed è un aiuto enorme per il progetto!
         </p>
 
         <button class="btn btn-primary btn-lg" id="btn-open-review-modal" onclick="openReviewModal()" style="font-size: 1rem; padding: 0.85rem 1.8rem; border-radius: 999px;">
@@ -801,8 +801,22 @@
           <span data-content-key="reviews.btn">Lascia una recensione</span>
         </button>
 
-        <!-- Live reviews container populated as users submit -->
-        <div class="reviews-grid" id="reviews-container" style="margin-top: 2.5rem; text-align: left;"></div>
+        <!-- Live reviews container with smart slider mode -->
+        <div class="reviews-slider-wrap">
+          <div class="reviews-grid" id="reviews-container" style="margin-top: 2.5rem; text-align: left;"></div>
+          
+          <!-- Slider Navigation Controls (shown dynamically when reviews count is high) -->
+          <div class="reviews-carousel-nav" id="reviews-carousel-nav" style="display: none;">
+            <button type="button" class="carousel-nav-btn prev" id="btn-reviews-prev" aria-label="Recensioni precedenti">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <span class="reviews-counter-badge" id="reviews-counter-badge"></span>
+            <button type="button" class="carousel-nav-btn next" id="btn-reviews-next" aria-label="Recensioni successive">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
         <p class="reviews-empty-placeholder" id="reviews-empty-note" data-content-key="reviews.empty_note">Le recensioni degli autori compariranno qui man mano che vengono pubblicate.</p>
       </div>
 
@@ -1086,7 +1100,7 @@
 
     </div>
   </div>
-  <script src="app.js?v=1.0.6"></script>
-  <script src="content-manager.js?v=1.0.6" defer></script>
+  <script src="app.js?v=1.0.7"></script>
+  <script src="content-manager.js?v=1.0.7" defer></script>
 </body>
 </html>

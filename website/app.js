@@ -443,6 +443,77 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
+  const SLIDER_THRESHOLD = 6;
+
+  function updateReviewsNav(container) {
+    const prevBtn = document.getElementById('btn-reviews-prev');
+    const nextBtn = document.getElementById('btn-reviews-next');
+    if (!prevBtn || !nextBtn || !container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    prevBtn.disabled = scrollLeft <= 5;
+    nextBtn.disabled = scrollLeft >= maxScroll - 5;
+  }
+
+  function setupReviewsDisplay(allReviews) {
+    const emptyNote = document.getElementById('reviews-empty-note');
+    const carouselNav = document.getElementById('reviews-carousel-nav');
+    const counterBadge = document.getElementById('reviews-counter-badge');
+    const prevBtn = document.getElementById('btn-reviews-prev');
+    const nextBtn = document.getElementById('btn-reviews-next');
+
+    if (!reviewsContainer) return;
+
+    if (!allReviews || allReviews.length === 0) {
+      if (emptyNote) emptyNote.style.display = 'block';
+      if (carouselNav) carouselNav.style.display = 'none';
+      reviewsContainer.innerHTML = '';
+      reviewsContainer.classList.remove('is-slider');
+      return;
+    }
+
+    if (emptyNote) emptyNote.style.display = 'none';
+    reviewsContainer.innerHTML = allReviews.map(renderReviewCard).join('');
+
+    if (allReviews.length > SLIDER_THRESHOLD) {
+      reviewsContainer.classList.add('is-slider');
+      if (carouselNav) carouselNav.style.display = 'flex';
+      if (counterBadge) {
+        counterBadge.textContent = `${allReviews.length} recensioni della community`;
+      }
+
+      const getScrollStep = () => {
+        const firstCard = reviewsContainer.querySelector('.review-card');
+        return firstCard ? firstCard.offsetWidth + 24 : 360;
+      };
+
+      if (prevBtn && !prevBtn._hasReviewListener) {
+        prevBtn.addEventListener('click', () => {
+          reviewsContainer.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+        });
+        prevBtn._hasReviewListener = true;
+      }
+
+      if (nextBtn && !nextBtn._hasReviewListener) {
+        nextBtn.addEventListener('click', () => {
+          reviewsContainer.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+        });
+        nextBtn._hasReviewListener = true;
+      }
+
+      if (!reviewsContainer._hasScrollListener) {
+        reviewsContainer.addEventListener('scroll', () => updateReviewsNav(reviewsContainer), { passive: true });
+        reviewsContainer._hasScrollListener = true;
+      }
+
+      setTimeout(() => updateReviewsNav(reviewsContainer), 100);
+    } else {
+      reviewsContainer.classList.remove('is-slider');
+      if (carouselNav) carouselNav.style.display = 'none';
+    }
+  }
+
   function loadReviews() {
     if (!reviewsContainer) return;
 
@@ -461,21 +532,10 @@ document.addEventListener('DOMContentLoaded', () => {
             all.push(item);
           }
         });
-
-        const emptyNote = document.getElementById('reviews-empty-note');
-        if (all.length > 0) {
-          if (emptyNote) emptyNote.style.display = 'none';
-          reviewsContainer.innerHTML = all.map(renderReviewCard).join('');
-        } else {
-          if (emptyNote) emptyNote.style.display = 'block';
-        }
+        setupReviewsDisplay(all);
       })
       .catch(() => {
-        const emptyNote = document.getElementById('reviews-empty-note');
-        if (cached.length > 0) {
-          if (emptyNote) emptyNote.style.display = 'none';
-          reviewsContainer.innerHTML = cached.map(renderReviewCard).join('');
-        }
+        setupReviewsDisplay(cached);
       });
   }
 
@@ -534,12 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('folia_local_reviews', JSON.stringify(cached));
         } catch (err) {}
 
-        if (reviewsContainer) {
-          const emptyNote = document.getElementById('reviews-empty-note');
-          if (emptyNote) emptyNote.style.display = 'none';
-          reviewsContainer.insertAdjacentHTML('afterbegin', renderReviewCard(rev));
-        }
-
+        loadReviews();
         window.closeReviewModal();
         formReview.reset();
         alert('Grazie mille per la tua recensione! È stata pubblicata con successo.');
@@ -552,11 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('folia_local_reviews', JSON.stringify(cached));
         } catch (err) {}
 
-        if (reviewsContainer) {
-          const emptyNote = document.getElementById('reviews-empty-note');
-          if (emptyNote) emptyNote.style.display = 'none';
-          reviewsContainer.insertAdjacentHTML('afterbegin', renderReviewCard(reviewPayload));
-        }
+        loadReviews();
         window.closeReviewModal();
         formReview.reset();
         alert('Grazie per la tua recensione! È stata aggiunta.');

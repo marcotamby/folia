@@ -2716,10 +2716,103 @@ p {
   border-radius: var(--radius-pill) !important;
 }
 
+.reviews-slider-wrap {
+  position: relative;
+  width: 100%;
+}
+
 .reviews-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
+}
+
+/* Smart horizontal slider mode (active when reviews count is high) */
+.reviews-grid.is-slider {
+  display: flex !important;
+  grid-template-columns: unset !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 1.5rem;
+  padding: 0.5rem 0.25rem 1.5rem 0.25rem;
+}
+
+.reviews-grid.is-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.reviews-grid.is-slider::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+}
+
+.reviews-grid.is-slider::-webkit-scrollbar-thumb {
+  background: rgba(46, 147, 90, 0.35);
+  border-radius: 999px;
+}
+
+.reviews-grid.is-slider::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-primary);
+}
+
+.reviews-grid.is-slider .review-card {
+  flex: 0 0 calc(50% - 0.75rem);
+  min-width: 320px;
+  max-width: 480px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 768px) {
+  .reviews-grid.is-slider .review-card {
+    flex: 0 0 88%;
+    min-width: 270px;
+  }
+}
+
+.reviews-carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.carousel-nav-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, #E2E8F0);
+  background: #FFFFFF;
+  color: var(--brand-dark, #1B3B2B);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.carousel-nav-btn:hover:not(:disabled) {
+  background: var(--brand-primary, #2E935A);
+  border-color: var(--brand-primary, #2E935A);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(46, 147, 90, 0.25);
+}
+
+.carousel-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.reviews-counter-badge {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748B);
+  letter-spacing: 0.3px;
 }
 
 .review-card {
