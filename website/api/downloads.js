@@ -44,6 +44,11 @@ module.exports = async function handler(req, res) {
           .maybeSingle();
 
         if (!error && data && typeof data.stat_value === 'number') {
+          // Sanitize any legacy fake seed (e.g. 1482)
+          if (data.stat_value >= 1480 && data.stat_value <= 1500) {
+            await supabase.from('site_stats').upsert({ stat_name: 'downloads_count', stat_value: 0, updated_at: new Date().toISOString() }).catch(() => {});
+            return res.status(200).json({ count: 0 });
+          }
           res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate=30');
           return res.status(200).json({ count: data.stat_value });
         }
@@ -63,7 +68,7 @@ module.exports = async function handler(req, res) {
           .maybeSingle();
 
         if (data && typeof data.stat_value === 'number') {
-          currentCount = data.stat_value;
+          currentCount = (data.stat_value >= 1480 && data.stat_value <= 1500) ? 0 : data.stat_value;
         }
         currentCount++;
         await supabase

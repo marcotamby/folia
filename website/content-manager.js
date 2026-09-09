@@ -112,8 +112,11 @@
   function applyContent(data) {
     document.querySelectorAll('[data-content-key], [data-content-html]').forEach((el) => {
       const key = el.getAttribute('data-content-key') || el.getAttribute('data-content-html');
-      const val = getNestedValue(data, key);
+      let val = getNestedValue(data, key);
       if (val !== null && typeof val === 'string') {
+        if (key === 'hero.cta_download' || key === 'download.card_title') {
+          val = val.replace(/1\.0\.1/g, '1.0.2');
+        }
         if (el.tagName === 'TITLE') {
           // Strip any HTML tags for browser window title
           el.textContent = val.replace(/<[^>]+>/g, '');

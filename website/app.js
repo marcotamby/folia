@@ -345,11 +345,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroDlVal = document.getElementById('hero-download-count');
 
   function updateCounterDisplays(count) {
+    if (!dlCounterPill) return;
     const num = Number(count) || 0;
-    const formatted = num.toLocaleString('it-IT');
-    if (dlCounterPill) {
-      dlCounterPill.style.display = 'inline-flex';
+    if (num <= 0) {
+      dlCounterPill.style.display = 'none';
+      return;
     }
+    const formatted = num.toLocaleString('it-IT');
+    dlCounterPill.style.display = 'inline-flex';
     const label = num === 1 ? 'volta' : 'volte';
     if (dlCounterText) {
       dlCounterText.innerHTML = `scaricato <strong id="download-count-val">${formatted}</strong> ${label}`;

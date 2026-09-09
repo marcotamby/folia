@@ -596,5 +596,5 @@ DROP POLICY IF EXISTS "Full access on site_stats" ON site_stats;
 CREATE POLICY "Full access on site_stats" ON site_stats FOR ALL USING (true);
 
 INSERT INTO site_stats (stat_name, stat_value)
-VALUES ('downloads_count', 1482)
+VALUES ('downloads_count', 0)
 ON CONFLICT (stat_name) DO NOTHING;
