@@ -479,18 +479,18 @@ export const RichEditor: React.FC<RichEditorProps> = ({
     return () => window.removeEventListener('folia-scroll-editor-top', handleScrollTop);
   }, []);
 
-  // Sync content when active document changes
+  // Sync content when active document changes or updates externally
   useEffect(() => {
     if (editor && document) {
       const currentHTML = editor.getHTML();
-      if (document.content !== currentHTML) {
+      if (document.content !== currentHTML && !editor.isFocused) {
         editor.commands.setContent(document.content || '', false);
+        setTimeout(() => {
+          (editor.view.dom as any)?._foliaRecalcPagination?.();
+        }, 50);
       }
-      setTimeout(() => {
-        (editor.view.dom as any)?._foliaRecalcPagination?.();
-      }, 50);
     }
-  }, [document?.id, editor]);
+  }, [document?.id, document?.content, editor]);
 
   // Handle special characters insertion
   const insertChar = (char: string) => {
@@ -1857,6 +1857,7 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 line-height: inherit !important;
               }
               .folia-page-bottom-footer {
+                display: block;
                 background: inherit;
                 padding-left: var(--sheet-pad-left, 3.5rem);
                 padding-right: var(--sheet-pad-right, 3.5rem);
@@ -1872,7 +1873,7 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 width: calc(100% + 40px) !important;
                 border: none !important;
                 box-shadow: none !important;
-                display: flex;
+                display: flex !important;
                 align-items: center;
                 justify-content: center;
                 position: relative;
@@ -1895,6 +1896,7 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 gap: 5px;
               }
               .folia-page-top-header {
+                display: block;
                 background: inherit;
                 padding-left: var(--sheet-pad-left, 3.5rem);
                 padding-right: var(--sheet-pad-right, 3.5rem);

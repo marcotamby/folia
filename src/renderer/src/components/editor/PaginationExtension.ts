@@ -535,22 +535,6 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
 
                 // If block exceeds page limit
                 if (accumulatedHeightOnCurrentPage + blockHeight > limitForThisPage) {
-                  // Check if this and all remaining blocks are empty trailing paragraphs
-                  let isTrailingEmptyOnly = true;
-                  for (let k = i; k < doc.childCount; k++) {
-                    if (doc.child(k).textContent.trim().length > 0) {
-                      isTrailingEmptyOnly = false;
-                      break;
-                    }
-                  }
-
-                  // If it's just a trailing empty block at the end of text, don't spawn an empty ghost page
-                  if (isTrailingEmptyOnly && accumulatedHeightOnCurrentPage > 0 && (doc.childCount - i) <= 2) {
-                    accumulatedHeightOnCurrentPage += blockHeight;
-                    currentPos += node.nodeSize;
-                    continue;
-                  }
-
                   const remainingOnPage = Math.max(0, limitForThisPage - accumulatedHeightOnCurrentPage);
                   const availableSlot = accumulatedHeightOnCurrentPage === 0 ? limitForThisPage : remainingOnPage;
 
@@ -649,10 +633,14 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
                 return;
               }
 
-              // Sanitize break positions within document content bounds
-              const validBreakPositions = breakPositions.filter(bp =>
-                Number.isFinite(bp.pos) && bp.pos >= 0 && bp.pos <= doc.content.size
-              );
+              // Sanitize and deduplicate break positions within document content bounds
+              const seenBreakPositions = new Set<number>();
+              const validBreakPositions = breakPositions.filter(bp => {
+                if (!Number.isFinite(bp.pos) || bp.pos < 0 || bp.pos > doc.content.size) return false;
+                if (seenBreakPositions.has(bp.pos)) return false;
+                seenBreakPositions.add(bp.pos);
+                return true;
+              });
 
               const decorations: Decoration[] = [];
 
@@ -690,8 +678,9 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
                     container.setAttribute('contenteditable', 'false');
                     container.setAttribute('data-virtual-page-break', 'true');
 
-                    const footerSection = document.createElement('div');
+                    const footerSection = document.createElement('span');
                     footerSection.className = 'folia-page-bottom-footer';
+                    footerSection.style.display = 'block';
 
                     const pageFootnotes = footnotesByPage.get(bp.prevPage) || [];
                     const fnEstimatedHeight = pageFootnotes.length * 52;
@@ -699,19 +688,21 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
 
                     // Equalizer spacer so every page has the EXACT same physical height
                     if (adjustedSpacer > 0) {
-                      const spacer = document.createElement('div');
+                      const spacer = document.createElement('span');
                       spacer.style.height = `${adjustedSpacer}px`;
+                      spacer.style.display = 'block';
                       spacer.className = 'folia-page-bottom-spacer pointer-events-none select-none';
                       footerSection.appendChild(spacer);
                     }
 
                     // Render footnotes of this specific page at the bottom
                     if (pageFootnotes.length > 0) {
-                      const fnContainer = document.createElement('div');
+                      const fnContainer = document.createElement('span');
                       fnContainer.className = 'folia-page-footnotes my-3 pt-2.5 border-t border-paper-300 pointer-events-auto select-text';
+                      fnContainer.style.display = 'block';
 
                       pageFootnotes.forEach(fn => {
-                        const item = document.createElement('div');
+                        const item = document.createElement('span');
                         item.className = 'group flex items-start gap-2 text-xs font-serif mb-1.5';
                         item.id = `footnote-${fn.id}`;
 
@@ -764,10 +755,11 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
 
                     // Dedicated bottom margin area: exact height of bottomMarginPx
                     // Page numbers live strictly inside this margin area without pushing or altering text margins
-                    const footerMargin = document.createElement('div');
+                    const footerMargin = document.createElement('span');
                     footerMargin.style.height = `${bottomMarginPx}px`;
+                    footerMargin.style.display = 'flex';
                     footerMargin.style.boxSizing = 'border-box';
-                    footerMargin.className = `flex items-center text-xs font-serif font-medium text-paper-700 select-none ${alignClass}`;
+                    footerMargin.className = `items-center text-xs font-serif font-medium text-paper-700 select-none ${alignClass}`;
 
                     if (showPageNumbers && pageNumberPosition.startsWith('bottom')) {
                       footerMargin.innerHTML = `<span class="tracking-wide">${prevPageNumText}</span>`;
@@ -775,27 +767,27 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
                     footerSection.appendChild(footerMargin);
                     container.appendChild(footerSection);
 
-                    const deskGap = document.createElement('div');
+                    const deskGap = document.createElement('span');
                     deskGap.className = 'folia-page-desk-gap';
                     deskGap.innerHTML = `
-                      <div class="folia-page-badge">
+                      <span class="folia-page-badge">
                         <span>Pagina ${bp.nextPage}</span>
-                      </div>
+                      </span>
                     `;
                     container.appendChild(deskGap);
 
                     // Dedicated top margin area: exact height of topMarginPx
                     // Running chapter title and divider line live strictly inside this margin area
-                    const headerSection = document.createElement('div');
+                    const headerSection = document.createElement('span');
                     headerSection.className = 'folia-page-top-header';
                     headerSection.style.height = `${topMarginPx}px`;
-                    headerSection.style.boxSizing = 'border-box';
                     headerSection.style.display = 'flex';
+                    headerSection.style.boxSizing = 'border-box';
                     headerSection.style.flexDirection = 'column';
                     headerSection.style.justifyContent = 'flex-end';
                     headerSection.style.paddingBottom = '8px';
 
-                    const headerContent = document.createElement('div');
+                    const headerContent = document.createElement('span');
                     headerContent.className = 'flex items-center justify-between text-[11px] font-serif font-medium text-paper-500 select-none pb-1.5 border-b border-paper-200/80 w-full';
 
                     const runningTitle = document.createElement('span');
@@ -821,14 +813,21 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
                 decorations.push(widget);
               });
 
-              decorations.sort((a, b) => a.from - b.from);
+              decorations.sort((a, b) => {
+                if (a.from !== b.from) {
+                  return a.from - b.from;
+                }
+                const sideA = (a.spec as any)?.side ?? 0;
+                const sideB = (b.spec as any)?.side ?? 0;
+                return sideA - sideB;
+              });
 
               let newDecorationSet: DecorationSet;
               try {
                 newDecorationSet = DecorationSet.create(doc, decorations);
               } catch (decErr) {
-                console.warn('[Folia Pagination] DecorationSet creation warning, fallback to empty:', decErr);
-                newDecorationSet = DecorationSet.empty;
+                console.warn('[Folia Pagination] DecorationSet creation warning, fallback to lastDecorationSet:', decErr);
+                newDecorationSet = (lastDecorationSet instanceof DecorationSet) ? lastDecorationSet : DecorationSet.empty;
               }
 
               lastDecorationSet = newDecorationSet;
@@ -892,7 +891,8 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
           return {
             update(view, prevState) {
               if (view.state.doc !== prevState.doc) {
-                scheduleRecalc(60);
+                lastBreakPositionsKey = '';
+                scheduleRecalc(40);
               }
             },
             destroy() {

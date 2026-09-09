@@ -18,7 +18,7 @@
   "hero": {
     "title": "L'ambiente di scrittura per chi <em>dà vita a nuove storie</em>.",
     "desc": "Dalla prima scintilla d'ispirazione all'ultima pagina impaginata. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.",
-    "cta_download": "Scarica gratis per Windows (v1.0.2)",
+    "cta_download": "Scarica gratis per Windows (v1.0.4)",
     "cta_kofi": "Sostieni su Ko-fi ↗",
     "badge_offline": "100% Offline & Privato",
     "badge_cartelle": "Cartelle editoriali 1800 battute",
@@ -108,7 +108,7 @@
     "section_label": "Centro Download",
     "title": "Scarica Folia per Windows",
     "subtitle": "Disponibile al momento per sistemi Windows (64-bit). Gratuito in questa fase di sviluppo e perfezionamento.",
-    "card_title": "Folia 1.0.2 per Windows",
+    "card_title": "Folia 1.0.4 per Windows",
     "card_meta": "Pacchetto Setup Ufficiale (.exe) • 64-bit",
     "spec1": "Installer Setup guidato (.exe) con installazione rapida",
     "spec2": "Piena compatibilità con Windows 10 e Windows 11 (x64)",
