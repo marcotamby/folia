@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowDownCircle, CheckCircle2, RefreshCw, X, Sparkles, AlertCircle } from 'lucide-react';
+import { ArrowDownCircle, CheckCircle2, RefreshCw, X, AlertCircle } from 'lucide-react';
 
 interface UpdateState {
   status: 'idle' | 'checking' | 'available' | 'downloading' | 'downloaded' | 'error' | 'up-to-date';
@@ -117,7 +117,6 @@ export const UpdateNotification: React.FC = () => {
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-folia-600" />
                   <h4 className="font-semibold text-xs text-paper-900">
                     Nuovo aggiornamento disponibile {update.version ? `(v${update.version})` : ''}
                   </h4>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Globe, Type, Heading1, Target, Check, WrapText, Indent, AlignJustify, Info, BookOpen, Compass, GraduationCap, Mail, SpellCheck, RefreshCw, Sparkles, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { X, Settings, Globe, Type, Heading1, Target, Check, WrapText, Indent, AlignJustify, Info, BookOpen, Compass, GraduationCap, Mail, SpellCheck, RefreshCw, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { Project, Language, FontFamily, PageMargins, PageFormat, ParagraphSpacing, ProjectType } from '../../types';
 import { CustomSelect } from '../common/CustomSelect';
 
@@ -502,7 +502,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* Aggiornamenti dell'applicazione */}
           <div className="pt-2 border-t border-paper-250 space-y-3">
             <div className="flex items-center gap-2 text-xs font-semibold text-paper-700 uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-folia-700" />
+              <RefreshCw className="w-4 h-4 text-folia-700" />
               <span>Aggiornamenti dell'applicazione</span>
             </div>
 
