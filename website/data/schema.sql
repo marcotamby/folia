@@ -79,7 +79,7 @@ VALUES ('hero.desc', 'hero', 'html', 'Dalla prima scintilla d''ispirazione fino 
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('hero.cta_download', 'hero', 'text', 'Scarica gratis per Windows (v1.0.2)', 'Testo per hero.cta_download')
+VALUES ('hero.cta_download', 'hero', 'text', 'Scarica gratis per Windows (v1.0.3)', 'Testo per hero.cta_download')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -403,7 +403,7 @@ VALUES ('download.subtitle', 'download', 'text', 'Disponibile al momento per sis
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('download.card_title', 'download', 'text', 'Folia 1.0.2 per Windows', 'Testo per download.card_title')
+VALUES ('download.card_title', 'download', 'text', 'Folia 1.0.3 per Windows', 'Testo per download.card_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)

@@ -92,9 +92,9 @@ async function run() {
     process.exit(1);
   }
 
-  const owner = 'marcotamby';
-  const repo = 'folia';
-  const tag = 'v1.0.2';
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
+  const version = pkg.version;
+  const tag = `v${version}`;
 
   console.log(`Creating GitHub Release ${tag} for ${owner}/${repo}...`);
 
@@ -115,8 +115,8 @@ async function run() {
     const createBody = JSON.stringify({
       tag_name: tag,
       target_commitish: 'main',
-      name: `Folia v1.0.2`,
-      body: `## Folia v1.0.2\n\n### Novità e Miglioramenti\n- 🔄 **Aggiornamento automatico**: Integrazione di \`electron-updater\` con notifiche in-app e download in background quando è disponibile una nuova versione.\n- ⚙️ **Controllo aggiornamenti nelle Impostazioni**: Possibilità di attivare o disattivare gli aggiornamenti automatici e pulsante per la verifica manuale immediata.\n- 🪟 **Icone finestra Windows**: Sistemata e allineata l'icona nativa di *Ripristina giù / Ingrandisci* per seguire perfettamente lo standard di Windows 10 e 11.\n- 🚀 **Performance & Pulizia**: Ottimizzazione del bundle di produzione e compatibilità dell'installer.`,
+      name: `Folia v${version}`,
+      body: `## Folia v${version}\n\n### Novità e Risoluzioni Bug\n- 📄 **Risolto crash e allungamento impaginazione**: Risolto il problema per cui l'eliminazione di una pagina vuota o di ritorni a capo finali provocava il collasso del calcolo delle decorazioni e l'allungamento sproporzionato dell'ultima pagina.\n- 📐 **Misurazione affidabile dell'ultima pagina**: La misura dello spazio residuo della pagina finale si basa ora sui blocchi effettivi elaborati e non più su widget DOM obsoleti.\n- 🛡️ **Tolleranza blocchi vuoti finali**: I paragrafi vuoti a fine testo non generano più pagine fantasma spurie.\n- 🔄 **Aggiornamenti automatici e stabilità**: Manutenuto il sistema di aggiornamento in-app con impostazione personalizzata e verifica istantanea.`,
       draft: false,
       prerelease: false
     });
@@ -157,8 +157,8 @@ async function run() {
   // Assets to upload
   const assets = [
     { path: path.join(__dirname, '../release/latest.yml'), type: 'text/yaml' },
-    { path: path.join(__dirname, '../release/Folia-Installer-Setup-1.0.2.exe.blockmap'), type: 'application/octet-stream' },
-    { path: path.join(__dirname, '../release/Folia-Installer-Setup-1.0.2.exe'), type: 'application/vnd.microsoft.portable-executable' }
+    { path: path.join(__dirname, `../release/Folia-Installer-Setup-${version}.exe.blockmap`), type: 'application/octet-stream' },
+    { path: path.join(__dirname, `../release/Folia-Installer-Setup-${version}.exe`), type: 'application/vnd.microsoft.portable-executable' }
   ];
 
   for (const asset of assets) {
@@ -169,7 +169,7 @@ async function run() {
     }
   }
 
-  console.log('\n🎉 Release v1.0.2 and all assets uploaded successfully!');
+  console.log(`\n🎉 Release v${version} and all assets uploaded successfully!`);
   console.log(`URL: ${release.html_url}`);
 }
 

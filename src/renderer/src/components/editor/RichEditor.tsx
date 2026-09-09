@@ -2100,7 +2100,7 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 ? lastPageFootnotes
                 : (actualPageCount === 1 ? (document?.footnotes || []) : []);
               const fnHeight = finalPageFootnotesList.length * 52;
-              const adjustedPadding = Math.max(0, lastPagePadding - fnHeight);
+              const adjustedPadding = Math.min(pageMetrics.subsequentPageLimit, Math.max(0, lastPagePadding - fnHeight));
 
               return (
                 <div className="folia-final-page-bottom select-none w-full bg-inherit rounded-b-md">

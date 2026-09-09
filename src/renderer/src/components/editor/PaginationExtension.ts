@@ -364,6 +364,9 @@ function findInlineSplits(
     }
 
     return splits;
+  } catch (err) {
+    console.warn('[Folia Pagination] findInlineSplits warning:', err);
+    return [];
   } finally {
     existingBreakWidgets.forEach((w) => {
       w.style.display = '';
@@ -412,7 +415,11 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
               return meta;
             }
             if (tr.docChanged && oldSet instanceof DecorationSet) {
-              return oldSet.map(tr.mapping, tr.doc);
+              try {
+                return oldSet.map(tr.mapping, tr.doc);
+              } catch {
+                return DecorationSet.empty;
+              }
             }
             return oldSet instanceof DecorationSet ? oldSet : DecorationSet.empty;
           },
@@ -528,6 +535,22 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
 
                 // If block exceeds page limit
                 if (accumulatedHeightOnCurrentPage + blockHeight > limitForThisPage) {
+                  // Check if this and all remaining blocks are empty trailing paragraphs
+                  let isTrailingEmptyOnly = true;
+                  for (let k = i; k < doc.childCount; k++) {
+                    if (doc.child(k).textContent.trim().length > 0) {
+                      isTrailingEmptyOnly = false;
+                      break;
+                    }
+                  }
+
+                  // If it's just a trailing empty block at the end of text, don't spawn an empty ghost page
+                  if (isTrailingEmptyOnly && accumulatedHeightOnCurrentPage > 0 && (doc.childCount - i) <= 2) {
+                    accumulatedHeightOnCurrentPage += blockHeight;
+                    currentPos += node.nodeSize;
+                    continue;
+                  }
+
                   const remainingOnPage = Math.max(0, limitForThisPage - accumulatedHeightOnCurrentPage);
                   const availableSlot = accumulatedHeightOnCurrentPage === 0 ? limitForThisPage : remainingOnPage;
 
@@ -588,7 +611,6 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
               }
 
               const totalPages = currentPageIndex;
-              onPageCountChange?.(totalPages);
 
               // Map footnote nodes to their respective physical page
               const footnotesByPage = new Map<number, Footnote[]>();
@@ -615,57 +637,39 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
                 }
               });
 
-              // Notify parent about final page footnotes
-              const finalPageFootnotes = footnotesByPage.get(totalPages) || [];
-              currentOpts.onLastPageFootnotesChange?.(finalPageFootnotes);
-
-              // Calculate remaining space on the final page content slot so the sheet equals a complete physical page
+              // Final page limit
               const finalPageLimit = totalPages === 1 ? firstPageLimit : subsequentPageLimit;
-
-              // Measure actual final page content height directly from DOM if page break widgets exist
-              let finalContentHeight = accumulatedHeightOnCurrentPage;
-              if (totalPages > 1 && dom) {
-                const breakWidgets = dom.querySelectorAll('.folia-virtual-page-break');
-                if (breakWidgets.length > 0) {
-                  const lastWidget = breakWidgets[breakWidgets.length - 1];
-                  const lastWidgetBottom = lastWidget.getBoundingClientRect().bottom;
-                  const domBottom = dom.getBoundingClientRect().bottom;
-                  const measuredHeight = Math.max(0, Math.round(domBottom - lastWidgetBottom));
-                  if (measuredHeight > 0) {
-                    finalContentHeight = measuredHeight;
-                  }
-                }
-              } else if (totalPages === 1 && dom) {
-                const measuredHeight = Math.max(0, Math.round(dom.getBoundingClientRect().height));
-                if (measuredHeight > 0) {
-                  finalContentHeight = measuredHeight;
-                }
-              }
-
+              // accumulatedHeightOnCurrentPage is the accurate, fresh height of content on the final page
+              const finalContentHeight = Math.max(0, accumulatedHeightOnCurrentPage);
               const lastPagePadding = Math.max(0, finalPageLimit - finalContentHeight);
-              onLastPagePaddingChange?.(lastPagePadding);
 
               const fnKey = (currentOpts.footnotes || []).map(f => `${f.id}:${f.content}`).join('|');
               const newKey = `${pageFormat}-${pageMargins}-${customMargins ? `${customMargins.top},${customMargins.bottom}` : ''}-${showPageNumbers ? '1' : '0'}-${pageNumberPosition}-${pageNumberFormat}-${breakPositions.map(b => `${b.pos}:${b.spacerHeight}:${b.hasHyphen ? '1' : '0'}`).join(',')}-${fnKey}`;
               if (newKey === lastBreakPositionsKey) {
                 return;
               }
-              lastBreakPositionsKey = newKey;
+
+              // Sanitize break positions within document content bounds
+              const validBreakPositions = breakPositions.filter(bp =>
+                Number.isFinite(bp.pos) && bp.pos >= 0 && bp.pos <= doc.content.size
+              );
 
               const decorations: Decoration[] = [];
 
-              breakPositions.forEach((bp) => {
+              validBreakPositions.forEach((bp) => {
+                const safePos = Math.max(0, Math.min(doc.content.size, bp.pos));
+
                 // If a word was split at syllable boundary across pages, render hyphen at the end of the line
                 if (bp.hasHyphen) {
                   const hyphenWidget = Decoration.widget(
-                    bp.pos,
+                    safePos,
                     () => {
                       const span = document.createElement('span');
                       span.className = 'folia-page-break-hyphen select-none pointer-events-none';
                       span.textContent = '-';
                       return span;
                     },
-                    { side: -1, key: `page-break-hyphen-${bp.pos}` }
+                    { side: -1, key: `page-break-hyphen-${safePos}` }
                   );
                   decorations.push(hyphenWidget);
                 }
@@ -676,19 +680,18 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
                 const alignClass = isAlignLeft ? 'text-left justify-start' : isAlignCenter ? 'text-center justify-center' : 'text-right justify-end';
 
                 const widget = Decoration.widget(
-                  bp.pos,
+                  safePos,
                   () => {
-                    const container = document.createElement(bp.isInline ? 'span' : 'div');
+                    const container = document.createElement('span');
                     container.className = 'folia-virtual-page-break' + (bp.isInline ? ' inline-break' : '');
-                    if (bp.isInline) {
-                      container.style.display = 'block';
-                    }
+                    container.style.display = 'block';
+                    container.style.width = '100%';
+                    container.style.clear = 'both';
                     container.setAttribute('contenteditable', 'false');
                     container.setAttribute('data-virtual-page-break', 'true');
 
                     const footerSection = document.createElement('div');
                     footerSection.className = 'folia-page-bottom-footer';
-
 
                     const pageFootnotes = footnotesByPage.get(bp.prevPage) || [];
                     const fnEstimatedHeight = pageFootnotes.length * 52;
@@ -812,19 +815,38 @@ export const PaginationExtension = Extension.create<PaginationExtensionOptions>(
 
                     return container;
                   },
-                  { side: bp.hasHyphen ? 1 : -1, key: `page-break-${bp.pos}` }
+                  { side: bp.hasHyphen ? 1 : -1, key: `page-break-${safePos}` }
                 );
 
                 decorations.push(widget);
               });
 
-              const newDecorationSet = DecorationSet.create(doc, decorations);
+              decorations.sort((a, b) => a.from - b.from);
+
+              let newDecorationSet: DecorationSet;
+              try {
+                newDecorationSet = DecorationSet.create(doc, decorations);
+              } catch (decErr) {
+                console.warn('[Folia Pagination] DecorationSet creation warning, fallback to empty:', decErr);
+                newDecorationSet = DecorationSet.empty;
+              }
+
               lastDecorationSet = newDecorationSet;
+              lastBreakPositionsKey = newKey;
 
               const tr = editorView.state.tr.setMeta(paginationPluginKey, newDecorationSet);
               editorView.dispatch(tr);
+
+              // Notify parent callbacks after successful dispatch
+              onPageCountChange?.(totalPages);
+              onLastPagePaddingChange?.(lastPagePadding);
+
+              // Notify parent about final page footnotes
+              const finalPageFootnotes = footnotesByPage.get(totalPages) || [];
+              currentOpts.onLastPageFootnotesChange?.(finalPageFootnotes);
             } catch (err) {
               console.error('[Folia Pagination] Error during pagination calculation:', err);
+              lastBreakPositionsKey = '';
             } finally {
               isCalculating = false;
             }

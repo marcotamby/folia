@@ -64,7 +64,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
           </div>
           <h2 className="font-brand font-bold text-2xl text-folia-950">Folia</h2>
           <p className="text-xs text-folia-700 font-medium tracking-wide uppercase mt-0.5">Suite di scrittura & worldbuilding</p>
-          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione 1.0.2 &bull; Aggiornato 09/09/2026</div>
+          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione 1.0.3 &bull; Aggiornato 09/09/2026</div>
         </div>
 
         {/* Content */}
@@ -98,7 +98,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
           <div className="p-3 bg-folia-50/70 border border-folia-200 rounded-xl flex items-center justify-between gap-3">
             <div className="text-[11px] text-paper-700">
               <span className="font-semibold text-folia-950 block">Aggiornamenti</span>
-              <span className="text-paper-500">{updateStatus || 'Versione 1.0.2 attiva'}</span>
+              <span className="text-paper-500">{updateStatus || 'Versione 1.0.3 attiva'}</span>
             </div>
             <button
               type="button"

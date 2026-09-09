@@ -526,7 +526,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <div className="pt-2 border-t border-paper-200/80 flex items-center justify-between gap-3">
                 <span className="text-[11px] text-paper-500">
-                  Versione attuale: <strong className="text-paper-700">1.0.2</strong>
+                  Versione attuale: <strong className="text-paper-700">1.0.3</strong>
                 </span>
                 <button
                   type="button"
@@ -550,7 +550,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Copyright Box in Settings */}
           <div className="pt-2 border-t border-paper-200 text-center text-[11px] text-paper-500">
-            <div>Folia v1.0.2 &bull; Tutti i diritti riservati sono di <strong>Marco Tamborrino, 2026</strong>.</div>
+            <div>Folia v1.0.3 &bull; Tutti i diritti riservati sono di <strong>Marco Tamborrino, 2026</strong>.</div>
           </div>
         </div>
 
