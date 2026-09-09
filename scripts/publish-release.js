@@ -92,6 +92,8 @@ async function run() {
     process.exit(1);
   }
 
+  const owner = 'marcotamby';
+  const repo = 'folia';
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
   const version = pkg.version;
   const tag = `v${version}`;
