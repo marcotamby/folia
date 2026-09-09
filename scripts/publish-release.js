@@ -140,6 +140,20 @@ async function run() {
 
   const uploadUrl = release.upload_url;
 
+  // If release already has assets, check and delete existing ones to overwrite cleanly
+  if (Array.isArray(release.assets) && release.assets.length > 0) {
+    for (const a of release.assets) {
+      console.log(`Removing previous asset ${a.name}...`);
+      await request(`https://api.github.com/repos/${owner}/${repo}/releases/assets/${a.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }).catch(() => {});
+    }
+  }
+
   // Assets to upload
   const assets = [
     { path: path.join(__dirname, '../release/latest.yml'), type: 'text/yaml' },
