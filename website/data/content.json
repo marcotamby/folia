@@ -142,7 +142,7 @@
     "q10": "Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?",
     "a10": "Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L'applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni.",
     "q11": "Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?",
-    "a11": "Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendomi sulla pagina <a href=\"https://ko-fi.com/marcotamby\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--brand-green); text-decoration: underline;\">Ko-fi</a> o aprendo un'issue / discussione sul repository ufficiale di <a href=\"https://github.com/marcotamby/folia\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--brand-green); text-decoration: underline;\">GitHub</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!",
+    "a11": "Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendo all'indirizzo email ufficiale <a href=\"mailto:info@folia-suite.com\" style=\"color: var(--brand-green); font-weight: 600; text-decoration: underline;\">info@folia-suite.com</a> o sulla pagina <a href=\"https://ko-fi.com/marcotamby\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--brand-green); text-decoration: underline;\">Ko-fi</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!",
     "items": [
       {
         "q": "Folia è gratuito? Ci sono costi nascosti o limitazioni al numero di capitoli?",
@@ -186,13 +186,13 @@
       },
       {
         "q": "Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?",
-        "a": "Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendomi sulla pagina Ko-fi o aprendo un'issue / discussione sul repository ufficiale di GitHub. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!"
+        "a": "Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendo all'indirizzo email ufficiale info@folia-suite.com o sulla pagina Ko-fi. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!"
       }
     ]
   },
   "footer": {
     "brand_desc": "La suite desktop per la scrittura di romanzi, il worldbuilding approfondito e le campagne di gioco di ruolo. Local-first, indipendente e attualmente gratuita.",
-    "link_github": "GitHub",
+    "link_contact": "info@folia-suite.com",
     "copyright": "© 2026 Folia. Creato con passione da Marco Tamborrino. Tutti i diritti riservati."
   }
 }

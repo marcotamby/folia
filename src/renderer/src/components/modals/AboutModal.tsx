@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, ShieldCheck, Heart, Info, UserCheck, HardDrive, RefreshCw, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, ShieldCheck, Heart, Info, UserCheck, HardDrive, RefreshCw, CheckCircle2, Mail } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
 
 interface AboutModalProps {
@@ -11,6 +11,16 @@ interface AboutModalProps {
 export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) => {
   const [isChecking, setIsChecking] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<string | null>(null);
+  const [appVersion, setAppVersion] = useState('1.0.4');
+
+  useEffect(() => {
+    const folia = (window as any).foliaAPI;
+    if (folia?.getAppVersion) {
+      folia.getAppVersion().then((v: string) => {
+        if (v) setAppVersion(v);
+      }).catch(() => {});
+    }
+  }, []);
 
   if (!isOpen) return null;
 
@@ -64,7 +74,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
           </div>
           <h2 className="font-brand font-bold text-2xl text-folia-950">Folia</h2>
           <p className="text-xs text-folia-700 font-medium tracking-wide uppercase mt-0.5">Suite di scrittura & worldbuilding</p>
-          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione 1.0.3 &bull; Aggiornato 09/09/2026</div>
+          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione {appVersion} &bull; Aggiornato 09/09/2026</div>
         </div>
 
         {/* Content */}
@@ -83,6 +93,33 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
             </p>
           </div>
 
+          {/* Official Contact Box */}
+          <div className="p-3.5 bg-paper-100 border border-paper-200 rounded-xl space-y-1.5 text-[11px]">
+            <div className="flex items-center gap-1.5 font-semibold text-folia-900">
+              <Mail className="w-3.5 h-3.5 text-folia-700" />
+              <span>Contatti & Assistenza ufficiale</span>
+            </div>
+            <p className="text-paper-600 leading-relaxed">
+              Per segnalazioni, idee, anomalie o supporto dedicato:
+            </p>
+            <div className="pt-0.5">
+              <a 
+                href="mailto:info@folia-suite.com"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if ((window as any).foliaAPI?.openExternal) {
+                    (window as any).foliaAPI.openExternal('mailto:info@folia-suite.com');
+                  } else {
+                    window.location.href = 'mailto:info@folia-suite.com';
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 font-bold text-folia-800 hover:text-folia-950 underline cursor-pointer"
+              >
+                info@folia-suite.com
+              </a>
+            </div>
+          </div>
+
           {/* Local-first Info */}
           <div className="p-3.5 bg-paper-100 border border-paper-200 rounded-xl space-y-1 text-[11px] text-paper-600">
             <div className="flex items-center gap-1.5 font-medium text-paper-800">
@@ -98,7 +135,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
           <div className="p-3 bg-folia-50/70 border border-folia-200 rounded-xl flex items-center justify-between gap-3">
             <div className="text-[11px] text-paper-700">
               <span className="font-semibold text-folia-950 block">Aggiornamenti</span>
-              <span className="text-paper-500">{updateStatus || 'Versione 1.0.3 attiva'}</span>
+              <span className="text-paper-500">{updateStatus || `Versione ${appVersion} attiva`}</span>
             </div>
             <button
               type="button"

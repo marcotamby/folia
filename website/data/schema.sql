@@ -531,7 +531,7 @@ VALUES ('faq.q11', 'faq', 'text', 'Come posso mettermi in contatto per suggerime
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a11', 'faq', 'html', 'Il dialogo costante con chi scrive e narra è l''anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>"Lascia una recensione"</strong> presente su questo sito, oppure scrivendomi sulla pagina <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a> o aprendo un''issue / discussione sul repository ufficiale di <a href="https://github.com/marcotamby/folia" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">GitHub</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!', 'Testo per faq.a11')
+VALUES ('faq.a11', 'faq', 'html', 'Il dialogo costante con chi scrive e narra è l''anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>"Lascia una recensione"</strong> presente su questo sito, oppure scrivendo all''indirizzo email ufficiale <a href="mailto:info@folia-suite.com" style="color: var(--brand-green); font-weight: 600; text-decoration: underline;">info@folia-suite.com</a> o sulla pagina <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!', 'Testo per faq.a11')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -539,7 +539,7 @@ VALUES ('footer.brand_desc', 'footer', 'text', 'La suite desktop per la scrittur
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('footer.link_github', 'footer', 'text', 'GitHub', 'Testo per footer.link_github')
+VALUES ('footer.link_contact', 'footer', 'text', 'info@folia-suite.com', 'Testo per footer.link_contact')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
