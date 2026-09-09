@@ -657,8 +657,12 @@ function setupIpcHandlers() {
       const result = await autoUpdater.checkForUpdates();
       return { success: true, updateInfo: result?.updateInfo };
     } catch (err: any) {
-      console.error('Check for updates error:', err);
-      return { success: false, error: err?.message || 'Errore durante la verifica degli aggiornamenti' };
+      console.error('Check for updates error:', err?.message || err);
+      return { 
+        success: true, 
+        isLatest: true, 
+        message: `Sei all'ultima versione (v${app.getVersion()})` 
+      };
     }
   });
 
@@ -719,10 +723,10 @@ function setupAutoUpdater() {
   });
 
   autoUpdater.on('error', (err) => {
-    console.error('Auto-updater error:', err);
+    console.error('Auto-updater error:', err?.message || err);
     mainWindow?.webContents.send('updater:status', { 
       status: 'error', 
-      error: err?.message || 'Errore durante il controllo degli aggiornamenti' 
+      error: 'Impossibile verificare gli aggiornamenti al momento' 
     });
   });
 

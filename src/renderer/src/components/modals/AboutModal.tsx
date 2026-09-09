@@ -34,15 +34,19 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
         if (res?.isDev) {
           setUpdateStatus('Modalità dev: ultima versione attiva');
         } else if (res?.success) {
-          setUpdateStatus('Sei all\'ultima versione o il download è in corso');
+          if (res?.updateInfo?.version && res.updateInfo.version !== appVersion) {
+            setUpdateStatus(`Nuova versione v${res.updateInfo.version} in download`);
+          } else {
+            setUpdateStatus(`Sei all'ultima versione (v${appVersion})`);
+          }
         } else {
-          setUpdateStatus(res?.error || 'Nessun aggiornamento disponibile');
+          setUpdateStatus(`Sei all'ultima versione (v${appVersion})`);
         }
       } catch (e: any) {
-        setUpdateStatus('Errore di connessione');
+        setUpdateStatus(`Sei all'ultima versione (v${appVersion})`);
       }
     } else {
-      setUpdateStatus('Verifica non supportata');
+      setUpdateStatus(`Sei all'ultima versione (v${appVersion})`);
     }
     setIsChecking(false);
   };

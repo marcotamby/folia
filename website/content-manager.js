@@ -112,6 +112,9 @@
   function applyContent(data) {
     document.querySelectorAll('[data-content-key], [data-content-html]').forEach((el) => {
       const key = el.getAttribute('data-content-key') || el.getAttribute('data-content-html');
+      if (key && (key.startsWith('auto.footer.') || key === 'footer.link_github')) {
+        return;
+      }
       let val = getNestedValue(data, key);
       if (val !== null && typeof val === 'string') {
         if (key === 'hero.cta_download' || key === 'download.card_title') {
@@ -432,7 +435,7 @@
       '.faq-btn span', '.niche-header-title h3', '.niche-header-title p',
       '.niche-feat-col h4 span', '.niche-bullets li', '.dl-specs-list li',
       '.sc-hl-box strong', '.sc-hl-box p', '.nav-links a', '.nav-actions a span',
-      '.footer-left span', '.footer-nav a', '.reviews-cta-card h3',
+      '.footer-left span', '.reviews-cta-card h3',
       '.reviews-cta-card p', '.reviews-cta-badge', '.niche-tab-btn span'
     ].join(', ');
 

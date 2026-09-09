@@ -543,6 +543,18 @@ VALUES ('footer.link_contact', 'footer', 'text', 'info@folia-suite.com', 'Testo 
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('footer.link_kofi', 'footer', 'text', 'Ko-fi', 'Testo per footer.link_kofi')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('footer.link_download', 'footer', 'text', 'Download', 'Testo per footer.link_download')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('footer.link_privacy', 'footer', 'text', 'Privacy Local-First', 'Testo per footer.link_privacy')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
 VALUES ('footer.copyright', 'footer', 'text', '© 2026 Folia. Creato con passione da Marco Tamborrino. Tutti i diritti riservati.', 'Testo per footer.copyright')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
