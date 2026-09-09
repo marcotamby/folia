@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=1.0.9">
+  <link rel="stylesheet" href="style.css?v=1.0.10">
 </head>
 <body>
 
@@ -944,18 +944,20 @@
       </div>
 
       <div class="faq-clean-wrap">
+        <!-- FAQ 1: Gratuito & Modello -->
         <div class="faq-row">
           <button class="faq-btn">
-            <span data-content-key="faq.q1">Folia è gratuito?</span>
+            <span data-content-key="faq.q1">Folia è gratuito? Ci sono costi nascosti o limitazioni al numero di capitoli?</span>
             <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <div class="faq-collapse">
             <div class="faq-text-body" data-content-html="faq.a1">
-              Sì, attualmente Folia è completamente gratuito da scaricare e utilizzare. Non ci sono canoni mensili né funzioni bloccate dietro paywall. Chi lo desidera può sostenere il progetto e il tempo dedicato allo sviluppo tramite una donazione libera su <a href="https://ko-fi.com/marcotamby" target="_blank" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a>.
+              Sì, attualmente Folia è <strong>completamente gratuito</strong> da scaricare e utilizzare sul tuo PC Windows. Non ci sono canoni mensili, non esistono limitazioni al numero di progetti, capitoli o parole scritte, e nessuna funzione essenziale è bloccata dietro paywall. Folia nasce come progetto indipendente creato da Marco Tamborrino: chi desidera sostenere il lavoro e il tempo dedicato allo sviluppo delle nuove versioni può offrire un caffè con una donazione libera su <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a>.
             </div>
           </div>
         </div>
 
+        <!-- FAQ 2: Cartelle Editoriali -->
         <div class="faq-row">
           <button class="faq-btn">
             <span data-content-key="faq.q2">Perché è così importante il calcolo delle "Cartelle Editoriali da 1800 battute"?</span>
@@ -963,55 +965,124 @@
           </button>
           <div class="faq-collapse">
             <div class="faq-text-body" data-content-html="faq.a2">
-              Nell'editoria italiana ed europea, il conteggio delle parole è spesso fuorviante a causa delle diverse lunghezze dei vocaboli. Case editrici, concorsi letterari e agenzie richiedono quasi sempre la lunghezza espressa in "cartelle" (convenzionalmente 1.800 battute spazi inclusi, corrispondenti a 30 righe per 60 battute). Folia calcola questo valore in tempo reale riga per riga.
+              Nell'editoria italiana ed europea (case editrici, concorsi letterari, agenzie di rappresentanza, traduttori ed editor), la lunghezza effettiva di un'opera non si misura a pagine generiche né a parole (che variano per lunghezza), ma in <strong>cartelle editoriali standard</strong> (esattamente 30 righe per 60 battute a riga = 1.800 battute spazi inclusi). I normali elaboratori di testo costringono l'autore a fare calcoli a mente o a contare i caratteri con calcolatrici esterne; Folia calcola le cartelle editoriali istantaneamente e con precisione tipografica riga per riga durante la digitazione, affiancandole al conteggio delle parole e alla stima del tempo di lettura.
             </div>
           </div>
         </div>
 
+        <!-- FAQ 3: Privacy & Local-First -->
         <div class="faq-row">
           <button class="faq-btn">
-            <span data-content-key="faq.q3">Come funzionano le mappe geografiche interattive?</span>
+            <span data-content-key="faq.q3">Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA?</span>
             <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <div class="faq-collapse">
             <div class="faq-text-body" data-content-html="faq.a3">
-              Puoi caricare qualsiasi immagine di mappa (disegnata a mano, creata con Wonderdraft, Inkarnate o Photoshop). All'interno di Folia potrai posizionare pin con icone (castelli, città, dungeon, monti, porti) e collegarli alle schede dell'ambientazione. Cliccando su un pin sulla mappa si aprirà subito la relativa scheda informativa.
+              Con Folia hai la <strong>garanzia assoluta di privacy e sovranità sui tuoi testi</strong>. L'applicazione adotta l'architettura <em>Local-First</em>: ogni progetto viene salvato direttamente e unicamente sul disco rigido del tuo computer come file <code>.folia</code> (un formato aperto e leggero contenente manoscritto, schede, immagini e note). Folia funziona al 100% offline, senza bisogno di connessione a internet né di login. Nessun testo viene mai inviato a server esterni, nessuno analizza le tue bozze e i tuoi scritti non verranno <strong>mai utilizzati per addestrare modelli di intelligenza artificiale</strong>. Sei libero di salvare i tuoi file dove preferisci: su chiavetta USB, hard disk esterno o nella tua cartella cloud preferita (Dropbox, Google Drive, OneDrive, Nextcloud).
             </div>
           </div>
         </div>
 
+        <!-- FAQ 4: Mappe Geografiche & Pin -->
         <div class="faq-row">
           <button class="faq-btn">
-            <span data-content-key="faq.q4">Posso usare Folia sia per scrivere romanzi che per preparare campagne di D&amp;D?</span>
+            <span data-content-key="faq.q4">Come funzionano le Mappe Geografiche Interattive e i segnaposti (pin)?</span>
             <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <div class="faq-collapse">
             <div class="faq-text-body" data-content-html="faq.a4">
-              Sì! Folia supporta diverse tipologie di progetto. Quando crei una scheda personaggio puoi attivare i parametri D&amp;D 5e: caratteristiche (FOR, DES, COS, INT, SAG, CAR), tiri salvezza, punti ferita, dadi vita, armi, inventario, slot incantesimi e perfino statblock mostro con Grado di Sfida (CR) e azioni leggendarie.
+              Puoi importare qualsiasi immagine di mappa ad alta risoluzione: pergamene disegnate a mano, mappe geografiche o mappe create con software specializzati come <em>Inkarnate</em>, <em>Wonderdraft</em>, <em>Photoshop</em> o <em>Dungeon Alchemist</em>. Folia ti permette di navigare la mappa con zoom fluido dal 25% al 300% e pan millimetrico, posizionando <strong>segnaposti georeferenziati</strong> con icone tematiche (città, capitali, fortezze, monti, porti, templi o dungeon) e colori personalizzati. Cliccando su un pin si apre istantaneamente il pannello <em>Dettagli Luogo</em>, collegato direttamente alla scheda di worldbuilding corrispondente: una vera e propria atlante viva del tuo universo narrativo.
             </div>
           </div>
         </div>
 
+        <!-- FAQ 5: D&D 5e & Master Screen -->
         <div class="faq-row">
           <button class="faq-btn">
-            <span data-content-key="faq.q5">Dove vengono memorizzati i miei dati? Posso usarlo senza connessione?</span>
+            <span data-content-key="faq.q5">Posso usare Folia per giocare di ruolo o fare il Game Master (D&amp;D 5e e altri TTRPG)?</span>
             <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <div class="faq-collapse">
             <div class="faq-text-body" data-content-html="faq.a5">
-              Folia è un software <strong>local-first</strong>: funziona al 100% offline, senza richiedere connessione internet né login. Tutti i manoscritti, le mappe e le schede risiedono sul disco rigido del tuo computer nei file aperti <code>.folia</code>. Nessun testo viene inviato a server esterni né utilizzato per addestrare modelli IA.
+              Assolutamente sì! Folia include una modalità GDR nativa specificamente pensata per Master e giocatori di <strong>Dungeons &amp; Dragons 5e e giochi di ruolo da tavolo</strong>. Puoi compilare schede personaggio con tutti i parametri di gioco ufficiali: caratteristiche (FOR, DES, COS, INT, SAG, CAR), modificatori, tiri salvezza, Classe Armatura (CA), Punti Ferita (PF), dadi vita, armi, equipaggiamento e slot incantesimi. Per i Game Master, Folia supporta schede Boss e Mostri con Grado di Sfida (CR), tratti speciali e azioni leggendarie, oltre al pulsante rapido <em>Schermo Master</em> per consultare al volo le statistiche del Party durante la sessione senza sfogliare decine di fogli sparsi.
             </div>
           </div>
         </div>
 
+        <!-- FAQ 6: Wiki Interlinking -->
         <div class="faq-row">
           <button class="faq-btn">
-            <span data-content-key="faq.q6">Come posso mettermi in contatto per suggerimenti o nuove idee?</span>
+            <span data-content-key="faq.q6">Come funziona il Wiki-Interlinking automatico e i popup contestuali mentre scrivo?</span>
             <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <div class="faq-collapse">
             <div class="faq-text-body" data-content-html="faq.a6">
-              Puoi inviare messaggi, proporre nuove feature o metterti in contatto con me direttamente tramite la pagina <a href="https://ko-fi.com/marcotamby" target="_blank" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a> oppure aprendo un'issue sul repository GitHub del progetto.
+              Mentre redigi i capitoli nell'editor, Folia indicizza automaticamente in background tutti i nomi dei tuoi personaggi, luoghi, fazioni, reliquie magiche ed eventi storici creati nel modulo di worldbuilding. Passando semplicemente con il mouse su un nome o inserendo un richiamo wiki, compare una scheda riassuntiva fluttuante che ti ricorda l'età del personaggio, il suo obiettivo, il suo difetto fatale o le coordinate geografiche di una città. Non dovrai mai più interrompere il flusso creativo per andare a cercare un dettaglio annotato cento pagine prima.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 7: Formati Export -->
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span data-content-key="faq.q7">In quali formati posso esportare o impaginare la mia opera (.docx, PDF, Markdown)?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body" data-content-html="faq.a7">
+              Folia supporta esportazioni versatili e prive di lock-in pensate per le reali necessità di pubblicazione: <strong>Microsoft Word (.docx)</strong> pronto per la revisione con editor o per l'invio alle case editrici, con formattazione dei paragrafi corretta, stili di capitolo e note a piè di pagina native; <strong>PDF impaginato</strong> nel classico formato romanzo (14x21 cm o A5) pronto per la stampa o la condivisione con i lettori beta; formato <strong>Markdown (.md)</strong> ideale per la massima interoperabilità con Obsidian, Notion e piattaforme web; e testo semplice <strong>(.txt)</strong>. Puoi anche scegliere se esportare l'intero manoscritto oppure includere appendici con l'enciclopedia del mondo e le schede dei personaggi.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 8: Outliner & 18+ Strutture -->
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span data-content-key="faq.q8">Quali sono le oltre 18 strutture narrative e i template di trama inclusi nell'Outliner?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body" data-content-html="faq.a8">
+              L'Outliner strutturale di Folia ti guida passo dopo passo attraverso i principali modelli di storytelling della letteratura e della drammaturgia mondiale. Include, tra gli altri: il <em>Viaggio dell'Eroe</em> di Campbell e Vogler, lo schema a beat <em>Save the Cat!</em> di Blake Snyder, la classica <em>Struttura in Tre Atti</em>, il <em>Cerchio delle Storie</em> di Dan Harmon, la <em>Piramide di Freytag</em>, la <em>Struttura in Sette Punti</em> di Dan Wells, il modello investigativo per Gialli e Whodunnit (con tracciamento di indizi, alibi e false piste), template per il Romance, la <em>Curva Fichteana</em> e il modello <em>5-Room Dungeon</em> per sessioni GDR. Ogni beat narrativo offre suggerimenti concreti per la stesura e si collega direttamente alle scene del manoscritto.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 9: Psicologia Personaggi -->
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span data-content-key="faq.q9">Come funzionano le schede psicologiche dei personaggi?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body" data-content-html="faq.a9">
+              Le schede personaggio di Folia vanno molto oltre la semplice descrizione anagrafica o fisica: sono strutturate secondo i principi della drammaturgia moderna per creare figure tridimensionali e indimenticabili. Troverai sezioni dedicate a <strong>Obiettivo Principale</strong> (cosa desidera coscientemente il personaggio?), <strong>Bisogno Interiore</strong> (cosa deve comprendere per maturare?), <strong>Difetto Fatale e Vulnerabilità</strong> (la ferita emotiva che lo ostacola), Voce e registro linguistico, Archetipo drammatico e relazioni reciproche. Man mano che la storia evolve, puoi annotare le tappe dell'arco di trasformazione di protagonisti e antagonisti.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 10: Requisiti Windows & Mac/Linux -->
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span data-content-key="faq.q10">Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body" data-content-html="faq.a10">
+              Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L'applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 11: Contatti & Segnalazioni -->
+        <div class="faq-row">
+          <button class="faq-btn">
+            <span data-content-key="faq.q11">Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="faq-collapse">
+            <div class="faq-text-body" data-content-html="faq.a11">
+              Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>"Lascia una recensione"</strong> presente su questo sito, oppure scrivendomi sulla pagina <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a> o aprendo un'issue / discussione sul repository ufficiale di <a href="https://github.com/marcotamby/folia" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">GitHub</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!
             </div>
           </div>
         </div>
@@ -1168,7 +1239,7 @@
       </form>
     </div>
   </div>
-  <script src="app.js?v=1.0.9"></script>
-  <script src="content-manager.js?v=1.0.9" defer></script>
+  <script src="app.js?v=1.0.10"></script>
+  <script src="content-manager.js?v=1.0.10" defer></script>
 </body>
 </html>

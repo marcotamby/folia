@@ -17,7 +17,7 @@
   },
   "hero": {
     "title": "L'ambiente di scrittura per chi <em>dà vita a nuove storie</em>.",
-    "desc": "Dalla prima scintilla d'ispirazione fino all'ultima pagina del tuo libro. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.",
+    "desc": "Dalla prima scintilla d'ispirazione all'ultima pagina impaginata. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.",
     "cta_download": "Scarica gratis per Windows (v1.0.1)",
     "cta_kofi": "Sostieni su Ko-fi ↗",
     "badge_offline": "100% Offline & Privato",
@@ -26,7 +26,7 @@
     "badge_free": "Attualmente gratuito"
   },
   "niches": {
-    "section_label": "FATTO SU MISURA",
+    "section_label": "Fatto su misura",
     "title": "Progettato per le reali esigenze di chi narra.",
     "subtitle": "Gli elaboratori di testo generici ignorano le peculiarità del mondo letterario e ludico. Seleziona la tua area di scrittura per scoprire gli strumenti creati per te.",
     "tabs": {
@@ -72,44 +72,29 @@
   },
   "features": {
     "section_label": "Panoramica Completa",
-    "title": "Ogni strumento al suo posto, senza dispersioni.",
-    "subtitle": "Folia racchiude in un unico ambiente leggero e ordinato tutto ciò che gli scrittori solitamente sono costretti a frammentare tra tre o quattro programmi diversi.",
-    "f1_title": "Editor & Norme Editoriali",
-    "f1_desc": "Scrivi senza impazzire con le impostazioni: hai già le <strong>cartelle editoriali da 1800 battute</strong> calcolate in tempo reale, il formato pagina identico ai libri stampati, le note a piè di pagina e i dialoghi con le virgolette giuste (« »).",
-    "f1_b1": "Commenti a margine e revisioni risolvibili",
-    "f1_b2": "Trova e sostituisci avanzato",
-    "f2_title": "Personaggi & Schede D&D",
-    "f2_desc": "Dai spessore a protagonisti e antagonisti: cosa vogliono, cosa temono e i loro difetti. E se giochi a D&D, trovi le schede dei personaggi e dei mostri già pronte con caratteristiche, dadi vita e incantesimi.",
-    "f2_b1": "Archetipi drammatici ed evoluzione dell'arco",
-    "f2_b2": "Supporto razze e classi homebrew personalizzate",
-    "f3_title": "Worldbuilding & Mappe con Pin",
-    "f3_desc": "Carica le immagini dei tuoi regni o delle tue città, piazza i segnalini sui luoghi importanti e collegali alle tue note. Mentre scrivi il manoscritto, basta passare con il mouse sul nome di un posto per rivederne i dettagli.",
-    "f3_b1": "Wiki-linking istantaneo al passaggio del mouse",
-    "f3_b2": "Zoom, pan ed esplorazione fluida della mappa",
-    "f4_title": "Metti in ordine capitoli e scene",
-    "f4_desc": "Non restare bloccato davanti alla pagina bianca: trovi schemi semplici da seguire (come il Viaggio dell'Eroe, la struttura del giallo o i modelli per dungeon) per organizzare l'intreccio passo dopo passo.",
-    "f4_b1": "Beat narrativi con linee guida drammaturgiche",
-    "f4_b2": "Collegamento diretto tra snodi e scene dell'editor",
-    "f5_title": "Bacheca visiva per le tue idee",
-    "f5_desc": "Sposta le scene come se fossero foglietti su un tavolo per trovare l'ordine perfetto. E hai sempre a portata di mano un blocco per catturare al volo battute di dialogo o intuizioni prima di dimenticarle.",
-    "f5_b1": "Etichette di colore personalizzate per POV e sottotrame",
-    "f5_b2": "Archivio note veloci sempre accessibile",
-    "f6_title": "Scrivi senza distrazioni ed esporta facile",
-    "f6_desc": "Attiva la modalità a tutto schermo per concentrarti solo sulle parole, fissa un obiettivo di battute al giorno e, quando hai finito, esporta il libro in Word (DOCX) pronto per gli editor o in PDF impaginato.",
-    "f6_b1": "Opzione per esportare schede e appendici del mondo",
-    "f6_b2": "Nessun lock-in: i file rimangono sul tuo PC"
+    "title": "Tutto ciò che serve per dare forma a un'opera completa.",
+    "subtitle": "Dalla primissima bozza all'impaginazione finale, senza dover passare per cinque programmi diversi.",
+    "f1_title": "Norme Editoriali & Tipografia Italiana",
+    "f1_desc": "Cartelle editoriali da 1.800 battute calcolate in tempo reale. Formato romanzo 14x21 cm, caporali (« »), em-dash (—), rientro prima riga e sillabazione conforme agli standard delle case editrici italiane.",
+    "f2_title": "Bibbia di Worldbuilding & Lore",
+    "f2_desc": "Organizza in categorie ordinate luoghi, fazioni, sistemi magici, religioni ed ere storiche. Il testo del tuo manoscritto si collega automaticamente alle schede di lore con comode anteprime al passaggio del mouse.",
+    "f3_title": "Schede Personaggi & D&D 5e",
+    "f3_desc": "Dalla psicologia profonda (bisogno, obiettivo, difetto fatale) alle schede statistiche complete per D&D 5e e statblock dei mostri per i Game Master: caratteristiche, CA, PF, slot incantesimi e attacchi.",
+    "f4_title": "Outliner con 18+ Modelli di Trama",
+    "f4_desc": "Save the Cat!, Story Circle di Dan Harmon, Mystery Beats, Viaggio dell'Eroe, Snowflake Method, Five Room Dungeon e molti altri. Struttura ogni beat con conteggio parole raccomandato e note di svolta.",
+    "f5_title": "Bacheca Visiva Corkboard & Note",
+    "f5_desc": "Visualizza i capitoli come schede su un pannello di sughero. Assegna stati di avanzamento (Bozza, In stesura, Da rivedere, Completato) con codici colore e riorganizza la sequenza degli eventi trascinando le card.",
+    "f6_title": "Metriche, Focus & Esportazione",
+    "f6_desc": "Monitora le sessioni di scrittura, fissa obiettivi giornalieri con barre di progresso discrete e stima i minuti di lettura. Esporta poi l'opera finita in DOCX Word formattato, PDF per la stampa, Markdown o testo semplice."
   },
   "privacy": {
-    "section_label": "LOCAL-FIRST & PRIVACY",
+    "section_label": "Privacy & Architettura",
     "title": "Le tue storie appartengono solo a te. Senza eccezioni.",
-    "desc": "Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. Con Folia i file di progetto (<code>.folia</code>) risiedono unicamente sul tuo disco rigido: <strong>zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta</strong>.",
+    "desc": "Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. Con Folia i file di progetto (.folia) risiedono unicamente sul tuo disco rigido: zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta.",
     "bullet1": "Funzionamento 100% offline, ovunque ti trovi",
     "bullet2": "Nessun canone mensile obbligatorio",
     "bullet3": "Nessuna IA addestrata sulle tue creazioni letterarie",
-    "spec1": "Cartella locale: Documenti/Folia/Romanzo.folia",
-    "spec2": "Pacchetti scambiati via web: 0 byte (offline)",
-    "spec3": "Backup automatico di sicurezza: ogni 2 minuti",
-    "spec4": "Proprietà dei testi: 100% dell'Autore"
+    "file_spec": "Formato Aperto: File .folia archiviati in locale sul tuo computer"
   },
   "support": {
     "section_label": "Sviluppo Indipendente",
@@ -117,10 +102,10 @@
     "quote": "Ho creato Folia perché sentivo la mancanza di uno strumento che unisse il rigore tipografico necessario a noi autori alla ricchezza di worldbuilding di cui hanno bisogno romanzieri fantasy, saggisti, giallisti e Game Master, senza costringere nessuno a pagare abbonamenti mensili per continuare ad accedere ai propri testi. Folia è attualmente gratuito da scaricare e utilizzare. Se il programma ti aiuta a scrivere il tuo romanzo, a preparare le tue sessioni di gioco o vuoi sostenere lo sviluppo delle prossime versioni, puoi offrirmi un caffè su Ko-fi: ogni piccolo contributo è una spinta enorme!",
     "author_name": "Marco Tamborrino",
     "author_role": "Autore & Sviluppatore di Folia",
-    "cta_kofi": "Supporta Marco"
+    "cta_kofi": "Supporta Marco su Ko-fi (ko-fi.com/marcotamby) ↗"
   },
   "download": {
-    "section_label": "CENTRO DOWNLOAD",
+    "section_label": "Centro Download",
     "title": "Scarica Folia per Windows",
     "subtitle": "Disponibile al momento per sistemi Windows (64-bit). Gratuito in questa fase di sviluppo e perfezionamento.",
     "card_title": "Folia 1.0.1 per Windows",
@@ -134,40 +119,74 @@
     "note_bottom": "Folia è attualmente in sviluppo e perfezionamento continuo. Puoi già scaricare e testare l'installer per Windows, oppure sostenere il progetto con una libera donazione su Ko-fi per aiutarmi a dedicare sempre più tempo alla cura di Folia!"
   },
   "faq": {
-    "section_label": "DOMANDE FREQUENTI",
+    "section_label": "Domande Frequenti",
     "title": "Tutto quello che c'è da sapere su Folia.",
+    "q1": "Folia è gratuito? Ci sono costi nascosti o limitazioni al numero di capitoli?",
+    "a1": "Sì, attualmente Folia è <strong>completamente gratuito</strong> da scaricare e utilizzare sul tuo PC Windows. Non ci sono canoni mensili, non esistono limitazioni al numero di progetti, capitoli o parole scritte, e nessuna funzione essenziale è bloccata dietro paywall. Folia nasce come progetto indipendente creato da Marco Tamborrino: chi desidera sostenere il lavoro e il tempo dedicato allo sviluppo delle nuove versioni può offrire un caffè con una donazione libera su <a href=\"https://ko-fi.com/marcotamby\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--brand-green); text-decoration: underline;\">Ko-fi</a>.",
+    "q2": "Perché è così importante il calcolo delle \"Cartelle Editoriali da 1800 battute\"?",
+    "a2": "Nell'editoria italiana ed europea (case editrici, concorsi letterari, agenzie di rappresentanza, traduttori ed editor), la lunghezza effettiva di un'opera non si misura a pagine generiche né a parole (che variano per lunghezza), ma in <strong>cartelle editoriali standard</strong> (esattamente 30 righe per 60 battute a riga = 1.800 battute spazi inclusi). I normali elaboratori di testo costringono l'autore a fare calcoli a mente o a contare i caratteri con calcolatrici esterne; Folia calcola le cartelle editoriali istantaneamente e con precisione tipografica riga per riga durante la digitazione, affiancandole al conteggio delle parole e alla stima del tempo di lettura.",
+    "q3": "Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA?",
+    "a3": "Con Folia hai la <strong>garanzia assoluta di privacy e sovranità sui tuoi testi</strong>. L'applicazione adotta l'architettura <em>Local-First</em>: ogni progetto viene salvato direttamente e unicamente sul disco rigido del tuo computer come file <code>.folia</code> (un formato aperto e leggero contenente manoscritto, schede, immagini e note). Folia funziona al 100% offline, senza bisogno di connessione a internet né di login. Nessun testo viene mai inviato a server esterni, nessuno analizza le tue bozze e i tuoi scritti non verranno <strong>mai utilizzati per addestrare modelli di intelligenza artificiale</strong>. Sei libero di salvare i tuoi file dove preferisci: su chiavetta USB, hard disk esterno o nella tua cartella cloud preferita (Dropbox, Google Drive, OneDrive, Nextcloud).",
+    "q4": "Come funzionano le Mappe Geografiche Interattive e i segnaposti (pin)?",
+    "a4": "Puoi importare qualsiasi immagine di mappa ad alta risoluzione: pergamene disegnate a mano, mappe geografiche o mappe create con software specializzati come <em>Inkarnate</em>, <em>Wonderdraft</em>, <em>Photoshop</em> o <em>Dungeon Alchemist</em>. Folia ti permette di navigare la mappa con zoom fluido dal 25% al 300% e pan millimetrico, posizionando <strong>segnaposti georeferenziati</strong> con icone tematiche (città, capitali, fortezze, monti, porti, templi o dungeon) e colori personalizzati. Cliccando su un pin si apre istantaneamente il pannello <em>Dettagli Luogo</em>, collegato direttamente alla scheda di worldbuilding corrispondente: una vera e propria atlante viva del tuo universo narrativo.",
+    "q5": "Posso usare Folia per giocare di ruolo o fare il Game Master (D&D 5e e altri TTRPG)?",
+    "a5": "Assolutamente sì! Folia include una modalità GDR nativa specificamente pensata per Master e giocatori di <strong>Dungeons &amp; Dragons 5e e giochi di ruolo da tavolo</strong>. Puoi compilare schede personaggio con tutti i parametri di gioco ufficiali: caratteristiche (FOR, DES, COS, INT, SAG, CAR), modificatori, tiri salvezza, Classe Armatura (CA), Punti Ferita (PF), dadi vita, armi, equipaggiamento e slot incantesimi. Per i Game Master, Folia supporta schede Boss e Mostri con Grado di Sfida (CR), tratti speciali e azioni leggendarie, oltre al pulsante rapido <em>Schermo Master</em> per consultare al volo le statistiche del Party durante la sessione senza sfogliare decine di fogli sparsi.",
+    "q6": "Come funziona il Wiki-Interlinking automatico e i popup contestuali mentre scrivo?",
+    "a6": "Mentre redigi i capitoli nell'editor, Folia indicizza automaticamente in background tutti i nomi dei tuoi personaggi, luoghi, fazioni, reliquie magiche ed eventi storici creati nel modulo di worldbuilding. Passando semplicemente con il mouse su un nome o inserendo un richiamo wiki, compare una scheda riassuntiva fluttuante che ti ricorda l'età del personaggio, il suo obiettivo, il suo difetto fatale o le coordinate geografiche di una città. Non dovrai mai più interrompere il flusso creativo per andare a cercare un dettaglio annotato cento pagine prima.",
+    "q7": "In quali formati posso esportare o impaginare la mia opera (.docx, PDF, Markdown)?",
+    "a7": "Folia supporta esportazioni versatili e prive di lock-in pensate per le reali necessità di pubblicazione: <strong>Microsoft Word (.docx)</strong> pronto per la revisione con editor o per l'invio alle case editrici, con formattazione dei paragrafi corretta, stili di capitolo e note a piè di pagina native; <strong>PDF impaginato</strong> nel classico formato romanzo (14x21 cm o A5) pronto per la stampa o la condivisione con i lettori beta; formato <strong>Markdown (.md)</strong> ideale per la massima interoperabilità con Obsidian, Notion e piattaforme web; e testo semplice <strong>(.txt)</strong>. Puoi anche scegliere se esportare l'intero manoscritto oppure includere appendici con l'enciclopedia del mondo e le schede dei personaggi.",
+    "q8": "Quali sono le oltre 18 strutture narrative e i template di trama inclusi nell'Outliner?",
+    "a8": "L'Outliner strutturale di Folia ti guida passo dopo passo attraverso i principali modelli di storytelling della letteratura e della drammaturgia mondiale. Include, tra gli altri: il <em>Viaggio dell'Eroe</em> di Campbell e Vogler, lo schema a beat <em>Save the Cat!</em> di Blake Snyder, la classica <em>Struttura in Tre Atti</em>, il <em>Cerchio delle Storie</em> di Dan Harmon, la <em>Piramide di Freytag</em>, la <em>Struttura in Sette Punti</em> di Dan Wells, il modello investigativo per Gialli e Whodunnit (con tracciamento di indizi, alibi e false piste), template per il Romance, la <em>Curva Fichteana</em> e il modello <em>5-Room Dungeon</em> per sessioni GDR. Ogni beat narrativo offre suggerimenti concreti per la stesura e si collega direttamente alle scene del manoscritto.",
+    "q9": "Come funzionano le schede psicologiche dei personaggi?",
+    "a9": "Le schede personaggio di Folia vanno molto oltre la semplice descrizione anagrafica o fisica: sono strutturate secondo i principi della drammaturgia moderna per creare figure tridimensionali e indimenticabili. Troverai sezioni dedicate a <strong>Obiettivo Principale</strong> (cosa desidera coscientemente il personaggio?), <strong>Bisogno Interiore</strong> (cosa deve comprendere per maturare?), <strong>Difetto Fatale e Vulnerabilità</strong> (la ferita emotiva che lo ostacola), Voce e registro linguistico, Archetipo drammatico e relazioni reciproche. Man mano che la storia evolve, puoi annotare le tappe dell'arco di trasformazione di protagonisti e antagonisti.",
+    "q10": "Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?",
+    "a10": "Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L'applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni.",
+    "q11": "Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?",
+    "a11": "Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendomi sulla pagina <a href=\"https://ko-fi.com/marcotamby\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--brand-green); text-decoration: underline;\">Ko-fi</a> o aprendo un'issue / discussione sul repository ufficiale di <a href=\"https://github.com/marcotamby/folia\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--brand-green); text-decoration: underline;\">GitHub</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!",
     "items": [
       {
-        "q": "Folia è gratuito?",
-        "a": "Sì, attualmente Folia è completamente gratuito da scaricare e utilizzare. Non ci sono canoni mensili né funzioni bloccate dietro paywall. Chi lo desidera può sostenere il progetto e il tempo dedicato allo sviluppo tramite una donazione libera su Ko-fi."
+        "q": "Folia è gratuito? Ci sono costi nascosti o limitazioni al numero di capitoli?",
+        "a": "Sì, attualmente Folia è <strong>completamente gratuito</strong> da scaricare e utilizzare sul tuo PC Windows. Non ci sono canoni mensili, non esistono limitazioni al numero di progetti, capitoli o parole scritte, e nessuna funzione essenziale è bloccata dietro paywall. Folia nasce come progetto indipendente creato da Marco Tamborrino: chi desidera sostenere il lavoro e il tempo dedicato allo sviluppo delle nuove versioni può offrire un caffè con una donazione libera su Ko-fi."
       },
       {
         "q": "Perché è così importante il calcolo delle \"Cartelle Editoriali da 1800 battute\"?",
-        "a": "In Italia, l'editoria professionale (case editrici, concorsi, agenzie letterarie, traduttori ed editor) misura la lunghezza di un testo in \"cartelle editoriali standard\" (30 righe per 60 battute per riga = 1.800 battute spazi inclusi). I normali elaboratori di testo calcolano solo parole o pagine generiche; Folia calcola esattamente il numero di cartelle editoriali in tempo reale."
+        "a": "Nell'editoria italiana ed europea (case editrici, concorsi letterari, agenzie di rappresentanza, traduttori ed editor), la lunghezza effettiva di un'opera non si misura a pagine generiche né a parole (che variano per lunghezza), ma in <strong>cartelle editoriali standard</strong> (esattamente 30 righe per 60 battute a riga = 1.800 battute spazi inclusi). I normali elaboratori di testo costringono l'autore a fare calcoli a mente o a contare i caratteri con calcolatrici esterne; Folia calcola le cartelle editoriali istantaneamente e con precisione tipografica riga per riga durante la digitazione, affiancandole al conteggio delle parole e alla stima del tempo di lettura."
       },
       {
-        "q": "Dove vengono salvati i miei testi e i dati del mio mondo?",
-        "a": "Tutti i tuoi progetti vengono salvati in locale sul disco rigido del tuo computer come singoli file con estensione .folia. Puoi salvarli nella tua cartella Documenti, su una chiavetta USB o sincronizzarli autonomamente con il tuo servizio cloud preferito (Dropbox, Google Drive, OneDrive, Nextcloud)."
+        "q": "Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA?",
+        "a": "Con Folia hai la <strong>garanzia assoluta di privacy e sovranità sui tuoi testi</strong>. L'applicazione adotta l'architettura <em>Local-First</em>: ogni progetto viene salvato direttamente e unicamente sul disco rigido del tuo computer come file .folia (un formato aperto e leggero contenente manoscritto, schede, immagini e note). Folia funziona al 100% offline, senza bisogno di connessione a internet né di login. Nessun testo viene mai inviato a server esterni, nessuno analizza le tue bozze e i tuoi scritti non verranno <strong>mai utilizzati per addestrare modelli di intelligenza artificiale</strong>. Sei libero di salvare i tuoi file dove preferisci: su chiavetta USB, hard disk esterno o nella tua cartella cloud preferita (Dropbox, Google Drive, OneDrive, Nextcloud)."
       },
       {
-        "q": "Folia funziona completamente offline?",
-        "a": "Sì, al 100%. Folia non richiede alcuna connessione internet per aprirsi, scrivere, salvare o esportare i tuoi testi. Puoi portarlo in treno, in baita o in qualunque luogo privo di rete."
+        "q": "Come funzionano le Mappe Geografiche Interattive e i segnaposti (pin)?",
+        "a": "Puoi importare qualsiasi immagine di mappa ad alta risoluzione: pergamene disegnate a mano, mappe geografiche o mappe create con software specializzati come Inkarnate, Wonderdraft, Photoshop o Dungeon Alchemist. Folia ti permette di navigare la mappa con zoom fluido dal 25% al 300% e pan millimetrico, posizionando <strong>segnaposti georeferenziati</strong> con icone tematiche (città, capitali, fortezze, monti, porti, templi o dungeon) e colori personalizzati. Cliccando su un pin si apre istantaneamente il pannello Dettagli Luogo, collegato direttamente alla scheda di worldbuilding corrispondente: una vera e propria atlante viva del tuo universo narrativo."
       },
       {
-        "q": "Come funzionano le schede personaggio D&D 5e?",
-        "a": "In Folia puoi arricchire la scheda di qualsiasi personaggio con statistiche complete da gioco di ruolo (punteggi di caratteristica FOR, DES, COS, INT, SAG, CAR, modificatori, CA, PF, armi, incantesimi e dadi vita), oltre a poter creare schede per Boss e Mostri con Grado di Sfida (CR) e azioni leggendarie. È l'ideale per chi scrive fantasy con radici nei GDR o per Game Master che preparano le loro avventure."
+        "q": "Posso usare Folia per giocare di ruolo o fare il Game Master (D&D 5e e altri TTRPG)?",
+        "a": "Assolutamente sì! Folia include una modalità GDR nativa specificamente pensata per Master e giocatori di <strong>Dungeons & Dragons 5e e giochi di ruolo da tavolo</strong>. Puoi compilare schede personaggio con tutti i parametri di gioco ufficiali: caratteristiche (FOR, DES, COS, INT, SAG, CAR), modificatori, tiri salvezza, Classe Armatura (CA), Punti Ferita (PF), dadi vita, armi, equipaggiamento e slot incantesimi. Per i Game Master, Folia supporta schede Boss e Mostri con Grado di Sfida (CR), tratti speciali e azioni leggendarie, oltre al pulsante rapido Schermo Master per consultare al volo le statistiche del Party durante la sessione senza sfogliare decine di fogli sparsi."
       },
       {
-        "q": "In quali formati posso esportare il mio romanzo?",
-        "a": "Puoi esportare in formato Microsoft Word (.docx) con stili editoriali corretti e note a piè di pagina native, in PDF impaginato pronto per la stampa o la condivisione, in formato Markdown (.md) e in testo semplice (.txt)."
+        "q": "Come funziona il Wiki-Interlinking automatico e i popup contestuali mentre scrivo?",
+        "a": "Mentre redigi i capitoli nell'editor, Folia indicizza automaticamente in background tutti i nomi dei tuoi personaggi, luoghi, fazioni, reliquie magiche ed eventi storici creati nel modulo di worldbuilding. Passando semplicemente con il mouse su un nome o inserendo un richiamo wiki, compare una scheda riassuntiva fluttuante che ti ricorda l'età del personaggio, il suo obiettivo, il suo difetto fatale o le coordinate geografiche di una città. Non dovrai mai più interrompere il flusso creativo per andare a cercare un dettaglio annotato cento pagine prima."
       },
       {
-        "q": "Quali sono i requisiti di sistema per Windows?",
-        "a": "Folia è compatibile con Windows 10 e Windows 11 a 64 bit. È un'applicazione Electron ottimizzata, leggera e veloce nell'avvio."
+        "q": "In quali formati posso esportare o impaginare la mia opera (.docx, PDF, Markdown)?",
+        "a": "Folia supporta esportazioni versatili e prive di lock-in pensate per le reali necessità di pubblicazione: <strong>Microsoft Word (.docx)</strong> pronto per la revisione con editor o per l'invio alle case editrici, con formattazione dei paragrafi corretta, stili di capitolo e note a piè di pagina native; <strong>PDF impaginato</strong> nel classico formato romanzo (14x21 cm o A5) pronto per la stampa o la condivisione con i lettori beta; formato <strong>Markdown (.md)</strong> ideale per la massima interoperabilità con Obsidian, Notion e piattaforme web; e testo semplice (.txt). Puoi anche scegliere se esportare l'intero manoscritto oppure includere appendici con l'enciclopedia del mondo e le schede dei personaggi."
       },
       {
-        "q": "Come posso sostenere lo sviluppo di Folia?",
-        "a": "Puoi sostenere il progetto offrendo un caffè o una donazione libera tramite la pagina ufficiale di Ko-fi di Marco Tamborrino. Ogni contributo aiuta a dedicare tempo allo sviluppo e all'introduzione di nuove funzionalità."
+        "q": "Quali sono le oltre 18 strutture narrative e i template di trama inclusi nell'Outliner?",
+        "a": "L'Outliner strutturale di Folia ti guida passo dopo passo attraverso i principali modelli di storytelling della letteratura e della drammaturgia mondiale. Include, tra gli altri: il Viaggio dell'Eroe di Campbell e Vogler, lo schema a beat Save the Cat! di Blake Snyder, la classica Struttura in Tre Atti, il Cerchio delle Storie di Dan Harmon, la Piramide di Freytag, la Struttura in Sette Punti di Dan Wells, il modello investigativo per Gialli e Whodunnit (con tracciamento di indizi, alibi e false piste), template per il Romance, la Curva Fichteana e il modello 5-Room Dungeon per sessioni GDR. Ogni beat narrativo offre suggerimenti concreti per la stesura e si collega direttamente alle scene del manoscritto."
+      },
+      {
+        "q": "Come funzionano le schede psicologiche dei personaggi?",
+        "a": "Le schede personaggio di Folia vanno molto oltre la semplice descrizione anagrafica o fisica: sono strutturate secondo i principi della drammaturgia moderna per creare figure tridimensionali e indimenticabili. Troverai sezioni dedicate a <strong>Obiettivo Principale</strong> (cosa desidera coscientemente il personaggio?), <strong>Bisogno Interiore</strong> (cosa deve comprendere per maturare?), <strong>Difetto Fatale e Vulnerabilità</strong> (la ferita emotiva che lo ostacola), Voce e registro linguistico, Archetipo drammatico e relazioni reciproche. Man mano che la storia evolve, puoi annotare le tappe dell'arco di trasformazione di protagonisti e antagonisti."
+      },
+      {
+        "q": "Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?",
+        "a": "Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L'applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni."
+      },
+      {
+        "q": "Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?",
+        "a": "Il dialogo costante con chi scrive e narra è l'anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendomi sulla pagina Ko-fi o aprendo un'issue / discussione sul repository ufficiale di GitHub. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!"
       }
     ]
   },

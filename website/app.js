@@ -179,7 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const collapse = row.querySelector('.faq-collapse');
 
     if (btn && collapse) {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        if (document.body.classList.contains('folia-cms-edit-mode')) {
+          return;
+        }
         const isOpen = row.classList.contains('active');
 
         // Close all other FAQs

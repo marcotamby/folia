@@ -2707,6 +2707,22 @@ p {
   background: #FFFFFF;
 }
 
+/* In CMS edit mode, uncollapse all FAQ answers so they can be clicked and edited instantly */
+.folia-cms-edit-mode .faq-collapse {
+  max-height: none !important;
+  overflow: visible !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+
+.folia-cms-edit-mode .faq-arrow {
+  transform: rotate(90deg) !important;
+}
+
+.folia-cms-edit-mode .faq-btn {
+  cursor: text;
+}
+
 #folia-cms-toast {
   position: fixed;
   bottom: 24px;
