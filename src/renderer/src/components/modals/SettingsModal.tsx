@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Settings, Globe, Type, Heading1, Target, Check, WrapText, Indent, AlignJustify, Info, BookOpen, Compass, GraduationCap, Mail, SpellCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Settings, Globe, Type, Heading1, Target, Check, WrapText, Indent, AlignJustify, Info, BookOpen, Compass, GraduationCap, Mail, SpellCheck, RefreshCw, Sparkles, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { Project, Language, FontFamily, PageMargins, PageFormat, ParagraphSpacing, ProjectType } from '../../types';
 import { CustomSelect } from '../common/CustomSelect';
 
@@ -23,6 +23,51 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   if (!isOpen) return null;
 
   const [newDictWord, setNewDictWord] = useState('');
+  const [autoUpdateEnabled, setAutoUpdateEnabled] = useState(true);
+  const [checkingUpdates, setCheckingUpdates] = useState(false);
+  const [updateFeedback, setUpdateFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    const folia = (window as any).foliaAPI;
+    if (folia?.getUpdateSettings) {
+      folia.getUpdateSettings().then((s: any) => {
+        if (s && typeof s.autoUpdateEnabled === 'boolean') {
+          setAutoUpdateEnabled(s.autoUpdateEnabled);
+        }
+      }).catch(() => {});
+    }
+  }, []);
+
+  const handleToggleAutoUpdate = async (val: boolean) => {
+    setAutoUpdateEnabled(val);
+    const folia = (window as any).foliaAPI;
+    if (folia?.setUpdateSettings) {
+      await folia.setUpdateSettings({ autoUpdateEnabled: val }).catch(() => {});
+    }
+  };
+
+  const handleCheckUpdatesManual = async () => {
+    setCheckingUpdates(true);
+    setUpdateFeedback(null);
+    const folia = (window as any).foliaAPI;
+    if (folia?.checkForUpdates) {
+      try {
+        const res = await folia.checkForUpdates();
+        if (res?.isDev) {
+          setUpdateFeedback('Modalità sviluppo: verifica aggiornamenti attiva sull\'app compilata.');
+        } else if (res?.success) {
+          setUpdateFeedback('Verifica inviata. Se è presente una nuova versione, il download si avvierà in basso.');
+        } else {
+          setUpdateFeedback(res?.error || 'Nessun nuovo aggiornamento trovato.');
+        }
+      } catch (err: any) {
+        setUpdateFeedback('Impossibile verificare gli aggiornamenti al momento.');
+      }
+    } else {
+      setUpdateFeedback('Funzione non supportata in questo ambiente.');
+    }
+    setCheckingUpdates(false);
+  };
   const customWords = project.settings.customDictionary || [];
 
   const handleAddDictWord = () => {
@@ -454,9 +499,58 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             )}
           </div>
 
+          {/* Aggiornamenti dell'applicazione */}
+          <div className="pt-2 border-t border-paper-250 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-paper-700 uppercase tracking-wider">
+              <Sparkles className="w-4 h-4 text-folia-700" />
+              <span>Aggiornamenti dell'applicazione</span>
+            </div>
+
+            <div className="p-4 bg-paper-100/70 border border-paper-200 rounded-xl space-y-3">
+              <label className="flex items-start gap-3 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={autoUpdateEnabled}
+                  onChange={(e) => handleToggleAutoUpdate(e.target.checked)}
+                  className="mt-0.5 rounded border-paper-300 text-folia-600 focus:ring-folia-500 w-4 h-4 cursor-pointer accent-folia-600"
+                />
+                <div className="text-xs">
+                  <span className="font-semibold text-paper-900 block">
+                    Aggiornamenti automatici
+                  </span>
+                  <span className="text-paper-600 leading-relaxed block mt-0.5">
+                    Verifica e scarica in background le nuove versioni. Quando un aggiornamento è pronto, Folia mostrerà una notifica per applicarlo.
+                  </span>
+                </div>
+              </label>
+
+              <div className="pt-2 border-t border-paper-200/80 flex items-center justify-between gap-3">
+                <span className="text-[11px] text-paper-500">
+                  Versione attuale: <strong className="text-paper-700">1.0.2</strong>
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCheckUpdatesManual}
+                  disabled={checkingUpdates}
+                  className="px-3 py-1.5 bg-paper-200 hover:bg-paper-250 text-paper-800 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${checkingUpdates ? 'animate-spin' : ''}`} />
+                  <span>{checkingUpdates ? 'Verifica in corso...' : 'Verifica ora'}</span>
+                </button>
+              </div>
+
+              {updateFeedback && (
+                <div className="p-2.5 rounded-lg bg-folia-50 border border-folia-200 text-folia-900 text-xs flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-folia-600 shrink-0" />
+                  <span>{updateFeedback}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Copyright Box in Settings */}
           <div className="pt-2 border-t border-paper-200 text-center text-[11px] text-paper-500">
-            <div>Folia v1.0.0 &bull; Tutti i diritti riservati sono di <strong>Marco Tamborrino, 2026</strong>.</div>
+            <div>Folia v1.0.2 &bull; Tutti i diritti riservati sono di <strong>Marco Tamborrino, 2026</strong>.</div>
           </div>
         </div>
 

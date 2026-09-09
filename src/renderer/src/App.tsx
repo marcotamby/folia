@@ -27,6 +27,7 @@ import { UnsavedChangesModal } from './components/modals/UnsavedChangesModal';
 import { MicrophoneSetupModal } from './components/sessions/MicrophoneSetupModal';
 import { MarkerEditModal } from './components/sessions/MarkerEditModal';
 import { WelcomeScreen } from './components/welcome/WelcomeScreen';
+import { UpdateNotification } from './components/common/UpdateNotification';
 import { PLOT_TEMPLATES } from './utils/plotTemplates';
 import { CheckCircle2, Save } from 'lucide-react';
 
@@ -1867,6 +1868,9 @@ ${formattedMarkers}`;
         onClose={() => setLiveMarkerToEdit(null)}
         t={t}
       />
+
+      {/* Global In-App Update Banner / Notification */}
+      <UpdateNotification />
     </div>
   );
 }

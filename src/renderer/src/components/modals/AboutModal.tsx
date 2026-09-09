@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, ShieldCheck, Heart, Info, UserCheck, HardDrive } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, ShieldCheck, Heart, Info, UserCheck, HardDrive, RefreshCw, CheckCircle2 } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
 
 interface AboutModalProps {
@@ -9,7 +9,33 @@ interface AboutModalProps {
 }
 
 export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) => {
+  const [isChecking, setIsChecking] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState<string | null>(null);
+
   if (!isOpen) return null;
+
+  const handleCheckUpdates = async () => {
+    setIsChecking(true);
+    setUpdateStatus(null);
+    const folia = (window as any).foliaAPI;
+    if (folia?.checkForUpdates) {
+      try {
+        const res = await folia.checkForUpdates();
+        if (res?.isDev) {
+          setUpdateStatus('Modalità dev: ultima versione attiva');
+        } else if (res?.success) {
+          setUpdateStatus('Sei all\'ultima versione o il download è in corso');
+        } else {
+          setUpdateStatus(res?.error || 'Nessun aggiornamento disponibile');
+        }
+      } catch (e: any) {
+        setUpdateStatus('Errore di connessione');
+      }
+    } else {
+      setUpdateStatus('Verifica non supportata');
+    }
+    setIsChecking(false);
+  };
 
   return (
     <div 
@@ -38,7 +64,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
           </div>
           <h2 className="font-brand font-bold text-2xl text-folia-950">Folia</h2>
           <p className="text-xs text-folia-700 font-medium tracking-wide uppercase mt-0.5">Suite di scrittura & worldbuilding</p>
-          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione 1.0.1 &bull; Aggiornato 03/09/2026</div>
+          <div className="text-[11px] text-folia-800 font-semibold mt-1">Versione 1.0.2 &bull; Aggiornato 09/09/2026</div>
         </div>
 
         {/* Content */}
@@ -66,6 +92,23 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) =>
             <p>
               Folia opera al 100% in locale sul tuo computer, senza tracciamento, cloud invasivi o telemetria esterna. I tuoi testi rimangono sempre tuoi.
             </p>
+          </div>
+
+          {/* Aggiornamenti */}
+          <div className="p-3 bg-folia-50/70 border border-folia-200 rounded-xl flex items-center justify-between gap-3">
+            <div className="text-[11px] text-paper-700">
+              <span className="font-semibold text-folia-950 block">Aggiornamenti</span>
+              <span className="text-paper-500">{updateStatus || 'Versione 1.0.2 attiva'}</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCheckUpdates}
+              disabled={isChecking}
+              className="px-3 py-1.5 rounded-lg bg-folia-700 hover:bg-folia-800 text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3 h-3 ${isChecking ? 'animate-spin' : ''}`} />
+              <span>{isChecking ? 'Verifica...' : 'Verifica ora'}</span>
+            </button>
           </div>
         </div>
 

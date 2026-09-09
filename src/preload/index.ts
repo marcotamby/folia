@@ -27,6 +27,18 @@ export interface FoliaAPI {
   onOpenFile: (callback: (payload: { filePath: string; data: any }) => void) => () => void;
   getMediaUrl: (filePath: string) => string;
   readRecordingBuffer: (filePath: string) => Promise<{ success: boolean; buffer?: ArrayBuffer; error?: string }>;
+  getAppVersion: () => Promise<string>;
+  getUpdateSettings: () => Promise<{ autoUpdateEnabled: boolean }>;
+  setUpdateSettings: (settings: { autoUpdateEnabled: boolean }) => Promise<{ success: boolean }>;
+  checkForUpdates: () => Promise<{ success: boolean; isDev?: boolean; updateInfo?: any; error?: string }>;
+  quitAndInstallUpdate: () => void;
+  onUpdateStatus: (callback: (payload: { 
+    status: 'checking' | 'available' | 'up-to-date' | 'downloading' | 'downloaded' | 'error'; 
+    version?: string; 
+    releaseNotes?: any; 
+    percent?: number; 
+    error?: string;
+  }) => void) => () => void;
 }
 
 let cachedInitialFile: { filePath?: string; data?: any } | null = null;
@@ -104,7 +116,19 @@ const api: FoliaAPI = {
     };
   },
   readRecordingBuffer: (filePath: string) =>
-    ipcRenderer.invoke('audio:readRecordingBuffer', filePath)
+    ipcRenderer.invoke('audio:readRecordingBuffer', filePath),
+  getAppVersion: () => ipcRenderer.invoke('app:getVersion'),
+  getUpdateSettings: () => ipcRenderer.invoke('updater:getSettings'),
+  setUpdateSettings: (settings: { autoUpdateEnabled: boolean }) => ipcRenderer.invoke('updater:setSettings', settings),
+  checkForUpdates: () => ipcRenderer.invoke('updater:checkForUpdates'),
+  quitAndInstallUpdate: () => ipcRenderer.invoke('updater:quitAndInstall'),
+  onUpdateStatus: (callback: (payload: any) => void) => {
+    const handler = (_: any, payload: any) => callback(payload);
+    ipcRenderer.on('updater:status', handler);
+    return () => {
+      ipcRenderer.removeListener('updater:status', handler);
+    };
+  }
 };
 
 contextBridge.exposeInMainWorld('foliaAPI', api);

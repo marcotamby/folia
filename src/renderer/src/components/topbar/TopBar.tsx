@@ -7,8 +7,7 @@ import {
   Maximize2, 
   Minimize2, 
   Minus, 
-  Plus,
-  Square, 
+  Plus, 
   X, 
   BookOpen, 
   Globe,
@@ -415,12 +414,16 @@ export const TopBar: React.FC<TopBarProps> = ({
             title={isMaximized ? "Ripristina giù" : "Ingrandisci"}
           >
             {isMaximized ? (
-              <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M3 5.5V3h7.5v7.5H8" />
-                <rect x="5.5" y="5.5" width="7.5" height="7.5" rx="0.5" />
+              /* Standard Windows Restore icon: front window bottom-left, back window top-right */
+              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <rect x="2.5" y="5.5" width="8" height="8" rx="0.5" />
+                <path d="M5.5 5.5V2.5h8v8h-3" strokeLinecap="square" />
               </svg>
             ) : (
-              <Square className="w-3 h-3" />
+              /* Standard Windows Maximize icon: crisp rectangle matching other controls */
+              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <rect x="2.5" y="2.5" width="11" height="11" rx="0.5" />
+              </svg>
             )}
           </button>
           <button

@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import * as fsSync from 'fs';
 import { pathToFileURL } from 'url';
+import { autoUpdater } from 'electron-updater';
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -637,6 +638,109 @@ function setupIpcHandlers() {
       return { success: false, error: err.message };
     }
   });
+
+  // Auto Updater IPC Handlers
+  ipcMain.handle('updater:getSettings', () => {
+    return loadAppSettings();
+  });
+
+  ipcMain.handle('updater:setSettings', (_, settings: { autoUpdateEnabled: boolean }) => {
+    saveAppSettings(settings);
+    return { success: true };
+  });
+
+  ipcMain.handle('updater:checkForUpdates', async () => {
+    if (isDev) {
+      return { success: false, isDev: true, message: 'La verifica automatica è attiva nell\'app installata.' };
+    }
+    try {
+      const result = await autoUpdater.checkForUpdates();
+      return { success: true, updateInfo: result?.updateInfo };
+    } catch (err: any) {
+      console.error('Check for updates error:', err);
+      return { success: false, error: err?.message || 'Errore durante la verifica degli aggiornamenti' };
+    }
+  });
+
+  ipcMain.handle('updater:quitAndInstall', () => {
+    autoUpdater.quitAndInstall();
+  });
+
+  ipcMain.handle('app:getVersion', () => {
+    return app.getVersion();
+  });
+}
+
+function getAppSettingsPath() {
+  return path.join(app.getPath('userData'), 'folia-app-settings.json');
+}
+
+function loadAppSettings(): { autoUpdateEnabled: boolean } {
+  try {
+    const p = getAppSettingsPath();
+    if (fsSync.existsSync(p)) {
+      const data = JSON.parse(fsSync.readFileSync(p, 'utf-8'));
+      return { autoUpdateEnabled: data.autoUpdateEnabled !== false };
+    }
+  } catch {}
+  return { autoUpdateEnabled: true };
+}
+
+function saveAppSettings(settings: { autoUpdateEnabled: boolean }) {
+  try {
+    const p = getAppSettingsPath();
+    fsSync.writeFileSync(p, JSON.stringify(settings, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Failed to save app settings:', err);
+  }
+}
+
+function setupAutoUpdater() {
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  autoUpdater.on('checking-for-update', () => {
+    mainWindow?.webContents.send('updater:status', { status: 'checking' });
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    mainWindow?.webContents.send('updater:status', { 
+      status: 'available', 
+      version: info.version,
+      releaseNotes: info.releaseNotes 
+    });
+  });
+
+  autoUpdater.on('update-not-available', (info) => {
+    mainWindow?.webContents.send('updater:status', { 
+      status: 'up-to-date', 
+      version: app.getVersion() 
+    });
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('Auto-updater error:', err);
+    mainWindow?.webContents.send('updater:status', { 
+      status: 'error', 
+      error: err?.message || 'Errore durante il controllo degli aggiornamenti' 
+    });
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    mainWindow?.webContents.send('updater:status', { 
+      status: 'downloading', 
+      percent: Math.round(progressObj.percent),
+      transferred: progressObj.transferred,
+      total: progressObj.total
+    });
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    mainWindow?.webContents.send('updater:status', { 
+      status: 'downloaded', 
+      version: info.version 
+    });
+  });
 }
 
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
@@ -719,8 +823,19 @@ if (!gotSingleInstanceLock) {
   });
 
   setupIpcHandlers();
+  setupAutoUpdater();
   createSplashWindow();
   createMainWindow();
+
+  // Automatic check for updates if enabled and not in development
+  const settings = loadAppSettings();
+  if (settings.autoUpdateEnabled && !isDev) {
+    setTimeout(() => {
+      autoUpdater.checkForUpdates().catch((err) => {
+        console.error('Silent auto update check error:', err);
+      });
+    }, 8000);
+  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
