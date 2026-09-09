@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=1.0.7">
+  <link rel="stylesheet" href="style.css?v=1.0.9">
 </head>
 <body>
 
@@ -61,41 +61,41 @@
         </button>
       </div>
     </div>
-
-    <!-- Mobile Drawer & Backdrop -->
-    <div class="nav-mobile-backdrop" id="nav-mobile-backdrop"></div>
-    <div class="nav-mobile-drawer" id="nav-mobile-drawer" aria-hidden="true">
-      <div class="nav-mobile-header">
-        <div class="nav-brand">
-          <img src="assets/logo.png" alt="Folia" class="nav-logo">
-          <span class="nav-title">Folia</span>
-        </div>
-        <button class="nav-mobile-close" id="nav-mobile-close" aria-label="Chiudi menu">✕</button>
-      </div>
-
-      <ul class="nav-mobile-links">
-        <li><a href="#nicchie" class="nav-mobile-link"><span>Per chi è</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#anteprima" class="nav-mobile-link"><span>Applicazione</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#features" class="nav-mobile-link"><span>Funzionalità</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#privacy" class="nav-mobile-link"><span>Local-first &amp; Privacy</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#recensioni" class="nav-mobile-link"><span>Recensioni</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#supporta" class="nav-mobile-link"><span>Sostieni il Progetto</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#download" class="nav-mobile-link"><span>Download per Windows</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-        <li><a href="#faq" class="nav-mobile-link"><span>Domande Frequenti</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
-      </ul>
-
-      <div class="nav-mobile-footer">
-        <a href="Folia-Installer-Setup-1.0.1.exe" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;" download>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          <span>Scarica gratis (v1.0.1)</span>
-        </a>
-        <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-subtle" style="width: 100%; justify-content: center;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
-          <span>Sostieni su Ko-fi ↗</span>
-        </a>
-      </div>
-    </div>
   </header>
+
+  <!-- Mobile Drawer & Backdrop (outside header for proper viewport-relative fixed positioning) -->
+  <div class="nav-mobile-backdrop" id="nav-mobile-backdrop"></div>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer" aria-hidden="true">
+    <div class="nav-mobile-header">
+      <div class="nav-brand">
+        <img src="assets/logo.png" alt="Folia" class="nav-logo">
+        <span class="nav-title">Folia</span>
+      </div>
+      <button class="nav-mobile-close" id="nav-mobile-close" aria-label="Chiudi menu">✕</button>
+    </div>
+
+    <ul class="nav-mobile-links">
+      <li><a href="#nicchie" class="nav-mobile-link"><span>Per chi è</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#anteprima" class="nav-mobile-link"><span>Applicazione</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#features" class="nav-mobile-link"><span>Funzionalità</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#privacy" class="nav-mobile-link"><span>Local-first &amp; Privacy</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#recensioni" class="nav-mobile-link"><span>Recensioni</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#supporta" class="nav-mobile-link"><span>Sostieni il Progetto</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#download" class="nav-mobile-link"><span>Download per Windows</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="#faq" class="nav-mobile-link"><span>Domande Frequenti</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+    </ul>
+
+    <div class="nav-mobile-footer">
+      <a href="Folia-Installer-Setup-1.0.1.exe" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Scarica gratis (v1.0.1)</span>
+      </a>
+      <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-subtle" style="width: 100%; justify-content: center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+        <span>Sostieni su Ko-fi ↗</span>
+      </a>
+    </div>
+  </div>
 
   <!-- Hero Section (Clean & Literary) -->
   <section class="hero">
@@ -424,6 +424,10 @@
           <span class="section-label" data-content-key="preview.section_label">Interfaccia Reale al 100%</span>
           <h3 class="sc-main-heading" data-content-key="preview.title">Folia in azione: catturato direttamente dal programma</h3>
         </div>
+        <div class="slider-header-hint">
+          <span class="slider-hint-text">Scorri le schermate</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
       </div>
 
       <!-- Elegant Desktop Slider Window -->
@@ -443,18 +447,26 @@
             <span class="slider-counter-pill" id="slider-counter-display">1 / 4</span>
           </div>
 
-          <div class="topbar-spacer" style="width: 70px;"></div>
+          <!-- Slider Topbar Navigation Arrows -->
+          <div class="slider-topbar-controls">
+            <button class="slider-nav-btn" id="slider-btn-prev" aria-label="Schermata precedente" title="Precedente">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="slider-nav-btn" id="slider-btn-next" aria-label="Schermata successiva" title="Successiva">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
         </div>
 
         <!-- Slider Viewport (Overflow Hidden) -->
         <div class="slider-viewport" id="slider-viewport">
           
           <!-- Floating side navigation arrows -->
-          <button class="slider-floating-arrow arrow-prev" id="float-btn-prev" aria-label="Precedente" title="Precedente">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <button class="slider-floating-arrow arrow-prev" id="float-btn-prev" aria-label="Schermata precedente" title="Precedente">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
           </button>
-          <button class="slider-floating-arrow arrow-next" id="float-btn-next" aria-label="Successiva" title="Successiva">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <button class="slider-floating-arrow arrow-next" id="float-btn-next" aria-label="Schermata successiva" title="Successiva">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
 
           <!-- Sliding Track -->
@@ -1031,76 +1043,132 @@
     <img id="lightbox-target-img" src="" alt="Folia Schermata Ingrandita">
   </div>
 
-  <!-- Modal: Lascia una recensione (Google Auth) -->
+  <!-- Modal: Lascia una recensione (Folia Software Premium Style) -->
   <div class="review-modal-overlay" id="review-modal-overlay" onclick="closeReviewModal(event)">
     <div class="review-modal-card" onclick="event.stopPropagation()">
-      <button class="review-modal-close" onclick="closeReviewModal()" aria-label="Chiudi" title="Chiudi">✕</button>
+      <!-- Folia Header Bar -->
+      <div class="review-modal-header">
+        <div class="review-modal-header-left">
+          <div class="review-modal-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          </div>
+          <div>
+            <h3 class="review-modal-title">Lascia una recensione</h3>
+            <p class="review-modal-subtitle">Condividi la tua esperienza con Folia</p>
+          </div>
+        </div>
+        <button class="review-modal-close-btn" onclick="closeReviewModal()" aria-label="Chiudi finestra" title="Chiudi">✕</button>
+      </div>
 
       <!-- Direct Review Form -->
-      <div id="review-step-form">
-        <div style="text-align: center; margin-bottom: 1.4rem;">
-          <div class="review-modal-icon" style="margin: 0 auto 0.6rem;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-          </div>
-          <h3 style="font-size: 1.3rem; margin-bottom: 0.35rem;">Lascia la tua recensione per Folia</h3>
-          <p class="review-modal-desc" style="margin-bottom: 0;">
-            Condividi le tue impressioni per aiutare altri autori e far crescere il progetto.
-          </p>
-        </div>
-
-        <form id="form-submit-review">
+      <form id="form-submit-review">
+        <div class="review-modal-body">
           <!-- Author Name -->
           <div class="form-group">
-            <label class="form-label" for="input-review-name">Il tuo Nome o Pseudonimo:</label>
-            <input type="text" id="input-review-name" class="form-input" placeholder="Es. Marco T., Elena B., DungeonMaster" required>
+            <label class="form-label" for="input-review-name">Il tuo Nome o Pseudonimo *</label>
+            <input type="text" id="input-review-name" class="form-input" placeholder="es. Marco T., Elena B., DungeonMaster" required>
           </div>
+
           <!-- Star Rating Selector -->
           <div class="form-group">
-            <label class="form-label">La tua valutazione:</label>
-            <div class="star-rating-picker" id="star-rating-picker">
-              <span class="star-btn active" data-rating="1">★</span>
-              <span class="star-btn active" data-rating="2">★</span>
-              <span class="star-btn active" data-rating="3">★</span>
-              <span class="star-btn active" data-rating="4">★</span>
-              <span class="star-btn active" data-rating="5">★</span>
-              <input type="hidden" id="input-review-rating" value="5">
+            <div class="form-label-row">
+              <label class="form-label">La tua valutazione *</label>
+              <span class="star-rating-text" id="star-rating-text">5 su 5 — Eccellente</span>
+            </div>
+            <div class="star-rating-box">
+              <div class="star-rating-picker" id="star-rating-picker">
+                <span class="star-btn active" data-rating="1" title="1 stella">★</span>
+                <span class="star-btn active" data-rating="2" title="2 stelle">★</span>
+                <span class="star-btn active" data-rating="3" title="3 stelle">★</span>
+                <span class="star-btn active" data-rating="4" title="4 stelle">★</span>
+                <span class="star-btn active" data-rating="5" title="5 stelle">★</span>
+                <input type="hidden" id="input-review-rating" value="5">
+              </div>
             </div>
           </div>
 
-          <!-- Role Selector -->
+          <!-- Role Selector (Custom Folia Select) -->
           <div class="form-group">
-            <label class="form-label" for="input-review-role">Cosa scrivi principalmente?</label>
-            <select id="input-review-role" class="form-select" required>
-              <option value="Romanziere &amp; Autore">Romanziere &amp; Autore</option>
-              <option value="Autore Fantasy &amp; Worldbuilding">Autore Fantasy &amp; Worldbuilding</option>
-              <option value="Game Master &amp; Giocatore GDR (D&amp;D 5e)">Game Master &amp; Giocatore GDR (D&amp;D 5e)</option>
-              <option value="Scrittore di Gialli &amp; Sceneggiatore">Scrittore di Gialli &amp; Sceneggiatore</option>
-              <option value="Self-Publisher &amp; Saggista">Self-Publisher &amp; Saggista</option>
-            </select>
+            <label class="form-label" id="label-review-role">Cosa scrivi principalmente? *</label>
+            <div class="folia-custom-select-wrap" id="folia-role-dropdown-wrap">
+              <button type="button" class="folia-custom-select-trigger" id="role-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="role-trigger-label" id="role-trigger-label">
+                  <span class="role-trigger-icon">📖</span>
+                  <span class="role-trigger-text">Romanziere &amp; Autore</span>
+                </span>
+                <svg class="role-trigger-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <div class="folia-custom-select-menu" id="role-select-menu" role="listbox">
+                <div class="folia-select-option active" data-value="Romanziere &amp; Autore" data-icon="📖" role="option" aria-selected="true">
+                  <span class="opt-icon">📖</span>
+                  <div class="opt-text-wrap">
+                    <span class="opt-title">Romanziere &amp; Autore</span>
+                    <span class="opt-desc">Narrativa, romanzi, saggi e racconti</span>
+                  </div>
+                  <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div class="folia-select-option" data-value="Autore Fantasy &amp; Worldbuilding" data-icon="🗺️" role="option">
+                  <span class="opt-icon">🗺️</span>
+                  <div class="opt-text-wrap">
+                    <span class="opt-title">Autore Fantasy &amp; Worldbuilding</span>
+                    <span class="opt-desc">Mappe geografiche, ambientazioni e fazioni</span>
+                  </div>
+                  <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div class="folia-select-option" data-value="Game Master &amp; Giocatore GDR (D&amp;D 5e)" data-icon="🎲" role="option">
+                  <span class="opt-icon">🎲</span>
+                  <div class="opt-text-wrap">
+                    <span class="opt-title">Game Master &amp; GDR (D&amp;D 5e)</span>
+                    <span class="opt-desc">Campagne, schede PNG e mostri D&amp;D 5e</span>
+                  </div>
+                  <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div class="folia-select-option" data-value="Scrittore di Gialli &amp; Sceneggiatore" data-icon="🔍" role="option">
+                  <span class="opt-icon">🔍</span>
+                  <div class="opt-text-wrap">
+                    <span class="opt-title">Scrittore di Gialli &amp; Sceneggiatore</span>
+                    <span class="opt-desc">Intrighi, indizi, moventi e scalette</span>
+                  </div>
+                  <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div class="folia-select-option" data-value="Self-Publisher &amp; Saggista" data-icon="✒️" role="option">
+                  <span class="opt-icon">✒️</span>
+                  <div class="opt-text-wrap">
+                    <span class="opt-title">Self-Publisher &amp; Saggista</span>
+                    <span class="opt-desc">Impaginazione, norme editoriali e cartelle</span>
+                  </div>
+                  <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+              </div>
+              <input type="hidden" id="input-review-role" name="role" value="Romanziere &amp; Autore">
+            </div>
           </div>
 
           <!-- Review Heading -->
           <div class="form-group">
-            <label class="form-label" for="input-review-title">Titolo della recensione:</label>
-            <input type="text" id="input-review-title" class="form-input" placeholder="Es. L'editor che stavo cercando da anni..." required>
+            <label class="form-label" for="input-review-title">Titolo della recensione *</label>
+            <input type="text" id="input-review-title" class="form-input" placeholder="es. L'ambiente di scrittura che cercavo da anni" required>
           </div>
 
           <!-- Review Text -->
           <div class="form-group">
-            <label class="form-label" for="input-review-text">La tua esperienza con Folia:</label>
-            <textarea id="input-review-text" class="form-textarea" rows="4" placeholder="Cosa ti piace di più? Come ha cambiato il tuo modo di scrivere o preparare sessioni?" required></textarea>
+            <label class="form-label" for="input-review-text">La tua esperienza con Folia *</label>
+            <textarea id="input-review-text" class="form-textarea" rows="3" placeholder="Cosa ti piace di più? Come ha cambiato il tuo modo di scrivere o preparare sessioni?" required></textarea>
           </div>
+        </div>
 
-          <div class="form-actions">
-            <button type="button" class="btn btn-subtle" onclick="closeReviewModal()">Annulla</button>
-            <button type="submit" class="btn btn-primary" id="btn-submit-review">Pubblica Recensione</button>
-          </div>
-        </form>
-      </div>
-
+        <!-- Folia Footer Actions -->
+        <div class="review-modal-footer">
+          <button type="button" class="btn-folia-cancel" onclick="closeReviewModal()">Annulla</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-review">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Pubblica Recensione</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-  <script src="app.js?v=1.0.7"></script>
-  <script src="content-manager.js?v=1.0.7" defer></script>
+  <script src="app.js?v=1.0.9"></script>
+  <script src="content-manager.js?v=1.0.9" defer></script>
 </body>
 </html>

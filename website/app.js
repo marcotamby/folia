@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (navToggle) {
     navToggle.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       const isOpen = navDrawer && navDrawer.classList.contains('active');
       if (isOpen) {
@@ -45,16 +46,33 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (navClose) {
-    navClose.addEventListener('click', closeMobileNav);
+    navClose.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    });
   }
 
   if (navBackdrop) {
-    navBackdrop.addEventListener('click', closeMobileNav);
+    navBackdrop.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    });
   }
 
   mobileLinks.forEach((link) => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
       closeMobileNav();
+      if (href && href.startsWith('#')) {
+        const targetId = href.substring(1);
+        const targetElem = document.getElementById(targetId);
+        if (targetElem) {
+          e.preventDefault();
+          setTimeout(() => {
+            targetElem.scrollIntoView({ behavior: 'smooth' });
+          }, 120);
+        }
+      }
     });
   });
 
@@ -272,19 +290,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // Touch Swipe Support for Mobile/Trackpad
   let touchStartX = 0;
   let touchEndX = 0;
+  let touchStartY = 0;
+  let touchEndY = 0;
 
   if (sliderViewport) {
     sliderViewport.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+      }
     }, { passive: true });
 
     sliderViewport.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const swipeThreshold = 40;
-      if (touchEndX < touchStartX - swipeThreshold) {
-        goToSlide(currentSlide + 1);
-      } else if (touchEndX > touchStartX + swipeThreshold) {
-        goToSlide(currentSlide - 1);
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchEndX = e.changedTouches[0].clientX;
+        touchEndY = e.changedTouches[0].clientY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+        const swipeThreshold = 35;
+        // Verify horizontal swipe dominates vertical scrolling
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+          if (diffX < 0) {
+            goToSlide(currentSlide + 1);
+          } else {
+            goToSlide(currentSlide - 1);
+          }
+        }
       }
     }, { passive: true });
   }
@@ -393,19 +424,91 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Star Picker interaction
+  // Star Picker interaction with feedback label
+  const ratingLabels = {
+    1: '1 su 5 — Da migliorare',
+    2: '2 su 5 — Discreto',
+    3: '3 su 5 — Buono',
+    4: '4 su 5 — Molto buono',
+    5: '5 su 5 — Eccellente'
+  };
+  const starRatingText = document.getElementById('star-rating-text');
+
   if (starPicker) {
     const stars = starPicker.querySelectorAll('.star-btn');
     stars.forEach(star => {
       star.addEventListener('click', () => {
         const rating = parseInt(star.getAttribute('data-rating'), 10);
         if (inputRating) inputRating.value = rating;
+        if (starRatingText && ratingLabels[rating]) {
+          starRatingText.textContent = ratingLabels[rating];
+        }
         stars.forEach(s => {
           const r = parseInt(s.getAttribute('data-rating'), 10);
           if (r <= rating) s.classList.add('active');
           else s.classList.remove('active');
         });
       });
+    });
+  }
+
+  // Custom Folia Role Selector Dropdown
+  const roleTrigger = document.getElementById('role-select-trigger');
+  const roleMenu = document.getElementById('role-select-menu');
+  const roleTriggerLabel = document.getElementById('role-trigger-label');
+  const inputRole = document.getElementById('input-review-role');
+  const roleOptions = document.querySelectorAll('.folia-select-option');
+
+  if (roleTrigger && roleMenu) {
+    roleTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = roleMenu.classList.contains('open');
+      if (isOpen) {
+        roleMenu.classList.remove('open');
+        roleTrigger.classList.remove('active');
+        roleTrigger.setAttribute('aria-expanded', 'false');
+      } else {
+        roleMenu.classList.add('open');
+        roleTrigger.classList.add('active');
+        roleTrigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    roleOptions.forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = opt.getAttribute('data-value');
+        const icon = opt.getAttribute('data-icon') || '📖';
+
+        if (inputRole) inputRole.value = val;
+
+        if (roleTriggerLabel) {
+          roleTriggerLabel.innerHTML = `
+            <span class="role-trigger-icon">${icon}</span>
+            <span class="role-trigger-text">${val}</span>
+          `;
+        }
+
+        roleOptions.forEach(o => {
+          o.classList.remove('active');
+          o.setAttribute('aria-selected', 'false');
+        });
+        opt.classList.add('active');
+        opt.setAttribute('aria-selected', 'true');
+
+        roleMenu.classList.remove('open');
+        roleTrigger.classList.remove('active');
+        roleTrigger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      if (!roleTrigger.contains(e.target) && !roleMenu.contains(e.target)) {
+        roleMenu.classList.remove('open');
+        roleTrigger.classList.remove('active');
+        roleTrigger.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
