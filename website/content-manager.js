@@ -112,7 +112,12 @@
   function applyContent(data) {
     document.querySelectorAll('[data-content-key], [data-content-html]').forEach((el) => {
       const key = el.getAttribute('data-content-key') || el.getAttribute('data-content-html');
-      if (key && (key.startsWith('auto.footer.') || key === 'footer.link_github')) {
+      if (key && (
+        key.includes('footer.a_') || 
+        key.includes('link_github') || 
+        key.startsWith('sections.footer.') || 
+        key.startsWith('auto.footer.')
+      )) {
         return;
       }
       let val = getNestedValue(data, key);

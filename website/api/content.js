@@ -87,7 +87,12 @@ module.exports = async function handler(req, res) {
           const contentTree = {};
           for (const row of data) {
             let val = row.value_it;
-            if (row.content_key && (row.content_key.startsWith('auto.footer.') || row.content_key === 'footer.link_github')) {
+            if (row.content_key && (
+              row.content_key.includes('footer.a_') || 
+              row.content_key.includes('link_github') || 
+              row.content_key.startsWith('sections.footer.') || 
+              row.content_key.startsWith('auto.footer.')
+            )) {
               supabase.from('site_contents').delete().eq('content_key', row.content_key).then(() => {}).catch(() => {});
               continue;
             }
