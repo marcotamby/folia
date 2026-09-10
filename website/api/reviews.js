@@ -27,12 +27,26 @@ function getFallbackReviews() {
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const supabase = getSupabaseClient();
+
+  if (req.method === 'DELETE') {
+    const id = req.query?.id || (req.body && req.body.id);
+    if (supabase) {
+      try {
+        if (id) {
+          await supabase.from('site_reviews').delete().eq('id', id);
+        } else {
+          await supabase.from('site_reviews').delete().or('name.ilike.test,text.ilike.test');
+        }
+      } catch (e) {}
+    }
+    return res.status(200).json({ success: true, message: 'Recensione eliminata' });
+  }
 
   if (req.method === 'GET') {
     if (supabase) {
@@ -43,8 +57,20 @@ module.exports = async function handler(req, res) {
           .order('created_at', { ascending: false });
 
         if (!error && data) {
-          res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate=60');
-          return res.status(200).json(data);
+          const cleanData = [];
+          for (const item of data) {
+            const isTest = (item.name && item.name.trim().toLowerCase() === 'test') ||
+                           (item.text && item.text.trim().toLowerCase() === 'test');
+            if (isTest) {
+              if (item.id) {
+                supabase.from('site_reviews').delete().eq('id', item.id).then(() => {}).catch(() => {});
+              }
+            } else {
+              cleanData.push(item);
+            }
+          }
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          return res.status(200).json(cleanData);
         }
       } catch (e) {}
     }

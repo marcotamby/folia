@@ -629,19 +629,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let cached = [];
     try {
       cached = JSON.parse(localStorage.getItem('folia_local_reviews') || '[]');
+      // Filter out test reviews from localStorage
+      cached = cached.filter(c => {
+        const isTest = (c.name && c.name.toLowerCase() === 'test') || (c.text && c.text.toLowerCase() === 'test');
+        return !isTest;
+      });
+      localStorage.setItem('folia_local_reviews', JSON.stringify(cached));
     } catch (e) {}
 
-    fetch('/api/reviews')
+    fetch('/api/reviews', { cache: 'no-store' })
       .then(res => res.json())
       .then(serverList => {
         const list = Array.isArray(serverList) ? serverList : [];
-        const all = [...cached];
-        list.forEach(item => {
-          if (!all.some(c => c.id === item.id || (c.name === item.name && c.text === item.text))) {
-            all.push(item);
-          }
-        });
-        setupReviewsDisplay(all);
+        if (list.length > 0) {
+          setupReviewsDisplay(list);
+          try {
+            localStorage.setItem('folia_local_reviews', JSON.stringify(list));
+          } catch (e) {}
+        } else {
+          // If server list is empty, display empty list and clear local cache
+          try {
+            localStorage.removeItem('folia_local_reviews');
+          } catch (e) {}
+          setupReviewsDisplay([]);
+        }
       })
       .catch(() => {
         setupReviewsDisplay(cached);
