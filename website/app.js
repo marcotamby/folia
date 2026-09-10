@@ -752,11 +752,101 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      window.closeFoliaLightbox();
-      window.closeReviewModal();
+  // =========================================================================
+  // 10. Mailto / Email Contact Handler with Clipboard Copy & Toast Feedback
+  // =========================================================================
+  function setupMailtoHandlers() {
+    let toastTimeout = null;
+
+    function showEmailToast(email) {
+      let toast = document.getElementById('folia-email-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'folia-email-toast';
+        toast.className = 'folia-action-toast';
+        document.body.appendChild(toast);
+      }
+
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
+      const outlookUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(email)}`;
+
+      toast.innerHTML = `
+        <div class="folia-toast-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="folia-toast-content">
+          <div class="folia-toast-title">Email copiata negli appunti!</div>
+          <div class="folia-toast-subtitle">${email} · Apertura client email...</div>
+        </div>
+        <div class="folia-toast-actions">
+          <a href="${gmailUrl}" target="_blank" rel="noopener noreferrer" class="folia-toast-btn" title="Componi email con Gmail nel browser">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            <span>Gmail</span>
+          </a>
+          <a href="${outlookUrl}" target="_blank" rel="noopener noreferrer" class="folia-toast-btn" title="Componi email con Outlook Web">
+            <span>Outlook</span>
+          </a>
+          <button type="button" class="folia-toast-close" title="Chiudi notifica">✕</button>
+        </div>
+      `;
+
+      toast.querySelector('.folia-toast-close')?.addEventListener('click', () => {
+        toast.classList.remove('active');
+        if (toastTimeout) clearTimeout(toastTimeout);
+      });
+
+      // Force reflow and show
+      void toast.offsetHeight;
+      toast.classList.add('active');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 5500);
     }
-  });
+
+    document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        // Allow CMS editing if active
+        if (document.body.classList.contains('folia-cms-edit-mode')) return;
+
+        const href = link.getAttribute('href') || 'mailto:info@folia-suite.com';
+        const email = href.replace(/^mailto:/i, '').split('?')[0].trim() || 'info@folia-suite.com';
+
+        // 1. Copy to clipboard immediately
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).catch(() => {});
+        } else {
+          try {
+            const temp = document.createElement('textarea');
+            temp.value = email;
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+          } catch (err) {}
+        }
+
+        // 2. Visual feedback on the element itself
+        link.classList.add('copied');
+        setTimeout(() => link.classList.remove('copied'), 2500);
+
+        // 3. Show sleek toast with webmail options
+        showEmailToast(email);
+
+        // 4. Trigger mailto protocol handler
+        setTimeout(() => {
+          try {
+            window.location.href = href;
+          } catch (err) {}
+        }, 120);
+      });
+    });
+  }
+
+  setupMailtoHandlers();
 
 });
+

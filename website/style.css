@@ -2099,6 +2099,8 @@ p {
   background: var(--bg-subtle);
   margin-top: 5rem;
   font-size: 0.88rem;
+  position: relative;
+  z-index: 10;
 }
 
 .footer-inner {
@@ -2123,16 +2125,193 @@ p {
 
 .footer-nav {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
 }
 
 .footer-nav a {
   color: var(--text-secondary);
   text-decoration: none;
+  cursor: pointer;
+  transition: color 0.18s ease;
 }
 
 .footer-nav a:hover {
   color: var(--text-main);
+}
+
+.footer-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.footer-email-link:hover {
+  color: var(--brand-green) !important;
+}
+
+.footer-email-link svg {
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.footer-email-link:hover svg {
+  transform: translateY(-1px);
+}
+
+.footer-email-link .copy-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(118, 181, 131, 0.15);
+  color: var(--brand-green);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.footer-email-link.copied .copy-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   Folia Action Toast (Email Copied & Direct Actions)
+   ========================================================================== */
+.folia-action-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background: #1B2B20;
+  color: #FFFFFF;
+  border: 1px solid rgba(118, 181, 131, 0.35);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 14px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 999999;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0.25s ease;
+  max-width: 92vw;
+  width: auto;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+}
+
+.folia-action-toast.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.folia-toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(118, 181, 131, 0.22);
+  color: #76B583;
+  flex-shrink: 0;
+}
+
+.folia-toast-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.folia-toast-title {
+  font-weight: 600;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.25;
+}
+
+.folia-toast-subtitle {
+  font-size: 0.78rem;
+  color: #A3B8A8;
+}
+
+.folia-toast-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 6px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding-left: 12px;
+}
+
+.folia-toast-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.folia-toast-btn:hover {
+  background: #76B583;
+  color: #0E1A11;
+  border-color: #76B583;
+}
+
+.folia-toast-close {
+  background: none;
+  border: none;
+  color: #A3B8A8;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  border-radius: 4px;
+  margin-left: 4px;
+  transition: color 0.15s ease;
+}
+
+.folia-toast-close:hover {
+  color: #FFFFFF;
+}
+
+@media (max-width: 640px) {
+  .folia-action-toast {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    bottom: 16px;
+    width: 92vw;
+  }
+  .folia-toast-actions {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 }
 
 /* Responsive */

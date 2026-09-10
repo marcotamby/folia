@@ -131,6 +131,13 @@
         } else {
           el.innerHTML = val;
         }
+
+        // If this element is or is inside a mailto link, keep href updated
+        const parentMailLink = el.closest('a[href^="mailto:"]') || (el.tagName === 'A' && el.getAttribute('href')?.startsWith('mailto:') ? el : null);
+        if (parentMailLink && val.includes('@')) {
+          const cleanEmail = val.replace(/<[^>]+>/g, '').trim();
+          parentMailLink.setAttribute('href', `mailto:${cleanEmail}`);
+        }
       }
     });
   }

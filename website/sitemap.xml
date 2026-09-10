@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://folia-suite.com/</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://folia-suite.com/assets/logo.png</image:loc>
+      <image:title>Folia — Suite di Scrittura e Worldbuilding</image:title>
+      <image:caption>Logo ufficiale dell'applicazione desktop Folia per Windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://folia-suite.com/assets/screenshots/editor_real.png</image:loc>
+      <image:title>Editor di Scrittura Folia con Norme Editoriali</image:title>
+      <image:caption>Interfaccia di scrittura con cartelle editoriali da 1800 battute, formato romanzo 14x21 e modalità focus</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://folia-suite.com/assets/screenshots/mappe_real.png</image:loc>
+      <image:title>Mappe Geografiche Interattive e Atlante di Worldbuilding</image:title>
+      <image:caption>Modulo di visualizzazione mappe con zoom fluido, pin georeferenziati e collegamenti wiki alle schede lore</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://folia-suite.com/assets/screenshots/personaggi_real.png</image:loc>
+      <image:title>Schede Psicologiche dei Personaggi</image:title>
+      <image:caption>Gestione tridimensionale dei personaggi: obiettivo, bisogno interiore, difetto fatale e relazioni</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://folia-suite.com/assets/screenshots/dnd_real.png</image:loc>
+      <image:title>Schede Personaggio e Mostri D&amp;D 5e / TTRPG</image:title>
+      <image:caption>Supporto nativo per Game Master e giocatori di ruolo con caratteristiche, slot incantesimi e Schermo Master</image:caption>
+    </image:image>
+  </url>
+</urlset>

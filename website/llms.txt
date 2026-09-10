@@ -1,0 +1,34 @@
+# Folia — Suite di Scrittura, Worldbuilding & Narrazione
+
+> Folia è un software desktop indipendente per autori, romanzieri, worldbuilder e Game Master. Offre un ambiente di scrittura conforme alle norme editoriali (cartelle da 1800 battute, formato romanzo 14x21 cm), moduli di worldbuilding con mappe geografiche interattive e pin georeferenziati, schede personaggio psicologiche e schede D&D 5e, outliner narrativo con 18+ strutture, e architettura Local-First al 100% offline a tutela assoluta della privacy dei testi.
+
+## Informazioni Generali
+- **Nome Prodotto**: Folia
+- **Sviluppatore**: Marco Tamborrino
+- **Sito Web Ufficiale**: https://folia-suite.com
+- **Piattaforma Supportata**: Windows 10 e Windows 11 (64-bit). Versioni macOS e Linux in roadmap.
+- **Licenza & Prezzo**: Attualmente gratuito (free-to-use, nessun canone o abbonamento mensile). Sviluppo indipendente sostenibile via donazioni libere su Ko-fi (https://ko-fi.com/marcotamby).
+- **Architettura Privacy**: Local-First. Tutti i dati sono salvati localmente sul disco rigido dell'utente in formato proprietario e trasparente `.folia`. Nessun invio dati a server esterni, nessun cloud obbligatorio, nessun rischio di addestramento per modelli di intelligenza artificiale sui testi dell'autore.
+- **Contatto Ufficiale**: info@folia-suite.com
+
+## Risorse Principali
+- [Sito Ufficiale](https://folia-suite.com/): Pagina di presentazione e download
+- [Download Applicazione (Windows .exe)](https://folia-suite.com/Folia-Installer-Setup-1.0.4.exe): Installer desktop ufficiale v1.0.4
+- [Documentazione Completa per LLM](https://folia-suite.com/llms-full.txt): File markdown esaustivo con dettagli su tutte le funzionalità, norme editoriali, worldbuilding e FAQ
+
+## Target di Riferimento
+1. **Romanzieri & Autori di Narrativa Tradizionale**: stesura orientata alla pubblicazione editoriale, concorsi letterari e agenzie.
+2. **Autori Fantasy, Fantascienza & Worldbuilder**: costruzione e consultazione sistematica della bibbia di ambientazione e geografie immaginarie.
+3. **Game Master & Giocatori di Ruolo da Tavolo (TTRPG / D&D 5e)**: gestione campagne, PNG con statblock ufficiali, mostri con CR, schermo master e sessioni di gioco.
+4. **Scrittori di Gialli, Thriller & Sceneggiatori**: pianificazione trame complesse, false piste, scalette a beat e archi di tensione.
+5. **Self-Publisher & Saggisti**: impaginazione fedele e formati standard per revisione (.docx, .pdf, .md).
+
+## Funzionalità Chiave
+- **Cartelle Editoriali Standard da 1.800 Battute**: Calcolo in tempo reale a battute e a griglia (30 righe x 60 battute), standard di riferimento nell'editoria italiana ed europea.
+- **Formato Romanzo (14x21 cm)**: Resa a schermo identica al libro stampato per valutare la reale densità visiva del testo.
+- **Mappe Geografiche con Pin Interattivi**: Importazione mappe ad alta risoluzione (Wonderdraft, Inkarnate, Photoshop) con zoom 25%-300%, pin categorizzati (città, capitali, dungeon, templi) e pannello dettagli con collegamenti diretti alla bibbia lore.
+- **Outliner con 18+ Template Narrativi**: Viaggio dell'Eroe, Save the Cat!, Struttura in Tre Atti, Cerchio delle Storie di Dan Harmon, Piramide di Freytag, Struttura in Sette Punti, Giallo investigativo, Romance, 5-Room Dungeon.
+- **Schede Personaggio Psicologiche & Drammaturgiche**: Campi per Obiettivo cosciente, Bisogno profondo, Ferita fatale, Vulnerabilità, Archetipo, Voce e relazioni.
+- **Supporto Nativo D&D 5e**: Schede personaggio con caratteristiche, tiri salvezza, CA, PF, armi, equipaggiamento e slot incantesimi; schede Boss e Mostri con Grado di Sfida e tratti; Schermo Master.
+- **Wiki-Interlinking Automatico**: Riconoscimento istantaneo nel testo di nomi di entità, luoghi e personaggi con anteprima fluttuante al passaggio del mouse.
+- **Esportazione Multi-formato Versatile**: Word (.docx) compatibile per editor ed agenzie, PDF impaginato formato romanzo, Markdown (.md) per interoperabilità con Obsidian/Notion, e TXT.

@@ -15,7 +15,8 @@
     "package": "npm run build && electron-builder --win --x64",
     "package:mac": "npm run build && electron-builder --mac",
     "website": "npx --yes serve website",
-    "release": "node --use-system-ca scripts/publish-release.js"
+    "release": "node --use-system-ca scripts/publish-release.js",
+    "seo:ping": "node scripts/ping-indexnow.js"
   },
   "dependencies": {
     "@tiptap/extension-character-count": "^2.11.5",

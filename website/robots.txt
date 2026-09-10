@@ -1,0 +1,25 @@
+# robots.txt for Folia (https://folia-suite.com)
+User-agent: *
+Allow: /
+
+# Dedicated access for AI & Generative Search Engines (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemaps
+Sitemap: https://folia-suite.com/sitemap.xml
