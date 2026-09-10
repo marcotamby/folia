@@ -1,10 +1,6 @@
 name: Build Folia for macOS
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 permissions:
@@ -47,4 +43,4 @@ jobs:
             release/*.dmg
             release/*.zip
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 3
