@@ -86,7 +86,7 @@ if (jsonLdMatch) {
     check('JSON-LD contiene FAQPage', types.includes('FAQPage'));
     
     const faq = graph.find(g => g['@type'] === 'FAQPage');
-    check('FAQPage include 11 domande', faq && faq.mainEntity && faq.mainEntity.length === 11, `Trovate: ${faq ? faq.mainEntity.length : 0}`);
+    check('FAQPage include 13 domande', faq && faq.mainEntity && faq.mainEntity.length === 13, `Trovate: ${faq ? faq.mainEntity.length : 0}`);
   } catch (e) {
     check('JSON-LD parsing', false, e.message);
   }
@@ -100,6 +100,7 @@ require('./serve-website.js');
 setTimeout(() => {
   const routes = [
     { url: '/', mime: 'text/html' },
+    { url: '/privacy.html', mime: 'text/html' },
     { url: '/robots.txt', mime: 'text/plain' },
     { url: '/sitemap.xml', mime: 'application/xml' },
     { url: '/llms.txt', mime: 'text/plain' },

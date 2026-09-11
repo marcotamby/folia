@@ -75,11 +75,11 @@ VALUES ('hero.title', 'hero', 'html', 'L''ambiente di scrittura per chi <em>dà 
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('hero.desc', 'hero', 'html', 'Dalla prima scintilla d''ispirazione fino all''ultima pagina del tuo libro. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.', 'Testo per hero.desc')
+VALUES ('hero.desc', 'hero', 'html', 'Dalla prima scintilla d''ispirazione all''ultima pagina impaginata. Folia combina un editor conforme alle <strong>norme editoriali</strong> (cartelle da 1800 battute, formato romanzo 14x21, caporali e sillabazione) con strumenti di worldbuilding, <strong>mappe geografiche con pin</strong>, outliner con oltre 18 strutture narrative e supporto per schede personaggi e mostri D&amp;D. Attualmente scaricabile gratuitamente, salvato in locale sul tuo computer, senza cloud obbligatori né costi nascosti.', 'Testo per hero.desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('hero.cta_download', 'hero', 'text', 'Scarica gratis per Windows (v1.0.3)', 'Testo per hero.cta_download')
+VALUES ('hero.cta_download', 'hero', 'text', 'Scarica gratis per Windows (v1.0.4)', 'Testo per hero.cta_download')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -103,7 +103,7 @@ VALUES ('hero.badge_free', 'hero', 'text', 'Attualmente gratuito', 'Testo per he
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('niches.section_label', 'niches', 'text', 'FATTO SU MISURA', 'Testo per niches.section_label')
+VALUES ('niches.section_label', 'niches', 'text', 'Fatto su misura', 'Testo per niches.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -223,111 +223,63 @@ VALUES ('features.section_label', 'features', 'text', 'Panoramica Completa', 'Te
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.title', 'features', 'text', 'Ogni strumento al suo posto, senza dispersioni.', 'Testo per features.title')
+VALUES ('features.title', 'features', 'text', 'Tutto ciò che serve per dare forma a un''opera completa.', 'Testo per features.title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.subtitle', 'features', 'text', 'Folia racchiude in un unico ambiente leggero e ordinato tutto ciò che gli scrittori solitamente sono costretti a frammentare tra tre o quattro programmi diversi.', 'Testo per features.subtitle')
+VALUES ('features.subtitle', 'features', 'text', 'Dalla primissima bozza all''impaginazione finale, senza dover passare per cinque programmi diversi.', 'Testo per features.subtitle')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f1_title', 'features', 'text', 'Editor & Norme Editoriali', 'Testo per features.f1_title')
+VALUES ('features.f1_title', 'features', 'text', 'Norme Editoriali & Tipografia Italiana', 'Testo per features.f1_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f1_desc', 'features', 'html', 'Scrivi senza impazzire con le impostazioni: hai già le <strong>cartelle editoriali da 1800 battute</strong> calcolate in tempo reale, il formato pagina identico ai libri stampati, le note a piè di pagina e i dialoghi con le virgolette giuste (« »).', 'Testo per features.f1_desc')
+VALUES ('features.f1_desc', 'features', 'text', 'Cartelle editoriali da 1.800 battute calcolate in tempo reale. Formato romanzo 14x21 cm, caporali (« »), em-dash (—), rientro prima riga e sillabazione conforme agli standard delle case editrici italiane.', 'Testo per features.f1_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f1_b1', 'features', 'text', 'Commenti a margine e revisioni risolvibili', 'Testo per features.f1_b1')
+VALUES ('features.f2_title', 'features', 'text', 'Bibbia di Worldbuilding & Lore', 'Testo per features.f2_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f1_b2', 'features', 'text', 'Trova e sostituisci avanzato', 'Testo per features.f1_b2')
+VALUES ('features.f2_desc', 'features', 'text', 'Organizza in categorie ordinate luoghi, fazioni, sistemi magici, religioni ed ere storiche. Il testo del tuo manoscritto si collega automaticamente alle schede di lore con comode anteprime al passaggio del mouse.', 'Testo per features.f2_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f2_title', 'features', 'text', 'Personaggi & Schede D&D', 'Testo per features.f2_title')
+VALUES ('features.f3_title', 'features', 'text', 'Schede Personaggi & D&D 5e', 'Testo per features.f3_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f2_desc', 'features', 'text', 'Dai spessore a protagonisti e antagonisti: cosa vogliono, cosa temono e i loro difetti. E se giochi a D&D, trovi le schede dei personaggi e dei mostri già pronte con caratteristiche, dadi vita e incantesimi.', 'Testo per features.f2_desc')
+VALUES ('features.f3_desc', 'features', 'text', 'Dalla psicologia profonda (bisogno, obiettivo, difetto fatale) alle schede statistiche complete per D&D 5e e statblock dei mostri per i Game Master: caratteristiche, CA, PF, slot incantesimi e attacchi.', 'Testo per features.f3_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f2_b1', 'features', 'text', 'Archetipi drammatici ed evoluzione dell''arco', 'Testo per features.f2_b1')
+VALUES ('features.f4_title', 'features', 'text', 'Outliner con 18+ Modelli di Trama', 'Testo per features.f4_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f2_b2', 'features', 'text', 'Supporto razze e classi homebrew personalizzate', 'Testo per features.f2_b2')
+VALUES ('features.f4_desc', 'features', 'text', 'Save the Cat!, Story Circle di Dan Harmon, Mystery Beats, Viaggio dell''Eroe, Snowflake Method, Five Room Dungeon e molti altri. Struttura ogni beat con conteggio parole raccomandato e note di svolta.', 'Testo per features.f4_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f3_title', 'features', 'text', 'Worldbuilding & Mappe con Pin', 'Testo per features.f3_title')
+VALUES ('features.f5_title', 'features', 'text', 'Bacheca Visiva Corkboard & Note', 'Testo per features.f5_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f3_desc', 'features', 'text', 'Carica le immagini dei tuoi regni o delle tue città, piazza i segnalini sui luoghi importanti e collegali alle tue note. Mentre scrivi il manoscritto, basta passare con il mouse sul nome di un posto per rivederne i dettagli.', 'Testo per features.f3_desc')
+VALUES ('features.f5_desc', 'features', 'text', 'Visualizza i capitoli come schede su un pannello di sughero. Assegna stati di avanzamento (Bozza, In stesura, Da rivedere, Completato) con codici colore e riorganizza la sequenza degli eventi trascinando le card.', 'Testo per features.f5_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f3_b1', 'features', 'text', 'Wiki-linking istantaneo al passaggio del mouse', 'Testo per features.f3_b1')
+VALUES ('features.f6_title', 'features', 'text', 'Metriche, Focus & Esportazione', 'Testo per features.f6_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f3_b2', 'features', 'text', 'Zoom, pan ed esplorazione fluida della mappa', 'Testo per features.f3_b2')
+VALUES ('features.f6_desc', 'features', 'text', 'Monitora le sessioni di scrittura, fissa obiettivi giornalieri con barre di progresso discrete e stima i minuti di lettura. Esporta poi l''opera finita in DOCX Word formattato, PDF per la stampa, Markdown o testo semplice.', 'Testo per features.f6_desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f4_title', 'features', 'text', 'Metti in ordine capitoli e scene', 'Testo per features.f4_title')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f4_desc', 'features', 'text', 'Non restare bloccato davanti alla pagina bianca: trovi schemi semplici da seguire (come il Viaggio dell''Eroe, la struttura del giallo o i modelli per dungeon) per organizzare l''intreccio passo dopo passo.', 'Testo per features.f4_desc')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f4_b1', 'features', 'text', 'Beat narrativi con linee guida drammaturgiche', 'Testo per features.f4_b1')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f4_b2', 'features', 'text', 'Collegamento diretto tra snodi e scene dell''editor', 'Testo per features.f4_b2')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f5_title', 'features', 'text', 'Bacheca visiva per le tue idee', 'Testo per features.f5_title')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f5_desc', 'features', 'text', 'Sposta le scene come se fossero foglietti su un tavolo per trovare l''ordine perfetto. E hai sempre a portata di mano un blocco per catturare al volo battute di dialogo o intuizioni prima di dimenticarle.', 'Testo per features.f5_desc')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f5_b1', 'features', 'text', 'Etichette di colore personalizzate per POV e sottotrame', 'Testo per features.f5_b1')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f5_b2', 'features', 'text', 'Archivio note veloci sempre accessibile', 'Testo per features.f5_b2')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f6_title', 'features', 'text', 'Scrivi senza distrazioni ed esporta facile', 'Testo per features.f6_title')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f6_desc', 'features', 'text', 'Attiva la modalità a tutto schermo per concentrarti solo sulle parole, fissa un obiettivo di battute al giorno e, quando hai finito, esporta il libro in Word (DOCX) pronto per gli editor o in PDF impaginato.', 'Testo per features.f6_desc')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f6_b1', 'features', 'text', 'Opzione per esportare schede e appendici del mondo', 'Testo per features.f6_b1')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('features.f6_b2', 'features', 'text', 'Nessun lock-in: i file rimangono sul tuo PC', 'Testo per features.f6_b2')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.section_label', 'privacy', 'text', 'LOCAL-FIRST & PRIVACY', 'Testo per privacy.section_label')
+VALUES ('privacy.section_label', 'privacy', 'text', 'Privacy & Architettura', 'Testo per privacy.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -335,7 +287,7 @@ VALUES ('privacy.title', 'privacy', 'text', 'Le tue storie appartengono solo a t
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.desc', 'privacy', 'html', 'Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. Con Folia i file di progetto (<code>.folia</code>) risiedono unicamente sul tuo disco rigido: <strong>zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta</strong>.', 'Testo per privacy.desc')
+VALUES ('privacy.desc', 'privacy', 'text', 'Oggi molti software costringono gli autori a caricare i propri testi su server remoti, a sottoscrivere abbonamenti a vita o a rischiare che i propri manoscritti vengano scandagliati da algoritmi di intelligenza artificiale. Con Folia i file di progetto (.folia) risiedono unicamente sul tuo disco rigido: zero tracciamento, zero cloud obbligatorio, 100% di proprietà intellettuale protetta.', 'Testo per privacy.desc')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -351,19 +303,7 @@ VALUES ('privacy.bullet3', 'privacy', 'text', 'Nessuna IA addestrata sulle tue c
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.spec1', 'privacy', 'text', 'Cartella locale: Documenti/Folia/Romanzo.folia', 'Testo per privacy.spec1')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.spec2', 'privacy', 'text', 'Pacchetti scambiati via web: 0 byte (offline)', 'Testo per privacy.spec2')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.spec3', 'privacy', 'text', 'Backup automatico di sicurezza: ogni 2 minuti', 'Testo per privacy.spec3')
-ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('privacy.spec4', 'privacy', 'text', 'Proprietà dei testi: 100% dell''Autore', 'Testo per privacy.spec4')
+VALUES ('privacy.file_spec', 'privacy', 'text', 'Formato Aperto: File .folia archiviati in locale sul tuo computer', 'Testo per privacy.file_spec')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -387,11 +327,11 @@ VALUES ('support.author_role', 'support', 'text', 'Autore & Sviluppatore di Foli
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('support.cta_kofi', 'support', 'text', 'Supporta Marco', 'Testo per support.cta_kofi')
+VALUES ('support.cta_kofi', 'support', 'text', 'Supporta Marco su Ko-fi (ko-fi.com/marcotamby) ↗', 'Testo per support.cta_kofi')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('download.section_label', 'download', 'text', 'CENTRO DOWNLOAD', 'Testo per download.section_label')
+VALUES ('download.section_label', 'download', 'text', 'Centro Download', 'Testo per download.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -403,7 +343,7 @@ VALUES ('download.subtitle', 'download', 'text', 'Disponibile al momento per sis
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('download.card_title', 'download', 'text', 'Folia 1.0.3 per Windows', 'Testo per download.card_title')
+VALUES ('download.card_title', 'download', 'text', 'Folia 1.0.4 per Windows', 'Testo per download.card_title')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -439,7 +379,7 @@ VALUES ('download.note_bottom', 'download', 'text', 'Folia è attualmente in svi
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.section_label', 'faq', 'text', 'DOMANDE FREQUENTI', 'Testo per faq.section_label')
+VALUES ('faq.section_label', 'faq', 'text', 'Domande Frequenti', 'Testo per faq.section_label')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -455,83 +395,103 @@ VALUES ('faq.a1', 'faq', 'html', 'Sì, attualmente Folia è <strong>completament
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q2', 'faq', 'text', 'Perché è così importante il calcolo delle "Cartelle Editoriali da 1800 battute"?', 'Testo per faq.q2')
+VALUES ('faq.q2', 'faq', 'text', 'Da chi è sviluppato Folia e qual è la provenienza del software? Posso fidarmi a installarlo?', 'Testo per faq.q2')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a2', 'faq', 'html', 'Nell''editoria italiana ed europea (case editrici, concorsi letterari, agenzie di rappresentanza, traduttori ed editor), la lunghezza effettiva di un''opera non si misura a pagine generiche né a parole (che variano per lunghezza), ma in <strong>cartelle editoriali standard</strong> (esattamente 30 righe per 60 battute a riga = 1.800 battute spazi inclusi). I normali elaboratori di testo costringono l''autore a fare calcoli a mente o a contare i caratteri con calcolatrici esterne; Folia calcola le cartelle editoriali istantaneamente e con precisione tipografica riga per riga durante la digitazione, affiancandole al conteggio delle parole e alla stima del tempo di lettura.', 'Testo per faq.a2')
+VALUES ('faq.a2', 'faq', 'html', 'Folia è un software <strong>100% italiano, trasparente e indipendente</strong>, ideato, progettato e sviluppato con cura artigianale da <strong>Marco Tamborrino</strong>, autore e sviluppatore software. Folia non nasce da società anonime estere o marketplace opachi, ma dall''esperienza diretta di chi scrive per passione e professione. L''autore segue personalmente ogni aspetto del programma, dialoga direttamente con la community tramite l''email ufficiale <a href="mailto:info@folia-suite.com" style="color: var(--brand-green); font-weight: 600; text-decoration: underline;">info@folia-suite.com</a> e la pagina Ko-fi, e rilascia aggiornamenti costanti. L''applicazione non contiene adware, non integra pubblicità o componenti sponsorizzati e non apporta modifiche invasive al tuo computer.', 'Testo per faq.a2')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q3', 'faq', 'text', 'Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA?', 'Testo per faq.q3')
+VALUES ('faq.q3', 'faq', 'text', 'L''eseguibile di installazione è sicuro? Perché Windows SmartScreen o l''antivirus potrebbero mostrare un avviso al primo avvio?', 'Testo per faq.q3')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a3', 'faq', 'html', 'Con Folia hai la <strong>garanzia assoluta di privacy e sovranità sui tuoi testi</strong>. L''applicazione adotta l''architettura <em>Local-First</em>: ogni progetto viene salvato direttamente e unicamente sul disco rigido del tuo computer come file <code>.folia</code> (un formato aperto e leggero contenente manoscritto, schede, immagini e note). Folia funziona al 100% offline, senza bisogno di connessione a internet né di login. Nessun testo viene mai inviato a server esterni, nessuno analizza le tue bozze e i tuoi scritti non verranno <strong>mai utilizzati per addestrare modelli di intelligenza artificiale</strong>. Sei libero di salvare i tuoi file dove preferisci: su chiavetta USB, hard disk esterno o nella tua cartella cloud preferita (Dropbox, Google Drive, OneDrive, Nextcloud).', 'Testo per faq.a3')
+VALUES ('faq.a3', 'faq', 'html', 'L''installer ufficiale di Folia (<code>Folia-Installer-Setup.exe</code>) è <strong>totalmente sicuro, pulito e privo di malware, virus, trojan o spyware</strong> (è verificabile in qualsiasi momento su servizi di sicurezza indipendenti come <a href="https://www.virustotal.com" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">VirusTotal.com</a>, che confermano 0 rilevamenti su oltre 70 motori antivirus). Al primo avvio dell''installazione su Windows, potrebbe comparire la schermata blu di <em>Microsoft Defender SmartScreen</em> con la dicitura «PC protetto da Windows — Filtro SmartScreen: Editore sconosciuto». Questo avviso è del tutto automatico e standard per <strong>qualsiasi software desktop indipendente di recente rilascio</strong> che non appartenga a multinazionali e non abbia acquistato costosi certificati digitali aziendali EV (dal costo di centinaia di euro all''anno). Per procedere all''installazione in tutta serenità, basta fare clic sulla scritta <strong>«Ulteriori informazioni»</strong> e successivamente sul pulsante <strong>«Esegui comunque»</strong>.', 'Testo per faq.a3')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q4', 'faq', 'text', 'Come funzionano le Mappe Geografiche Interattive e i segnaposti (pin)?', 'Testo per faq.q4')
+VALUES ('faq.q4', 'faq', 'text', 'Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA o essere scansionati?', 'Testo per faq.q4')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a4', 'faq', 'html', 'Puoi importare qualsiasi immagine di mappa ad alta risoluzione: pergamene disegnate a mano, mappe geografiche o mappe create con software specializzati come <em>Inkarnate</em>, <em>Wonderdraft</em>, <em>Photoshop</em> o <em>Dungeon Alchemist</em>. Folia ti permette di navigare la mappa con zoom fluido dal 25% al 300% e pan millimetrico, posizionando <strong>segnaposti georeferenziati</strong> con icone tematiche (città, capitali, fortezze, monti, porti, templi o dungeon) e colori personalizzati. Cliccando su un pin si apre istantaneamente il pannello <em>Dettagli Luogo</em>, collegato direttamente alla scheda di worldbuilding corrispondente: una vera e propria atlante viva del tuo universo narrativo.', 'Testo per faq.a4')
+VALUES ('faq.a4', 'faq', 'html', 'Con Folia hai la <strong>garanzia assoluta di privacy e sovranità sui tuoi testi</strong>. L''applicazione adotta l''architettura <em>Local-First</em>: è isolata, non scansiona l''hard disk e non accede ai tuoi documenti personali né ad altre cartelle del PC. Ogni progetto viene salvato direttamente e unicamente sul tuo computer come file aperto <code>.folia</code> (un formato leggero contenente manoscritto, schede, immagini e note). Folia funziona al 100% offline, senza bisogno di connessione a internet né di login o account. Nessun testo viene mai inviato a server esterni, nessuno analizza le tue bozze e i tuoi scritti non verranno <strong>mai utilizzati per addestrare modelli di intelligenza artificiale</strong>. Sei libero di salvare i tuoi file dove preferisci: su chiavetta USB, hard disk esterno o nella tua cartella cloud preferita (Dropbox, Google Drive, OneDrive, Nextcloud).', 'Testo per faq.a4')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q5', 'faq', 'text', 'Posso usare Folia per giocare di ruolo o fare il Game Master (D&D 5e e altri TTRPG)?', 'Testo per faq.q5')
+VALUES ('faq.q5', 'faq', 'text', 'Perché è così importante il calcolo delle "Cartelle Editoriali da 1800 battute"?', 'Testo per faq.q5')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a5', 'faq', 'html', 'Assolutamente sì! Folia include una modalità GDR nativa specificamente pensata per Master e giocatori di <strong>Dungeons &amp; Dragons 5e e giochi di ruolo da tavolo</strong>. Puoi compilare schede personaggio con tutti i parametri di gioco ufficiali: caratteristiche (FOR, DES, COS, INT, SAG, CAR), modificatori, tiri salvezza, Classe Armatura (CA), Punti Ferita (PF), dadi vita, armi, equipaggiamento e slot incantesimi. Per i Game Master, Folia supporta schede Boss e Mostri con Grado di Sfida (CR), tratti speciali e azioni leggendarie, oltre al pulsante rapido <em>Schermo Master</em> per consultare al volo le statistiche del Party durante la sessione senza sfogliare decine di fogli sparsi.', 'Testo per faq.a5')
+VALUES ('faq.a5', 'faq', 'html', 'Nell''editoria italiana ed europea (case editrici, concorsi letterari, agenzie di rappresentanza, traduttori ed editor), la lunghezza effettiva di un''opera non si misura a pagine generiche né a parole (che variano per lunghezza), ma in <strong>cartelle editoriali standard</strong> (esattamente 30 righe per 60 battute a riga = 1.800 battute spazi inclusi). I normali elaboratori di testo costringono l''autore a fare calcoli a mente o a contare i caratteri con calcolatrici esterne; Folia calcola le cartelle editoriali istantaneamente e con precisione tipografica riga per riga durante la digitazione, affiancandole al conteggio delle parole e alla stima del tempo di lettura.', 'Testo per faq.a5')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q6', 'faq', 'text', 'Come funziona il Wiki-Interlinking automatico e i popup contestuali mentre scrivo?', 'Testo per faq.q6')
+VALUES ('faq.q6', 'faq', 'text', 'Come funzionano le Mappe Geografiche Interattive e i segnaposti (pin)?', 'Testo per faq.q6')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a6', 'faq', 'html', 'Mentre redigi i capitoli nell''editor, Folia indicizza automaticamente in background tutti i nomi dei tuoi personaggi, luoghi, fazioni, reliquie magiche ed eventi storici creati nel modulo di worldbuilding. Passando semplicemente con il mouse su un nome o inserendo un richiamo wiki, compare una scheda riassuntiva fluttuante che ti ricorda l''età del personaggio, il suo obiettivo, il suo difetto fatale o le coordinate geografiche di una città. Non dovrai mai più interrompere il flusso creativo per andare a cercare un dettaglio annotato cento pagine prima.', 'Testo per faq.a6')
+VALUES ('faq.a6', 'faq', 'html', 'Puoi importare qualsiasi immagine di mappa ad alta risoluzione: pergamene disegnate a mano, mappe geografiche o mappe create con software specializzati come <em>Inkarnate</em>, <em>Wonderdraft</em>, <em>Photoshop</em> o <em>Dungeon Alchemist</em>. Folia ti permette di navigare la mappa con zoom fluido dal 25% al 300% e pan millimetrico, posizionando <strong>segnaposti georeferenziati</strong> con icone tematiche (città, capitali, fortezze, monti, porti, templi o dungeon) e colori personalizzati. Cliccando su un pin si apre istantaneamente il pannello <em>Dettagli Luogo</em>, collegato direttamente alla scheda di worldbuilding corrispondente: una vera e propria atlante viva del tuo universo narrativo.', 'Testo per faq.a6')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q7', 'faq', 'text', 'In quali formati posso esportare o impaginare la mia opera (.docx, PDF, Markdown)?', 'Testo per faq.q7')
+VALUES ('faq.q7', 'faq', 'text', 'Posso usare Folia per giocare di ruolo o fare il Game Master (D&D 5e e altri TTRPG)?', 'Testo per faq.q7')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a7', 'faq', 'html', 'Folia supporta esportazioni versatili e prive di lock-in pensate per le reali necessità di pubblicazione: <strong>Microsoft Word (.docx)</strong> pronto per la revisione con editor o per l''invio alle case editrici, con formattazione dei paragrafi corretta, stili di capitolo e note a piè di pagina native; <strong>PDF impaginato</strong> nel classico formato romanzo (14x21 cm o A5) pronto per la stampa o la condivisione con i lettori beta; formato <strong>Markdown (.md)</strong> ideale per la massima interoperabilità con Obsidian, Notion e piattaforme web; e testo semplice <strong>(.txt)</strong>. Puoi anche scegliere se esportare l''intero manoscritto oppure includere appendici con l''enciclopedia del mondo e le schede dei personaggi.', 'Testo per faq.a7')
+VALUES ('faq.a7', 'faq', 'html', 'Assolutamente sì! Folia include una modalità GDR nativa specificamente pensata per Master e giocatori di <strong>Dungeons &amp; Dragons 5e e giochi di ruolo da tavolo</strong>. Puoi compilare schede personaggio con tutti i parametri di gioco ufficiali: caratteristiche (FOR, DES, COS, INT, SAG, CAR), modificatori, tiri salvezza, Classe Armatura (CA), Punti Ferita (PF), dadi vita, armi, equipaggiamento e slot incantesimi. Per i Game Master, Folia supporta schede Boss e Mostri con Grado di Sfida (CR), tratti speciali e azioni leggendarie, oltre al pulsante rapido <em>Schermo Master</em> per consultare al volo le statistiche del Party durante la sessione senza sfogliare decine di fogli sparsi.', 'Testo per faq.a7')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q8', 'faq', 'text', 'Quali sono le oltre 18 strutture narrative e i template di trama inclusi nell''Outliner?', 'Testo per faq.q8')
+VALUES ('faq.q8', 'faq', 'text', 'Come funziona il Wiki-Interlinking automatico e i popup contestuali mentre scrivo?', 'Testo per faq.q8')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a8', 'faq', 'html', 'L''Outliner strutturale di Folia ti guida passo dopo passo attraverso i principali modelli di storytelling della letteratura e della drammaturgia mondiale. Include, tra gli altri: il <em>Viaggio dell''Eroe</em> di Campbell e Vogler, lo schema a beat <em>Save the Cat!</em> di Blake Snyder, la classica <em>Struttura in Tre Atti</em>, il <em>Cerchio delle Storie</em> di Dan Harmon, la <em>Piramide di Freytag</em>, la <em>Struttura in Sette Punti</em> di Dan Wells, il modello investigativo per Gialli e Whodunnit (con tracciamento di indizi, alibi e false piste), template per il Romance, la <em>Curva Fichteana</em> e il modello <em>5-Room Dungeon</em> per sessioni GDR. Ogni beat narrativo offre suggerimenti concreti per la stesura e si collega direttamente alle scene del manoscritto.', 'Testo per faq.a8')
+VALUES ('faq.a8', 'faq', 'text', 'Mentre redigi i capitoli nell''editor, Folia indicizza automaticamente in background tutti i nomi dei tuoi personaggi, luoghi, fazioni, reliquie magiche ed eventi storici creati nel modulo di worldbuilding. Passando semplicemente con il mouse su un nome o inserendo un richiamo wiki, compare una scheda riassuntiva fluttuante che ti ricorda l''età del personaggio, il suo obiettivo, il suo difetto fatale o le coordinate geografiche di una città. Non dovrai mai più interrompere il flusso creativo per andare a cercare un dettaglio annotato cento pagine prima.', 'Testo per faq.a8')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q9', 'faq', 'text', 'Come funzionano le schede psicologiche dei personaggi?', 'Testo per faq.q9')
+VALUES ('faq.q9', 'faq', 'text', 'In quali formati posso esportare o impaginare la mia opera (.docx, PDF, Markdown)?', 'Testo per faq.q9')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a9', 'faq', 'html', 'Le schede personaggio di Folia vanno molto oltre la semplice descrizione anagrafica o fisica: sono strutturate secondo i principi della drammaturgia moderna per creare figure tridimensionali e indimenticabili. Troverai sezioni dedicate a <strong>Obiettivo Principale</strong> (cosa desidera coscientemente il personaggio?), <strong>Bisogno Interiore</strong> (cosa deve comprendere per maturare?), <strong>Difetto Fatale e Vulnerabilità</strong> (la ferita emotiva che lo ostacola), Voce e registro linguistico, Archetipo drammatico e relazioni reciproche. Man mano che la storia evolve, puoi annotare le tappe dell''arco di trasformazione di protagonisti e antagonisti.', 'Testo per faq.a9')
+VALUES ('faq.a9', 'faq', 'html', 'Folia supporta esportazioni versatili e prive di lock-in pensate per le reali necessità di pubblicazione: <strong>Microsoft Word (.docx)</strong> pronto per la revisione con editor o per l''invio alle case editrici, con formattazione dei paragrafi corretta, stili di capitolo e note a piè di pagina native; <strong>PDF impaginato</strong> nel classico formato romanzo (14x21 cm o A5) pronto per la stampa o la condivisione con i lettori beta; formato <strong>Markdown (.md)</strong> ideale per la massima interoperabilità con Obsidian, Notion e piattaforme web; e testo semplice <strong>(.txt)</strong>. Puoi anche scegliere se esportare l''intero manoscritto oppure includere appendici con l''enciclopedia del mondo e le schede dei personaggi.', 'Testo per faq.a9')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q10', 'faq', 'text', 'Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?', 'Testo per faq.q10')
+VALUES ('faq.q10', 'faq', 'text', 'Quali sono le oltre 18 strutture narrative e i template di trama inclusi nell''Outliner?', 'Testo per faq.q10')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a10', 'faq', 'html', 'Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L''applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni.', 'Testo per faq.a10')
+VALUES ('faq.a10', 'faq', 'html', 'L''Outliner strutturale di Folia ti guida passo dopo passo attraverso i principali modelli di storytelling della letteratura e della drammaturgia mondiale. Include, tra gli altri: il <em>Viaggio dell''Eroe</em> di Campbell e Vogler, lo schema a beat <em>Save the Cat!</em> di Blake Snyder, la classica <em>Struttura in Tre Atti</em>, il <em>Cerchio delle Storie</em> di Dan Harmon, la <em>Piramide di Freytag</em>, la <em>Struttura in Sette Punti</em> di Dan Wells, il modello investigativo per Gialli e Whodunnit (con tracciamento di indizi, alibi e false piste), template per il Romance, la <em>Curva Fichteana</em> e il modello <em>5-Room Dungeon</em> per sessioni GDR. Ogni beat narrativo offre suggerimenti concreti per la stesura e si collega direttamente alle scene del manoscritto.', 'Testo per faq.a10')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.q11', 'faq', 'text', 'Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?', 'Testo per faq.q11')
+VALUES ('faq.q11', 'faq', 'text', 'Come funzionano le schede psicologiche dei personaggi?', 'Testo per faq.q11')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
-VALUES ('faq.a11', 'faq', 'html', 'Il dialogo costante con chi scrive e narra è l''anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>"Lascia una recensione"</strong> presente su questo sito, oppure scrivendo all''indirizzo email ufficiale <a href="mailto:info@folia-suite.com" style="color: var(--brand-green); font-weight: 600; text-decoration: underline;">info@folia-suite.com</a> o sulla pagina <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!', 'Testo per faq.a11')
+VALUES ('faq.a11', 'faq', 'html', 'Le schede personaggio di Folia vanno molto oltre la semplice descrizione anagrafica o fisica: sono strutturate secondo i principi della drammaturgia moderna per creare figure tridimensionali e indimenticabili. Troverai sezioni dedicate a <strong>Obiettivo Principale</strong> (cosa desidera coscientemente il personaggio?), <strong>Bisogno Interiore</strong> (cosa deve comprendere per maturare?), <strong>Difetto Fatale e Vulnerabilità</strong> (la ferita emotiva che lo ostacola), Voce e registro linguistico, Archetipo drammatico e relazioni reciproche. Man mano che la storia evolve, puoi annotare le tappe dell''arco di trasformazione di protagonisti e antagonisti.', 'Testo per faq.a11')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('faq.q12', 'faq', 'text', 'Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?', 'Testo per faq.q12')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('faq.a12', 'faq', 'html', 'Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L''applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni.', 'Testo per faq.a12')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('faq.q13', 'faq', 'text', 'Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?', 'Testo per faq.q13')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('faq.a13', 'faq', 'html', 'Il dialogo costante con chi scrive e narra è l''anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>"Lascia una recensione"</strong> presente su questo sito, oppure scrivendo all''indirizzo email ufficiale <a href="mailto:info@folia-suite.com" style="color: var(--brand-green); font-weight: 600; text-decoration: underline;">info@folia-suite.com</a> o sulla pagina <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" style="color: var(--brand-green); text-decoration: underline;">Ko-fi</a>. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!', 'Testo per faq.a13')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('faq.items', 'faq', 'json', '[{"q":"Folia è gratuito? Ci sono costi nascosti o limitazioni al numero di capitoli?","a":"Sì, attualmente Folia è <strong>completamente gratuito</strong> da scaricare e utilizzare sul tuo PC Windows. Non ci sono canoni mensili, non esistono limitazioni al numero di progetti, capitoli o parole scritte, e nessuna funzione essenziale è bloccata dietro paywall. Folia nasce come progetto indipendente creato da Marco Tamborrino: chi desidera sostenere il lavoro e il tempo dedicato allo sviluppo delle nuove versioni può offrire un caffè con una donazione libera su Ko-fi."},{"q":"Da chi è sviluppato Folia e qual è la provenienza del software? Posso fidarmi a installarlo?","a":"Folia è un software <strong>100% italiano, trasparente e indipendente</strong>, ideato, progettato e sviluppato con cura artigianale da <strong>Marco Tamborrino</strong>, autore e sviluppatore software. Folia non nasce da società anonime estere o marketplace opachi, ma dall''esperienza diretta di chi scrive per passione e professione. L''autore segue personalmente ogni aspetto del programma, dialoga direttamente con la community tramite l''email ufficiale info@folia-suite.com e la pagina Ko-fi, e rilascia aggiornamenti costanti. L''applicazione non contiene adware, non integra pubblicità o componenti sponsorizzati e non apporta modifiche invasive al tuo computer."},{"q":"L''eseguibile di installazione è sicuro? Perché Windows SmartScreen o l''antivirus potrebbero mostrare un avviso al primo avvio?","a":"L''installer ufficiale di Folia (Folia-Installer-Setup.exe) è <strong>totalmente sicuro, pulito e privo di malware, virus, trojan o spyware</strong> (è verificabile in qualsiasi momento su servizi di sicurezza indipendenti come VirusTotal.com, che confermano 0 rilevamenti su oltre 70 motori antivirus). Al primo avvio dell''installazione su Windows, potrebbe comparire la schermata blu di Microsoft Defender SmartScreen con la dicitura «PC protetto da Windows — Filtro SmartScreen: Editore sconosciuto». Questo avviso è del tutto automatico e standard per qualsiasi software desktop indipendente di recente rilascio che non appartenga a multinazionali e non abbia acquistato costosi certificati digitali aziendali EV (dal costo di centinaia di euro all''anno). Per procedere all''installazione in tutta serenità, basta fare clic sulla scritta «Ulteriori informazioni» e successivamente sul pulsante «Esegui comunque»."},{"q":"Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA o essere scansionati?","a":"Con Folia hai la <strong>garanzia assoluta di privacy e sovranità sui tuoi testi</strong>. L''applicazione adotta l''architettura <em>Local-First</em>: è isolata, non scansiona l''hard disk e non accede ai tuoi documenti personali né ad altre cartelle del PC. Ogni progetto viene salvato direttamente e unicamente sul tuo computer come file aperto .folia (un formato leggero contenente manoscritto, schede, immagini e note). Folia funziona al 100% offline, senza bisogno di connessione a internet né di login o account. Nessun testo viene mai inviato a server esterni, nessuno analizza le tue bozze e i tuoi scritti non verranno <strong>mai utilizzati per addestrare modelli di intelligenza artificiale</strong>. Sei libero di salvare i tuoi file dove preferisci: su chiavetta USB, hard disk esterno o nella tua cartella cloud preferita (Dropbox, Google Drive, OneDrive, Nextcloud)."},{"q":"Perché è così importante il calcolo delle \"Cartelle Editoriali da 1800 battute\"?","a":"Nell''editoria italiana ed europea (case editrici, concorsi letterari, agenzie di rappresentanza, traduttori ed editor), la lunghezza effettiva di un''opera non si misura a pagine generiche né a parole (che variano per lunghezza), ma in <strong>cartelle editoriali standard</strong> (esattamente 30 righe per 60 battute a riga = 1.800 battute spazi inclusi). I normali elaboratori di testo costringono l''autore a fare calcoli a mente o a contare i caratteri con calcolatrici esterne; Folia calcola le cartelle editoriali istantaneamente e con precisione tipografica riga per riga durante la digitazione, affiancandole al conteggio delle parole e alla stima del tempo di lettura."},{"q":"Come funzionano le Mappe Geografiche Interattive e i segnaposti (pin)?","a":"Puoi importare qualsiasi immagine di mappa ad alta risoluzione: pergamene disegnate a mano, mappe geografiche o mappe create con software specializzati come Inkarnate, Wonderdraft, Photoshop o Dungeon Alchemist. Folia ti permette di navigare la mappa con zoom fluido dal 25% al 300% e pan millimetrico, posizionando <strong>segnaposti georeferenziati</strong> con icone tematiche (città, capitali, fortezze, monti, porti, templi o dungeon) e colori personalizzati. Cliccando su un pin si apre istantaneamente il pannello Dettagli Luogo, collegato direttamente alla scheda di worldbuilding corrispondente: una vera e propria atlante viva del tuo universo narrativo."},{"q":"Posso usare Folia per giocare di ruolo o fare il Game Master (D&D 5e e altri TTRPG)?","a":"Assolutamente sì! Folia include una modalità GDR nativa specificamente pensata per Master e giocatori di <strong>Dungeons & Dragons 5e e giochi di ruolo da tavolo</strong>. Puoi compilare schede personaggio con tutti i parametri di gioco ufficiali: caratteristiche (FOR, DES, COS, INT, SAG, CAR), modificatori, tiri salvezza, Classe Armatura (CA), Punti Ferita (PF), dadi vita, armi, equipaggiamento e slot incantesimi. Per i Game Master, Folia supporta schede Boss e Mostri con Grado di Sfida (CR), tratti speciali e azioni leggendarie, oltre al pulsante rapido Schermo Master per consultare al volo le statistiche del Party durante la sessione senza sfogliare decine di fogli sparsi."},{"q":"Come funziona il Wiki-Interlinking automatico e i popup contestuali mentre scrivo?","a":"Mentre redigi i capitoli nell''editor, Folia indicizza automaticamente in background tutti i nomi dei tuoi personaggi, luoghi, fazioni, reliquie magiche ed eventi storici creati nel modulo di worldbuilding. Passando semplicemente con il mouse su un nome o inserendo un richiamo wiki, compare una scheda riassuntiva fluttuante che ti ricorda l''età del personaggio, il suo obiettivo, il suo difetto fatale o le coordinate geografiche di una città. Non dovrai mai più interrompere il flusso creativo per andare a cercare un dettaglio annotato cento pagine prima."},{"q":"In quali formati posso esportare o impaginare la mia opera (.docx, PDF, Markdown)?","a":"Folia supporta esportazioni versatili e prive di lock-in pensate per le reali necessità di pubblicazione: <strong>Microsoft Word (.docx)</strong> pronto per la revisione con editor o per l''invio alle case editrici, con formattazione dei paragrafi corretta, stili di capitolo e note a piè di pagina native; <strong>PDF impaginato</strong> nel classico formato romanzo (14x21 cm o A5) pronto per la stampa o la condivisione con i lettori beta; formato <strong>Markdown (.md)</strong> ideale per la massima interoperabilità con Obsidian, Notion e piattaforme web; e testo semplice (.txt). Puoi anche scegliere se esportare l''intero manoscritto oppure includere appendici con l''enciclopedia del mondo e le schede dei personaggi."},{"q":"Quali sono le oltre 18 strutture narrative e i template di trama inclusi nell''Outliner?","a":"L''Outliner strutturale di Folia ti guida passo dopo passo attraverso i principali modelli di storytelling della letteratura e della drammaturgia mondiale. Include, tra gli altri: il Viaggio dell''Eroe di Campbell e Vogler, lo schema a beat Save the Cat! di Blake Snyder, la classica Struttura in Tre Atti, il Cerchio delle Storie di Dan Harmon, la Piramide di Freytag, la Struttura in Sette Punti di Dan Wells, il modello investigativo per Gialli e Whodunnit (con tracciamento di indizi, alibi e false piste), template per il Romance, la Curva Fichteana e il modello 5-Room Dungeon per sessioni GDR. Ogni beat narrativo offre suggerimenti concreti per la stesura e si collega direttamente alle scene del manoscritto."},{"q":"Come funzionano le schede psicologiche dei personaggi?","a":"Le schede personaggio di Folia vanno molto oltre la semplice descrizione anagrafica o fisica: sono strutturate secondo i principi della drammaturgia moderna per creare figure tridimensionali e indimenticabili. Troverai sezioni dedicate a <strong>Obiettivo Principale</strong> (cosa desidera coscientemente il personaggio?), <strong>Bisogno Interiore</strong> (cosa deve comprendere per maturare?), <strong>Difetto Fatale e Vulnerabilità</strong> (la ferita emotiva che lo ostacola), Voce e registro linguistico, Archetipo drammatico e relazioni reciproche. Man mano che la storia evolve, puoi annotare le tappe dell''arco di trasformazione di protagonisti e antagonisti."},{"q":"Quali sono i requisiti di sistema per Windows e arriveranno versioni per Mac e Linux?","a":"Attualmente Folia è disponibile come pacchetto installer ufficiale (.exe a 64-bit) compatibile con <strong>Windows 10 e Windows 11</strong>. L''applicazione è estremamente reattiva, occupa poche centinaia di megabyte sul disco rigido e richiede requisiti minimi standard (4 GB di RAM e processore x64 dual-core o superiore). Le versioni native per <strong>macOS</strong> (sia Apple Silicon M1/M2/M3/M4 che processori Intel) e per <strong>Linux</strong> sono pianificate nella roadmap di sviluppo del progetto e verranno rilasciate nelle prossime iterazioni."},{"q":"Come posso mettermi in contatto per suggerimenti, segnalare bug o proporre nuove funzioni?","a":"Il dialogo costante con chi scrive e narra è l''anima di Folia! Puoi inviare i tuoi commenti, segnalare eventuali anomalie o suggerire nuove funzionalità direttamente attraverso il pulsante <strong>\"Lascia una recensione\"</strong> presente su questo sito, oppure scrivendo all''indirizzo email ufficiale info@folia-suite.com o sulla pagina Ko-fi. Ogni singolo messaggio viene letto e preso in considerazione per i futuri aggiornamenti!"}]', 'Elenco per faq.items')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
@@ -552,6 +512,10 @@ ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)
 VALUES ('footer.link_privacy', 'footer', 'text', 'Privacy Local-First', 'Testo per footer.link_privacy')
+ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO site_contents (content_key, section, content_type, value_it, description)
+VALUES ('footer.link_privacy_policy', 'footer', 'text', 'Informativa Privacy', 'Testo per footer.link_privacy_policy')
 ON CONFLICT (content_key) DO UPDATE SET value_it = EXCLUDED.value_it, updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO site_contents (content_key, section, content_type, value_it, description)

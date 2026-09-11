@@ -7,7 +7,8 @@ const HOST = process.env.FOLIA_HOST || 'folia-suite.com';
 const KEY = 'b5ef0b1098527fdfd98cd70e37fe7659';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 const URL_LIST = [
-  `https://${HOST}/`
+  `https://${HOST}/`,
+  `https://${HOST}/privacy`
 ];
 
 const payload = JSON.stringify({

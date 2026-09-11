@@ -89,32 +89,39 @@
 ### FAQ 1: Folia è gratuito? Ci sono costi nascosti o limitazioni?
 Sì, attualmente Folia è completamente gratuito da scaricare e utilizzare su PC Windows. Non ci sono canoni mensili, limitazioni al numero di progetti, capitoli o parole, né paywall per funzioni essenziali. È un progetto indipendente curato da Marco Tamborrino, sostenibile tramite donazioni libere su Ko-fi.
 
-### FAQ 2: Perché è importante il calcolo delle cartelle da 1800 battute?
+### FAQ 2: Da chi è sviluppato Folia e qual è la provenienza del software? Posso fidarmi a installarlo?
+Folia è un software 100% italiano, trasparente e indipendente, ideato e sviluppato con cura artigianale da Marco Tamborrino. Non proviene da società anonime estere o marketplace opachi. L'autore segue personalmente il progetto, comunica direttamente con la community (info@folia-suite.com e Ko-fi) e garantisce l'assenza totale di adware, spyware o bloatware.
+
+### FAQ 3: L'eseguibile di installazione è sicuro? Perché Windows SmartScreen o l'antivirus potrebbero mostrare un avviso al primo avvio?
+L'installer (.exe) di Folia è totalmente sicuro e pulito (0 rilevamenti su VirusTotal). All'avvio su Windows, Microsoft Defender SmartScreen può mostrare la schermata "PC protetto da Windows — Editore sconosciuto": è un comportamento standard per software indipendenti di recente rilascio privi di costosi certificati EV enterprise. Per procedere all'installazione in tutta serenità, basta cliccare su "Ulteriori informazioni" e poi su "Esegui comunque".
+
+### FAQ 4: Privacy e Local-First: dove vengono salvati i miei testi? Rischiano di finire in modelli IA o essere scansionati?
+I file vengono salvati unicamente sul disco rigido dell'utente nel formato aperto `.folia`. L'applicazione funziona 100% offline, è isolata e non scansiona il sistema. Nessun dato viene mai inviato a server cloud e i testi non verranno mai utilizzati per addestrare modelli di intelligenza artificiale. L'informativa completa è consultabile su https://folia-suite.com/privacy.
+
+### FAQ 5: Perché è importante il calcolo delle cartelle da 1800 battute?
 Nell'editoria italiana ed europea (case editrici, agenzie letterarie, concorsi, editor e traduttori), la lunghezza non si misura a pagine generiche né a parole, ma in cartelle editoriali standard (30 righe per 60 battute a riga = 1.800 battute spazi inclusi). Folia calcola le cartelle in tempo reale durante la scrittura.
 
-### FAQ 3: Dove vengono salvati i miei testi? Rischiano di finire in modelli IA?
-I file vengono salvati unicamente sul disco rigido dell'utente nel formato aperto `.folia`. L'applicazione funziona 100% offline. Nessun dato viene mai inviato a server cloud e i testi non verranno mai utilizzati per addestrare modelli di intelligenza artificiale.
-
-### FAQ 4: Come funzionano le mappe geografiche interattive e i pin?
+### FAQ 6: Come funzionano le mappe geografiche interattive e i pin?
 È possibile caricare qualsiasi mappa ad alta risoluzione (disegnata a mano o creata con Inkarnate, Wonderdraft o Photoshop), zoomare dal 25% al 300% e posizionare pin tematici con icone e colori. Cliccando su un pin si apre la scheda di worldbuilding corrispondente.
 
-### FAQ 5: Si può usare Folia per giocare di ruolo o fare il Game Master in D&D 5e?
+### FAQ 7: Si può usare Folia per giocare di ruolo o fare il Game Master in D&D 5e?
 Sì, include schede complete D&D 5e per personaggi giocanti, schede mostri con CR e azioni leggendarie, e lo Schermo Master per monitorare il party durante le sessioni dal vivo o telematiche.
 
-### FAQ 6: Come funziona il wiki-interlinking automatico?
+### FAQ 8: Come funziona il wiki-interlinking automatico?
 Durante la stesura nei capitoli, Folia riconosce i nomi di personaggi, luoghi, fazioni e artefatti già presenti nella bibbia lore. Passando il mouse compare un popup contestuale con le informazioni chiave.
 
-### FAQ 7: Quali formati di esportazione sono supportati?
+### FAQ 9: Quali formati di esportazione sono supportati?
 Microsoft Word (.docx) con stili capitolo e note native, PDF impaginato in formato romanzo (14x21 cm o A5), Markdown (.md) per interoperabilità con Obsidian e Notion, e testo semplice (.txt).
 
-### FAQ 8: Quali strutture narrative include l'Outliner?
+### FAQ 10: Quali strutture narrative include l'Outliner?
 Include oltre 18 strutture tra cui Viaggio dell'Eroe, Save the Cat!, Tre Atti, Dan Harmon Story Circle, Piramide di Freytag, Sette Punti, schema investigativo per Gialli, Romance e 5-Room Dungeon.
 
-### FAQ 9: Come sono strutturate le schede psicologiche dei personaggi?
+### FAQ 11: Come sono strutturate le schede psicologiche dei personaggi?
 Sono basate sulla drammaturgia moderna con campi per Obiettivo Cosciente, Bisogno Interiore, Difetto Fatale, Archetipo, Voce narrativa e arco evolutivo.
 
-### FAQ 10: Quali sono i requisiti di sistema per Windows?
+### FAQ 12: Quali sono i requisiti di sistema per Windows?
 Richiede Windows 10 o Windows 11 a 64-bit, processore dual-core x64 e 4 GB di RAM. Le versioni native per macOS e Linux sono in programma nella roadmap.
 
-### FAQ 11: Come posso inviare feedback, segnalare bug o suggerire funzioni?
+### FAQ 13: Come posso inviare feedback, segnalare bug o suggerire funzioni?
 Tramite il pulsante "Lascia una recensione" sul sito web, oppure scrivendo a info@folia-suite.com o sulla pagina Ko-fi (https://ko-fi.com/marcotamby).
+

@@ -104,8 +104,32 @@ module.exports = async function handler(req, res) {
               val = val.replace(/1\.0\.[123]/g, '1.0.4');
               supabase.from('site_contents').update({ value_it: val }).eq('content_key', 'download.card_title').then(() => {}).catch(() => {});
             }
+
+            // Remove obsolete middle contact FAQ if still in database
+            if ((row.content_key === 'faq.q6' || row.content_key === 'faq.a6') && typeof val === 'string' && (val.includes('mettermi in contatto') || val.includes('Ko-fi') || val.includes('nuove idee'))) {
+              supabase.from('site_contents').delete().eq('content_key', row.content_key).then(() => {}).catch(() => {});
+              continue;
+            }
+
             setNestedValue(contentTree, row.content_key, val);
           }
+
+          // Always ensure canonical FAQs from content.json take precedence and update database
+          const fallback = getFallbackContent();
+          if (fallback && fallback.faq) {
+            contentTree.faq = Object.assign({}, contentTree.faq, fallback.faq);
+            const faqUpserts = [];
+            for (let i = 1; i <= 13; i++) {
+              if (fallback.faq[`q${i}`]) {
+                faqUpserts.push({ content_key: `faq.q${i}`, section: 'faq', content_type: 'text', value_it: fallback.faq[`q${i}`] });
+              }
+              if (fallback.faq[`a${i}`]) {
+                faqUpserts.push({ content_key: `faq.a${i}`, section: 'faq', content_type: 'html', value_it: fallback.faq[`a${i}`] });
+              }
+            }
+            supabase.from('site_contents').upsert(faqUpserts, { onConflict: 'content_key' }).then(() => {}).catch(() => {});
+          }
+
           res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate=30');
           return res.status(200).json(contentTree);
         } else if (error) {

@@ -3979,3 +3979,237 @@ p {
   color: var(--brand-green);
   font-weight: 600;
 }
+
+/* ==========================================================================
+   Folia Legal & Privacy Policy Page Styling
+   ========================================================================== */
+.legal-main {
+  padding-top: 2.5rem;
+  padding-bottom: 5rem;
+}
+
+.legal-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.legal-breadcrumb a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.legal-breadcrumb a:hover {
+  color: var(--brand-green);
+}
+
+.legal-breadcrumb .sep {
+  opacity: 0.5;
+}
+
+.legal-breadcrumb .current {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.legal-header {
+  margin-bottom: 2.5rem;
+}
+
+.legal-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  line-height: 1.18;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0.75rem 0 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.legal-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 780px;
+}
+
+.legal-meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.25rem;
+  padding: 6px 14px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.legal-highlight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  background: var(--brand-tint);
+  border: 1px solid rgba(30, 119, 74, 0.25);
+  border-radius: var(--radius-lg);
+  margin-bottom: 3rem;
+}
+
+.legal-highlight-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--brand-light);
+  color: var(--brand-green);
+  flex-shrink: 0;
+}
+
+.legal-highlight-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin-bottom: 0.35rem;
+}
+
+.legal-highlight-card p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.legal-highlight-card code {
+  background: rgba(30, 119, 74, 0.12);
+  color: var(--brand-dark);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.86rem;
+}
+
+.legal-article {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2.25rem;
+  box-shadow: var(--shadow-subtle);
+}
+
+.legal-section {
+  margin-bottom: 2.5rem;
+}
+
+.legal-section:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section h2 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.legal-subheading {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 1.2rem 0 0.5rem;
+}
+
+.legal-section p {
+  font-size: 0.94rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 0.9rem;
+}
+
+.legal-contact-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0.9rem 0 1.2rem;
+  color: var(--text-main);
+}
+
+.legal-contact-card a {
+  color: var(--brand-green);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.legal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 1rem;
+}
+
+.legal-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.legal-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0.4rem;
+  color: var(--brand-green);
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.legal-list li strong {
+  color: var(--text-main);
+}
+
+.legal-footer-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .legal-article {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .legal-highlight-card {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .legal-footer-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .legal-footer-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

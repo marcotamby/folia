@@ -32,4 +32,10 @@
       <image:caption>Supporto nativo per Game Master e giocatori di ruolo con caratteristiche, slot incantesimi e Schermo Master</image:caption>
     </image:image>
   </url>
+  <url>
+    <loc>https://folia-suite.com/privacy</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

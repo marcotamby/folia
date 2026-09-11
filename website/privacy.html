@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Informativa sulla Privacy &amp; Tutela dei Dati — Folia</title>
+  <meta name="description" content="Informativa sulla Privacy e protezione dei dati di Folia. Scopri la nostra architettura Local-First al 100% offline, l'assenza totale di tracciamento e il rispetto del GDPR.">
+  <meta name="keywords" content="privacy policy folia, informativa privacy software, local-first privacy, sicurezza dati scrittura, gdpr folia suite, software offline sicuro">
+  <meta name="author" content="Marco Tamborrino">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://folia-suite.com/privacy">
+  <meta name="theme-color" content="#12241c">
+
+  <!-- Favicon & Touch Icons -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://folia-suite.com/privacy">
+  <meta property="og:site_name" content="Folia">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Informativa sulla Privacy &amp; Protezione dei Dati — Folia">
+  <meta property="og:description" content="Nessun tracciamento, nessun cloud obbligatorio, nessun addestramento di IA sui tuoi manoscritti. La privacy dei tuoi testi è garantita dal principio.">
+  <meta property="og:image" content="https://folia-suite.com/assets/og-image.png">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://folia-suite.com/privacy">
+  <meta name="twitter:title" content="Informativa sulla Privacy — Folia">
+  <meta name="twitter:description" content="Informativa sulla Privacy e rispetto dei dati personali per l'applicazione desktop Folia e il sito web ufficiale.">
+  <meta name="twitter:image" content="https://folia-suite.com/assets/og-image.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=1.0.13">
+</head>
+<body class="legal-page-body">
+
+  <!-- Minimal Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-wrap">
+      <a href="/" class="nav-brand">
+        <img src="assets/logo.png" alt="Folia — Suite di Scrittura &amp; Worldbuilding" class="nav-logo">
+        <span class="nav-title">Folia</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">← Torna alla Home</a></li>
+          <li><a href="/#features" class="nav-link">Funzionalità</a></li>
+          <li><a href="/#faq" class="nav-link">FAQ</a></li>
+          <li><a href="/#download" class="nav-link">Download</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-kofi-subtle nav-action-kofi" title="Sostieni lo sviluppo su Ko-fi">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+          <span>Ko-fi</span>
+        </a>
+
+        <a href="/Folia-Installer-Setup-1.0.4.exe" class="btn btn-primary nav-action-dl" download>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Scarica</span>
+        </a>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Apri menu di navigazione" aria-expanded="false">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer & Backdrop -->
+  <div class="nav-mobile-backdrop" id="nav-mobile-backdrop"></div>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer" aria-hidden="true">
+    <div class="nav-mobile-header">
+      <div class="nav-brand">
+        <img src="assets/logo.png" alt="Folia" class="nav-logo">
+        <span class="nav-title">Folia</span>
+      </div>
+      <button class="nav-mobile-close" id="nav-mobile-close" aria-label="Chiudi menu">✕</button>
+    </div>
+
+    <ul class="nav-mobile-links">
+      <li><a href="/" class="nav-mobile-link"><span>← Home</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="/#features" class="nav-mobile-link"><span>Funzionalità</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="/#faq" class="nav-mobile-link"><span>Domande Frequenti</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+      <li><a href="/#download" class="nav-mobile-link"><span>Download per Windows</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a></li>
+    </ul>
+
+    <div class="nav-mobile-footer">
+      <a href="/Folia-Installer-Setup-1.0.4.exe" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Scarica gratis (v1.0.4)</span>
+      </a>
+      <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer" class="btn btn-subtle" style="width: 100%; justify-content: center;">
+        <span>Sostieni su Ko-fi ↗</span>
+      </a>
+    </div>
+  </div>
+
+  <main id="main-content" class="legal-main">
+    <div class="container container-narrow">
+
+      <!-- Breadcrumbs -->
+      <nav class="legal-breadcrumb" aria-label="Percorso">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <span class="current">Informativa Privacy</span>
+      </nav>
+
+      <!-- Legal Header -->
+      <header class="legal-header">
+        <span class="section-label">Trasparenza &amp; Rispetto dei Dati</span>
+        <h1 class="legal-title">Informativa sulla Privacy &amp; Protezione dei Dati</h1>
+        <p class="legal-subtitle">
+          In Folia la riservatezza delle tue storie non è un'opzione, ma il fondamento stesso dell'architettura software.
+          La presente informativa descrive le modalità di trattamento dei dati sia per l'applicazione desktop <strong>Folia</strong> che per il sito web ufficiale <strong>folia-suite.com</strong>, ai sensi del Regolamento Generale sulla Protezione dei Dati (GDPR - Regolamento UE 2016/679).
+        </p>
+        <div class="legal-meta-badge">
+          <span>Ultimo aggiornamento: 11 Settembre 2026</span>
+          <span class="dot">•</span>
+          <span>Versione 1.1</span>
+        </div>
+      </header>
+
+      <!-- Core Principle Box -->
+      <div class="legal-highlight-card">
+        <div class="legal-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <div>
+          <h3>Il nostro impegno fondamentale: Architettura Local-First</h3>
+          <p>
+            L'applicazione desktop Folia <strong>non raccoglie, non legge e non trasmette a server esterni</strong> i tuoi manoscritti, i tuoi appunti o i tuoi dati personali. I tuoi file di progetto (<code>.folia</code>) risiedono esclusivamente sul disco rigido del tuo computer.
+          </p>
+        </div>
+      </div>
+
+      <!-- Legal Document Content -->
+      <article class="legal-article">
+
+        <section class="legal-section">
+          <h2>1. Titolare del Trattamento</h2>
+          <p>
+            Il Titolare del trattamento dei dati per il progetto e il sito web Folia è:
+          </p>
+          <div class="legal-contact-card">
+            <strong>Marco Tamborrino</strong><br>
+            Autore &amp; Sviluppatore software indipendente<br>
+            Email di contatto ufficiale: <a href="mailto:info@folia-suite.com">info@folia-suite.com</a><br>
+            Sito web: <a href="https://folia-suite.com">https://folia-suite.com</a>
+          </div>
+          <p>
+            Per qualsiasi chiarimento, esercizio dei tuoi diritti o segnalazione riguardante la riservatezza, puoi scrivere direttamente all'indirizzo email sopra indicato.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>2. L'Applicazione Desktop Folia: Privacy By Design</h2>
+          <p>
+            Folia è stata progettata fin dalla prima riga di codice con la filosofia <strong>Local-First</strong>. A differenza della maggior parte degli elaboratori di testo moderni basati su abbonamenti cloud, Folia rispetta in modo assoluto la tua proprietà intellettuale:
+          </p>
+          <ul class="legal-list">
+            <li>
+              <strong>Funzionamento 100% Offline:</strong> Folia non richiede alcuna connessione a internet per funzionare. Puoi scrivere in aereo, in treno o in totale isolamento.
+            </li>
+            <li>
+              <strong>Nessun Account o Registrazione:</strong> Non è necessario creare un profilo, fornire la propria email o inserire password per utilizzare il programma.
+            </li>
+            <li>
+              <strong>Zero Telemetria o Tracciamento d'Uso:</strong> Folia non registra le tue sessioni di scrittura, non invia statistiche anonime di digitazione, non installa keylogger e non effettua chiamate di background per tracciare le tue abitudini.
+            </li>
+            <li>
+              <strong>Salvataggio Unicamente Locale:</strong> Ogni progetto viene salvato direttamente sul tuo disco nella cartella da te scelta, all'interno di un file compresso standard <code>.folia</code>. Sei tu a decidere se e come custodirlo, eseguirne il backup o copiarlo su dispositivi esterni.
+            </li>
+            <li>
+              <strong>Nessun Accesso a File Estranei:</strong> L'installer e l'applicazione non scansionano il tuo computer né leggono directory estranee a quelle esplicitamente selezionate da te (ad esempio quando scegli di importare una mappa o salvare un manoscritto).
+            </li>
+            <li>
+              <strong>Garanzia Assoluta No-AI Training:</strong> Nessun testo, frammento di bozza, scheda personaggio o mappa creata in Folia viene mai inviato a server esterni né utilizzato per addestrare modelli di intelligenza artificiale o Large Language Model (LLM).
+            </li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>3. Dati Trattati Tramite il Sito Web (folia-suite.com)</h2>
+          <p>
+            Quando visiti il nostro sito vetrina, il trattamento dei dati è limitato a quanto strettamente necessario per l'erogazione del servizio e per la sicurezza:
+          </p>
+
+          <h3 class="legal-subheading">A. Dati di navigazione e log tecnici del server</h3>
+          <p>
+            I sistemi informatici e le procedure software preposte al funzionamento di questo sito web acquisiscono, nel corso del loro normale esercizio, alcuni dati tecnici la cui trasmissione è implicita nell'uso dei protocolli di comunicazione di Internet (ad es. indirizzo IP, tipo di browser, data e ora della richiesta, URL di provenienza).
+            Questi dati sono raccolti dall'infrastruttura di hosting (Vercel Inc.) al solo fine di ricavare informazioni tecniche aggregate sul corretto funzionamento del sito e per accertare eventuali responsabilità in caso di ipotetici reati informatici. I log vengono automaticamente eliminati secondo le policy standard del fornitore di hosting.
+          </p>
+
+          <h3 class="legal-subheading">B. Recensioni e testimonianze inviate volontariamente</h3>
+          <p>
+            Gli utenti che desiderano lasciare una testimonianza o recensione sul sito possono farlo tramite l'apposito modulo "Lascia una recensione". I dati richiesti comprendono:
+          </p>
+          <ul class="legal-list">
+            <li>Nome o pseudonimo a scelta dell'utente;</li>
+            <li>Categoria/ruolo di scrittura (es. Romanziere, Worldbuilder, Game Master);</li>
+            <li>Valutazione in stelle (da 1 a 5);</li>
+            <li>Titolo e testo descrittivo del commento.</li>
+          </ul>
+          <p>
+            L'invio di tali dati avviene su base <strong>puramente volontaria</strong> con il consenso esplicito dell'utente al momento della pressione del pulsante "Pubblica Recensione". I commenti inviati vengono memorizzati in un database sicuro (Supabase) al fine di mostrarli nella sezione pubblica delle recensioni del sito. L'utente ha in ogni momento il diritto di richiederne la modifica o la cancellazione immediata scrivendo a <a href="mailto:info@folia-suite.com">info@folia-suite.com</a>.
+          </p>
+
+          <h3 class="legal-subheading">C. Comunicazioni dirette via email</h3>
+          <p>
+            L'invio facoltativo e volontario di posta elettronica all'indirizzo <a href="mailto:info@folia-suite.com">info@folia-suite.com</a> comporta l'acquisizione dell'indirizzo del mittente, necessario per rispondere alle richieste, nonché degli eventuali altri dati personali inseriti nella missiva. Tali dati non vengono ceduti a terzi né utilizzati per scopi promozionali o mailing list non richieste.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>4. Cookie e Tecnologie di Tracciamento</h2>
+          <p>
+            Il nostro sito <strong>non fa uso di cookie di profilazione pubblicitaria</strong>, né integra pixel di tracciamento di social network o broker pubblicitari (come Facebook Pixel, Google Ads o simili).
+          </p>
+          <p>
+            Vengono utilizzati unicamente elementi tecnici essenziali o cache locale del browser (LocalStorage) per memorizzare lo stato dell'interfaccia (come ad esempio la presa visione di avvisi). In conformità con le linee guida del Garante per la Protezione dei Dati Personali e la Direttiva ePrivacy, l'impiego di soli cookie tecnici non richiede la visualizzazione di banner di consenso preventivo.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>5. Base Giuridica del Trattamento (GDPR)</h2>
+          <p>Il trattamento dei dati personali si fonda sulle seguenti basi di liceità ex art. 6 GDPR:</p>
+          <ul class="legal-list">
+            <li><strong>Esecuzione del servizio e navigazione:</strong> l'erogazione delle pagine web e del download dell'installer richiesto dall'utente;</li>
+            <li><strong>Consenso dell'interessato:</strong> per la pubblicazione volontaria delle recensioni della community;</li>
+            <li><strong>Legittimo interesse del titolare:</strong> per garantire la sicurezza informatica, la prevenzione da attacchi e la verifica del corretto funzionamento dell'infrastruttura;</li>
+            <li><strong>Riscontro a richieste precontrattuali o informative:</strong> per la risposta alle email di assistenza o proposta inviate spontaneamente dall'utente.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>6. Destinatari dei Dati e Trasferimento all'Estero</h2>
+          <p>
+            I dati trattati tramite il sito web non vengono venduti, affittati o commercializzati a terzi in nessun caso. Possono venire a conoscenza dei dati tecnici fornitori di servizi informatici di cui il titolare si avvale come responsabili del trattamento:
+          </p>
+          <ul class="legal-list">
+            <li><strong>Vercel Inc.:</strong> provider di hosting globale per l'infrastruttura del sito web, conforme ai framework internazionali di trasferimento dati (Data Privacy Framework UE-USA);</li>
+            <li><strong>Supabase Inc.:</strong> fornitore del database sicuro in cloud utilizzato per la sincronizzazione dei contenuti testuali e delle recensioni approvate;</li>
+            <li><strong>Ko-fi:</strong> piattaforma terza per le donazioni libere a sostegno del progetto. Quando visiti o effettui una donazione su Ko-fi, si applicano le policy sulla privacy proprie di tale piattaforma.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>7. Sicurezza Informativa del Software</h2>
+          <p>
+            La sicurezza dei tuoi dati passa anche attraverso l'integrità del software che installi:
+          </p>
+          <ul class="legal-list">
+            <li>L'eseguibile di installazione di Folia (<code>Folia-Installer-Setup.exe</code>) è generato mediante processi di compilazione sicuri e controllati;</li>
+            <li>Non contiene malware, trojan, spyware, adware né programmi aggregati terzi ("bloatware");</li>
+            <li>È verificabile in qualsiasi momento su servizi di scansione antivirus multipiattaforma come VirusTotal (con 0 rilevamenti di minacce);</li>
+            <li>L'eventuale avviso "SmartScreen" visualizzato al primo avvio su Windows è dovuto unicamente al fatto che Folia è un software indipendente recentemente pubblicato, e non è indice di vulnerabilità o pericolo.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>8. Diritti dell'Interessato</h2>
+          <p>
+            Ai sensi degli articoli 15-22 del Regolamento UE 2016/679, hai il pieno diritto di:
+          </p>
+          <ul class="legal-list">
+            <li>Chiedere la conferma dell'esistenza o meno di dati personali che ti riguardano;</li>
+            <li>Ottenere l'accesso ai tuoi dati, l'aggiornamento, la rettifica o l'integrazione;</li>
+            <li>Chiedere la cancellazione tempestiva dei tuoi dati (diritto all'oblio), ad esempio la rimozione di una recensione pubblicata in precedenza;</li>
+            <li>Ottenere la limitazione del trattamento o opporsi per motivi legittimi al trattamento;</li>
+            <li>Richiedere la portabilità dei dati forniti volontariamente;</li>
+            <li>Proporre reclamo all'Autorità di controllo competente (per l'Italia: <em>Garante per la Protezione dei Dati Personali</em>, <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer">garanteprivacy.it</a>).</li>
+          </ul>
+          <p>
+            Per esercitare ciascuno di questi diritti è sufficiente inviare un'email all'indirizzo <a href="mailto:info@folia-suite.com">info@folia-suite.com</a>: ti risponderemo tempestivamente entro i termini di legge.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>9. Modifiche a questa Informativa</h2>
+          <p>
+            Il Titolare si riserva il diritto di aggiornare la presente Privacy Policy in occasione di nuove funzionalità o aggiornamenti normativi. Eventuali variazioni sostanziali verranno comunicate attraverso la presente pagina web indicando la data dell'ultimo aggiornamento in cima al documento.
+          </p>
+        </section>
+
+      </article>
+
+      <!-- Back to top / action bar -->
+      <div class="legal-footer-cta">
+        <a href="/" class="btn btn-subtle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Torna alla Pagina Principale</span>
+        </a>
+        <a href="/Folia-Installer-Setup-1.0.4.exe" class="btn btn-primary" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Scarica Folia per Windows</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Clean Minimal Footer -->
+  <footer class="footer-clean">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <img src="assets/logo.png" alt="Folia">
+        <span>Folia — Creato con dedizione da Marco Tamborrino</span>
+      </div>
+
+      <div class="footer-nav">
+        <a href="mailto:info@folia-suite.com" class="footer-email-link" title="Invia un'email a info@folia-suite.com">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+          <span>info@folia-suite.com</span>
+        </a>
+        <a href="https://ko-fi.com/marcotamby" target="_blank" rel="noopener noreferrer">Ko-fi</a>
+        <a href="/#download">Download</a>
+        <a href="/#privacy">Local-First</a>
+        <a href="/privacy" style="font-weight: 600; color: var(--text-main);">Informativa Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=1.0.13"></script>
+</body>
+</html>
