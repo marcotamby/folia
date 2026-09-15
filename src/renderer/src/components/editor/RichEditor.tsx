@@ -13,6 +13,7 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TiptapImage from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
 import { EditorToolbar } from './EditorToolbar';
 import { LinkModal } from '../modals/LinkModal';
 import { InsertImageModal } from '../modals/InsertImageModal';
@@ -297,6 +298,10 @@ export const RichEditor: React.FC<RichEditorProps> = ({
       getCharacters: () => charsRef.current,
       getWorldbuilding: () => worldRef.current,
     }),
+    Placeholder.configure({
+      placeholder: 'Inizia a scrivere qui...',
+      emptyEditorClass: 'is-editor-empty',
+    }),
   ], []);
 
   const editor = useEditor({
@@ -483,7 +488,8 @@ export const RichEditor: React.FC<RichEditorProps> = ({
   useEffect(() => {
     if (editor && document) {
       const currentHTML = editor.getHTML();
-      if (document.content !== currentHTML && !editor.isFocused) {
+      const isBothEmpty = (!document.content || document.content === '<p></p>') && (!currentHTML || currentHTML === '<p></p>');
+      if (!isBothEmpty && document.content !== currentHTML && !editor.isFocused) {
         editor.commands.setContent(document.content || '', false);
         setTimeout(() => {
           (editor.view.dom as any)?._foliaRecalcPagination?.();
@@ -503,6 +509,17 @@ export const RichEditor: React.FC<RichEditorProps> = ({
   const handleInsertPageBreak = () => {
     if (editor) {
       editor.chain().focus().insertContent('<div class="folia-page-break" data-page-break="true"><div class="folia-page-bottom-footer"></div><div class="folia-page-desk-gap"><div class="folia-page-badge"><span>Interruzione di pagina</span></div></div><div class="folia-page-top-header"></div></div><p></p>').run();
+    }
+  };
+
+  // Handle click on page canvas / empty space to effortlessly focus the editor
+  const handlePageClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('input, textarea, button, a, sup, [contenteditable="true"], .folia-table, .folia-footnotes, .folia-fn-ref, .folia-comment-mark, .folia-interlink')) {
+      return;
+    }
+    if (editor) {
+      editor.commands.focus('end');
     }
   };
 
@@ -1523,9 +1540,10 @@ export const RichEditor: React.FC<RichEditorProps> = ({
         <div 
           ref={scrollContainerRef}
           className="flex-1 overflow-y-auto flex justify-center items-start px-4 bg-[#F7F6F3]"
+          onClick={handlePageClick}
         >
         <div 
-          className={`w-full ${formatClasses} transition-[max-width] duration-150 relative flex flex-col`}
+          className={`w-full ${formatClasses} transition-[max-width] duration-150 relative flex flex-col cursor-text`}
           style={{
             minHeight: sheetMinHeight,
             fontFamily: getFontFamilyStyle(fontFamily),
@@ -1543,8 +1561,9 @@ export const RichEditor: React.FC<RichEditorProps> = ({
             ['--sheet-pad-bottom' as any]: `${pageMetrics.bottomMarginPx}px`,
           }}
           lang="it"
+          onClick={handlePageClick}
         >
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col cursor-text" onClick={handlePageClick}>
             <div>
               {/* Top Page Number Header (if configured) */}
             {isTopNumber && (
@@ -1561,6 +1580,12 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 onChange={(e) => onUpdateTitle(e.target.value)}
                 onFocus={() => setIsTitleFocused(true)}
                 onClick={() => setIsTitleFocused(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    editor?.commands.focus('start');
+                  }
+                }}
                 placeholder="Titolo del capitolo..."
                 style={{
                   fontFamily: getFontFamilyStyle(headingFontFamily),
@@ -1751,6 +1776,8 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 font-size: ${fontSize}pt !important;
                 line-height: ${lineHeight} !important;
                 color: #000000 !important;
+                min-height: 2.5rem;
+                cursor: text;
                 hyphens: ${hyphenation ? 'auto' : 'manual'} !important;
                 -webkit-hyphens: ${hyphenation ? 'auto' : 'manual'} !important;
                 -ms-hyphens: ${hyphenation ? 'auto' : 'manual'} !important;
@@ -2079,7 +2106,7 @@ export const RichEditor: React.FC<RichEditorProps> = ({
                 }
               }
             `}</style>
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor} className="cursor-text min-h-[3rem]" onClick={handlePageClick} />
           </div>
 
           {/* Dynamic Last Page Filler, Footnotes and Standardized Footer */}
@@ -2105,7 +2132,10 @@ export const RichEditor: React.FC<RichEditorProps> = ({
               const adjustedPadding = Math.min(pageMetrics.subsequentPageLimit, Math.max(0, lastPagePadding - fnHeight));
 
               return (
-                <div className="folia-final-page-bottom select-none w-full bg-inherit rounded-b-md">
+                <div 
+                  className="folia-final-page-bottom select-none w-full bg-inherit rounded-b-md cursor-text"
+                  onClick={handlePageClick}
+                >
                   {/* Equalizer spacer filling remaining content slot */}
                   {adjustedPadding > 0 && (
                     <div 
