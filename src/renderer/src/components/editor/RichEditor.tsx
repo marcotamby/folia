@@ -13,7 +13,6 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TiptapImage from '@tiptap/extension-image';
-import Placeholder from '@tiptap/extension-placeholder';
 import { EditorToolbar } from './EditorToolbar';
 import { LinkModal } from '../modals/LinkModal';
 import { InsertImageModal } from '../modals/InsertImageModal';
@@ -297,10 +296,6 @@ export const RichEditor: React.FC<RichEditorProps> = ({
       getEnabled: () => hyphenationRef.current,
       getCharacters: () => charsRef.current,
       getWorldbuilding: () => worldRef.current,
-    }),
-    Placeholder.configure({
-      placeholder: 'Inizia a scrivere qui...',
-      emptyEditorClass: 'is-editor-empty',
     }),
   ], []);
 

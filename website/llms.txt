@@ -13,7 +13,7 @@
 
 ## Risorse Principali
 - [Sito Ufficiale](https://folia-suite.com/): Pagina di presentazione e download
-- [Download Applicazione (Windows .exe)](https://folia-suite.com/Folia-Installer-Setup-1.0.5.exe): Installer desktop ufficiale v1.0.5
+- [Download Applicazione (Windows .exe)](https://folia-suite.com/Folia-Installer-Setup-1.0.6.exe): Installer desktop ufficiale v1.0.6
 - [Informativa Privacy](https://folia-suite.com/privacy): Norme di tutela dei dati, architettura 100% local-first offline e conformità GDPR
 - [Documentazione Completa per LLM](https://folia-suite.com/llms-full.txt): File markdown esaustivo con dettagli su tutte le funzionalità, norme editoriali, worldbuilding e FAQ
 

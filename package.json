@@ -1,6 +1,6 @@
 {
   "name": "folia",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Folia - Writing & Worldbuilding Suite",
   "main": "dist/main/index.js",
   "scripts": {
