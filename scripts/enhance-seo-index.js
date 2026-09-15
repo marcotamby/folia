@@ -53,7 +53,7 @@ const schemaData = {
       "applicationCategory": "AuthoringTool",
       "applicationSubCategory": "WordProcessor, Worldbuilding & Campaign Manager",
       "operatingSystem": "Windows 10, Windows 11",
-      "softwareVersion": "1.0.4",
+      "softwareVersion": "1.0.5",
       "price": "0",
       "priceCurrency": "EUR",
       "offers": {
@@ -63,7 +63,7 @@ const schemaData = {
         "availability": "https://schema.org/InStock",
         "category": "Free Software"
       },
-      "downloadUrl": "https://folia-suite.com/Folia-Installer-Setup-1.0.4.exe",
+      "downloadUrl": "https://folia-suite.com/Folia-Installer-Setup-1.0.5.exe",
       "fileSize": "94.6MB",
       "author": {
         "@type": "Person",

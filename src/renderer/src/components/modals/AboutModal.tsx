@@ -11,7 +11,7 @@ interface AboutModalProps {
 export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, t }) => {
   const [isChecking, setIsChecking] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<string | null>(null);
-  const [appVersion, setAppVersion] = useState('1.0.4');
+  const [appVersion, setAppVersion] = useState('1.0.5');
 
   useEffect(() => {
     const folia = (window as any).foliaAPI;
