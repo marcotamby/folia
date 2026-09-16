@@ -5,8 +5,19 @@ const { execSync } = require('child_process');
 
 function getGitHubToken() {
   try {
+    const out = execSync('"C:\\Program Files\\Git\\mingw64\\libexec\\git-core\\git-credential-wincred.exe" get', {
+      input: 'protocol=https\nhost=github.com\n\n',
+      encoding: 'utf-8'
+    });
+    const match = out.match(/password=(.+)/);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
+  } catch (err) {}
+
+  try {
     const creds = execSync('git credential fill', {
-      input: 'protocol=https\nhost=github.com\n',
+      input: 'protocol=https\nhost=github.com\n\n',
       encoding: 'utf-8'
     });
     const match = creds.match(/password=(.+)/);
