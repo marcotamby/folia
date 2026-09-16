@@ -32,7 +32,8 @@
     "ideas": "Ideas & Notes",
     "notes": "Notes & Research",
     "trash": "Trash",
-    "sessions": "Sessions"
+    "sessions": "Sessions",
+    "timeline": "Timeline"
   },
   "sidebar": {
     "add_chapter": "Add Chapter",
@@ -154,7 +155,7 @@
     "status_draft": "First Draft",
     "status_revised": "In Revision",
     "status_done": "Completed",
-    "open_editor": "Open in Editor",
+    "open_in_editor": "Go to chapter",
     "color_label": "Color Tag"
   },
   "plot": {

@@ -1,6 +1,6 @@
 export type Language = 'it' | 'en';
 
-export type ViewMode = 'editor' | 'characters' | 'world' | 'maps' | 'plot' | 'corkboard' | 'ideas' | 'notes' | 'trash' | 'sessions';
+export type ViewMode = 'editor' | 'characters' | 'world' | 'maps' | 'plot' | 'corkboard' | 'ideas' | 'notes' | 'trash' | 'sessions' | 'timeline';
 
 export type PageFormat = 'a4' | 'novel' | 'cartella' | 'letter' | 'continuous';
 export type PageMargins = 'normal' | 'narrow' | 'wide' | 'custom';
@@ -426,6 +426,33 @@ export interface SessionRecording {
   updatedAt: string;
 }
 
+export type TimelineImportance = 'major' | 'minor' | 'climax' | 'lore';
+
+export interface TimelineEvent {
+  id: string;
+  eraId: string;
+  title: string;
+  dateOrPeriod: string;
+  summary: string;
+  linkedChapterIds?: string[];
+  linkedCharacterIds?: string[];
+  importance?: TimelineImportance;
+  color?: string;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface TimelineEra {
+  id: string;
+  title: string;
+  timeRange?: string;
+  description?: string;
+  color: string; // e.g. amber, emerald, sapphire, purple, rose, stone
+  order: number;
+  events: TimelineEvent[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -442,5 +469,6 @@ export interface Project {
   notes: ResearchNote[];
   trash: TrashItem[];
   sessions?: SessionRecording[];
+  timelineEras?: TimelineEra[];
   settings: ProjectSettings;
 }

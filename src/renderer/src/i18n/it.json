@@ -32,7 +32,8 @@
     "ideas": "Idee & note",
     "notes": "Appunti & ricerca",
     "trash": "Cestino",
-    "sessions": "Sessioni"
+    "sessions": "Sessioni",
+    "timeline": "Linea temporale"
   },
   "sidebar": {
     "add_chapter": "Aggiungi capitolo",
@@ -154,7 +155,7 @@
     "status_draft": "Prima bozza",
     "status_revised": "In revisione",
     "status_done": "Completato",
-    "open_editor": "Apri nell'editor",
+    "open_in_editor": "Vai al capitolo",
     "color_label": "Etichetta colore"
   },
   "plot": {

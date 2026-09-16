@@ -29,7 +29,8 @@ import {
   Mail,
   Compass,
   GripVertical,
-  Radio
+  Radio,
+  Hourglass
 } from 'lucide-react';
 import { Project, ViewMode, ManuscriptItem, Character, WorldEntry, CharacterRole } from '../../types';
 import { ConfirmModal } from '../common/ConfirmModal';
@@ -276,6 +277,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Layers className="w-4 h-4" />
           </button>
 
+          {!isThesis && !isLetter && !isTtrpg && (
+            <button
+              onClick={() => onSelectView('timeline')}
+              title={t('sections.timeline') || 'Linea temporale'}
+              className={`p-2 rounded-xl transition-colors cursor-pointer ${
+                activeView === 'timeline' ? 'bg-folia-100 text-folia-800' : 'text-paper-600 hover:bg-paper-200'
+              }`}
+            >
+              <Hourglass className="w-4 h-4" />
+            </button>
+          )}
+
           <button
             onClick={() => onSelectView('ideas')}
             title={t('sections.ideas')}
@@ -464,6 +477,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     isLetter ? 'Destinatario & allegati' :
     t('sections.notes');
 
+  const totalTimelineEvents = (project.timelineEras || []).reduce((acc, e) => acc + (e.events?.length || 0), 0);
+
   // Group characters by Role for Submenus
   const charGroups: { key: CharacterRole; label: string; color: string; items: Character[] }[] = [
     {
@@ -626,21 +641,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div>
           <div 
             onClick={() => {
-              setManuscriptExpanded(!manuscriptExpanded);
+              if (!manuscriptExpanded) setManuscriptExpanded(true);
               onSelectView('editor');
             }}
             className={`flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer font-semibold transition-colors group ${
               activeView === 'editor' && !selectedDocId ? 'bg-folia-100 text-folia-900' : 'hover:bg-paper-200 text-paper-800'
             }`}
           >
-            <div className="flex items-center gap-2 min-w-0">
-              {manuscriptExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
+            <div className="flex items-center gap-1.5 min-w-0">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setManuscriptExpanded(!manuscriptExpanded);
+                }}
+                className="p-0.5 -ml-0.5 rounded-md hover:bg-paper-300 text-paper-400 hover:text-paper-700 transition-colors cursor-pointer"
+                title={manuscriptExpanded ? 'Comprimi' : 'Espandi'}
+              >
+                {manuscriptExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              </button>
               {isThesis ? (
-                <GraduationCap className="w-4 h-4 text-blue-700" />
+                <GraduationCap className="w-4 h-4 text-blue-700 shrink-0" />
               ) : isLetter ? (
-                <Mail className="w-4 h-4 text-purple-700" />
+                <Mail className="w-4 h-4 text-purple-700 shrink-0" />
               ) : (
-                <BookOpen className="w-4 h-4 text-folia-700" />
+                <BookOpen className="w-4 h-4 text-folia-700 shrink-0" />
               )}
               <span className="truncate">{manuscriptSectionLabel}</span>
             </div>
@@ -748,16 +773,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div>
             <div 
               onClick={() => {
-                setCharactersExpanded(!charactersExpanded);
+                if (!charactersExpanded) setCharactersExpanded(true);
                 onSelectView('characters');
               }}
               className={`flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer font-semibold transition-colors group ${
                 activeView === 'characters' && !selectedCharId ? 'bg-folia-100 text-folia-900' : 'hover:bg-paper-200 text-paper-800'
               }`}
             >
-              <div className="flex items-center gap-2 min-w-0">
-                {charactersExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
-                <Users className="w-4 h-4 text-emerald-600" />
+              <div className="flex items-center gap-1.5 min-w-0">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCharactersExpanded(!charactersExpanded);
+                  }}
+                  className="p-0.5 -ml-0.5 rounded-md hover:bg-paper-300 text-paper-400 hover:text-paper-700 transition-colors cursor-pointer"
+                  title={charactersExpanded ? 'Comprimi' : 'Espandi'}
+                >
+                  {charactersExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                </button>
+                <Users className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span className="truncate">{isTtrpg ? 'Personaggi & party' : t('sections.characters')}</span>
                 <span className="text-[11px] text-paper-400 font-normal">({charactersList.length})</span>
               </div>
@@ -953,16 +988,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div>
             <div 
               onClick={() => {
-                setWorldExpanded(!worldExpanded);
+                if (!worldExpanded) setWorldExpanded(true);
                 onSelectView('world');
               }}
               className={`flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer font-semibold transition-colors group ${
                 activeView === 'world' && !selectedWorldId ? 'bg-folia-100 text-folia-900' : 'hover:bg-paper-200 text-paper-800'
               }`}
             >
-              <div className="flex items-center gap-2 min-w-0">
-                {worldExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
-                <Globe className="w-4 h-4 text-folia-700" />
+              <div className="flex items-center gap-1.5 min-w-0">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setWorldExpanded(!worldExpanded);
+                  }}
+                  className="p-0.5 -ml-0.5 rounded-md hover:bg-paper-300 text-paper-400 hover:text-paper-700 transition-colors cursor-pointer"
+                  title={worldExpanded ? 'Comprimi' : 'Espandi'}
+                >
+                  {worldExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                </button>
+                <Globe className="w-4 h-4 text-folia-700 shrink-0" />
                 <span className="truncate">{isTtrpg ? 'Mondo & luoghi' : t('sections.world')}</span>
                 <span className="text-[11px] text-paper-400 font-normal">({worldList.length})</span>
               </div>
@@ -1068,16 +1113,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div>
             <div 
               onClick={() => {
-                setMapsExpanded(!mapsExpanded);
+                if (!mapsExpanded) setMapsExpanded(true);
                 onSelectView('maps');
               }}
               className={`flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer font-semibold transition-colors group ${
                 activeView === 'maps' && !selectedMapId ? 'bg-folia-100 text-folia-900' : 'hover:bg-paper-200 text-paper-800'
               }`}
             >
-              <div className="flex items-center gap-2 min-w-0">
-                {mapsExpanded ? <ChevronDown className="w-4 h-4 text-paper-400" /> : <ChevronRight className="w-4 h-4 text-paper-400" />}
-                <Compass className="w-4 h-4 text-teal-600" />
+              <div className="flex items-center gap-1.5 min-w-0">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMapsExpanded(!mapsExpanded);
+                  }}
+                  className="p-0.5 -ml-0.5 rounded-md hover:bg-paper-300 text-paper-400 hover:text-paper-700 transition-colors cursor-pointer"
+                  title={mapsExpanded ? 'Comprimi' : 'Espandi'}
+                >
+                  {mapsExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                </button>
+                <Compass className="w-4 h-4 text-teal-600 shrink-0" />
                 <span className="truncate">Mappe</span>
               </div>
               <button
@@ -1178,6 +1233,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <Layers className="w-4 h-4 text-folia-700" />
             <span>{plotSectionLabel}</span>
+          </div>
+        )}
+
+        {/* 5b. TIMELINE VIEW (Only for Novel / Narrative) */}
+        {!isThesis && !isLetter && !isTtrpg && (
+          <div 
+            onClick={() => onSelectView('timeline')}
+            className={`flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer font-semibold transition-colors ${
+              activeView === 'timeline' ? 'bg-folia-100 text-folia-900' : 'hover:bg-paper-200 text-paper-800'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Hourglass className="w-4 h-4 text-amber-700" />
+              <span>{t('sections.timeline') || 'Linea temporale'}</span>
+            </div>
+            {totalTimelineEvents > 0 && (
+              <span className="text-[11px] bg-folia-100 text-folia-800 px-1.5 py-0.5 rounded-full font-mono font-medium border border-folia-200">
+                {totalTimelineEvents}
+              </span>
+            )}
           </div>
         )}
 

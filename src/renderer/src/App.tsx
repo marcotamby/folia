@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Project, ViewMode, ManuscriptItem, Character, WorldEntry, CardStatus, PageFormat, PageMargins, FontFamily, ParagraphSpacing, PlotAct, ProjectType, MapEntry, SessionRecording, SessionMarker } from './types';
+import { Project, ViewMode, ManuscriptItem, Character, WorldEntry, CardStatus, PageFormat, PageMargins, FontFamily, ParagraphSpacing, PlotAct, ProjectType, MapEntry, SessionRecording, SessionMarker, TimelineEra } from './types';
 import { createDefaultProject } from './utils/defaults';
 import { useI18n } from './hooks/useI18n';
 import { useAutosave } from './hooks/useAutosave';
@@ -12,6 +12,7 @@ import { WorldEditor } from './components/world/WorldEditor';
 import { InteractiveMapEditor } from './components/maps/InteractiveMapEditor';
 import { CorkboardView } from './components/corkboard/CorkboardView';
 import { PlotOutliner } from './components/plot/PlotOutliner';
+import { TimelineView } from './components/timeline/TimelineView';
 import { IdeasBoard } from './components/ideas/IdeasBoard';
 import { NotesEditor } from './components/notes/NotesEditor';
 import { SessionsView } from './components/sessions/SessionsView';
@@ -211,7 +212,8 @@ const ensureProjectIntegrity = (raw: any): Project => {
     ideas: migratedIdeas,
     notes: migratedNotes,
     trash: Array.isArray(raw.trash) ? raw.trash : [],
-    sessions: Array.isArray(raw.sessions) ? raw.sessions : []
+    sessions: Array.isArray(raw.sessions) ? raw.sessions : [],
+    timelineEras: Array.isArray(raw.timelineEras) ? raw.timelineEras : []
   };
 };
 
@@ -368,6 +370,7 @@ export default function App() {
   const isTtrpg = projectType === 'ttrpg_master';
   const isThesis = projectType === 'academic_thesis';
   const isLetter = projectType === 'letter';
+  const isNovel = projectType === 'novel' || (!isTtrpg && !isThesis && !isLetter);
 
   // Modals state
   const [isProjectsOpen, setIsProjectsOpen] = useState(false);
@@ -1696,6 +1699,25 @@ ${formattedMarkers}`;
               onUpdatePlotActs={(acts: PlotAct[]) => {
                 setProject(p => ({ ...p, plotActs: acts }));
                 markDirty();
+              }}
+              t={t}
+            />
+          )}
+
+          {activeView === 'timeline' && isNovel && (
+            <TimelineView
+              project={project}
+              onUpdateTimelineEras={(eras) => {
+                setProject(p => ({ ...p, timelineEras: eras }));
+                markDirty();
+              }}
+              onNavigateToChapter={(chapterId) => {
+                setSelectedDocId(chapterId);
+                setActiveView('editor');
+              }}
+              onNavigateToCharacter={(characterId) => {
+                setSelectedCharId(characterId);
+                setActiveView('characters');
               }}
               t={t}
             />

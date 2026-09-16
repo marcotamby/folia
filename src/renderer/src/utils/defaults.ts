@@ -294,6 +294,7 @@ export const createDefaultProject = (
     ideas,
     notes,
     trash: [],
-    sessions: []
+    sessions: [],
+    timelineEras: []
   };
 };

@@ -113,7 +113,7 @@ export const CorkboardView: React.FC<CorkboardViewProps> = ({
                     </button>
                     <button
                       onClick={() => onSelectDoc(item.id)}
-                      title={t('corkboard.open_in_editor')}
+                      title={isThesis ? 'Vai alla sezione' : isTtrpg ? 'Vai alla scena' : t('corkboard.open_in_editor')}
                       className="p-1 rounded-lg text-paper-400 hover:text-folia-700 hover:bg-folia-50 transition-colors cursor-pointer"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
