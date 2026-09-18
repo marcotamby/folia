@@ -23,30 +23,43 @@ export const FocusTextModal: React.FC<FocusTextModalProps> = ({
   placeholder = 'Scrivi qui...'
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  const hasInitializedFocusRef = useRef(false);
 
+  // Initial focus and cursor placement only once when opened
   useEffect(() => {
     if (isOpen) {
-      // Focus textarea and move cursor to end of text
-      const timer = setTimeout(() => {
-        if (textareaRef.current) {
-          textareaRef.current.focus();
-          const length = textareaRef.current.value.length;
-          textareaRef.current.setSelectionRange(length, length);
-        }
-      }, 50);
-
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          onClose();
-        }
-      };
-      window.addEventListener('keydown', handleKeyDown);
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener('keydown', handleKeyDown);
-      };
+      if (!hasInitializedFocusRef.current) {
+        hasInitializedFocusRef.current = true;
+        const timer = setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.focus();
+            const length = textareaRef.current.value.length;
+            textareaRef.current.setSelectionRange(length, length);
+          }
+        }, 50);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      hasInitializedFocusRef.current = false;
     }
-  }, [isOpen, onClose]);
+  }, [isOpen]);
+
+  // Escape key handler
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCloseRef.current();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -55,7 +68,7 @@ export const FocusTextModal: React.FC<FocusTextModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 md:p-8 animate-in fade-in select-none folia-modal-overlay"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 md:p-8 animate-in fade-in folia-modal-overlay"
       onClick={onClose}
     >
       <div 
@@ -63,7 +76,7 @@ export const FocusTextModal: React.FC<FocusTextModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-paper-200/80 bg-paper-100/60">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-paper-200/80 bg-paper-100/60 select-none">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-xl bg-folia-100 border border-folia-200/80 flex items-center justify-center text-folia-800 shrink-0 shadow-2xs">
               {icon || <FileText className="w-5 h-5 text-folia-800" />}
@@ -112,7 +125,7 @@ export const FocusTextModal: React.FC<FocusTextModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-t border-paper-200/80 bg-paper-100/60 text-xs">
+        <div className="flex items-center justify-between px-6 py-3.5 border-t border-paper-200/80 bg-paper-100/60 text-xs select-none">
           <span className="text-paper-400 text-[11px]">
             Suggerimento: premi <kbd className="px-1.5 py-0.5 rounded bg-paper-200 text-paper-700 font-mono text-[10px] border border-paper-300">Esc</kbd> per tornare alla scheda
           </span>

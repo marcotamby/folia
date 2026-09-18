@@ -111,15 +111,10 @@ async function run() {
 
   const releaseBody = `## Folia v${version}
 
-### Novità e Miglioramenti
-- 💡 **Ingrandimento Note e Idee Veloci**:
-  - **In fase di scrittura**: introdotto il pulsante *Ingrandisci* nel riquadro di inserimento per redigere note e idee a schermo intero (FocusTextModal) con conteggio parole e caratteri in tempo reale.
-  - **Sulle schede già salvate**: aggiunta l'opzione di ingrandimento su ciascun post-it della bacheca idee per consultare e revisionare comodamente i testi.
-  - **Campi di testo ridimensionabili**: aggiunto il ridimensionamento verticale alle textarea di scrittura e lettura per una migliore leggibilità.
-  - **Note di ricerca**: supporto all'ingrandimento a schermo intero direttamente dall'elenco note a sinistra e textarea di redazione ridimensionabile.
-- 💾 **Opzione "Salva con nome"**:
-  - Aggiunto il pulsante dedicato **Salva con nome** (\`Ctrl+Shift+S\`) nella barra superiore accanto al comando **Salva** (\`Ctrl+S\`).
-  - Consente di creare copie del progetto o selezionare una nuova cartella/nome file in qualsiasi momento tramite la finestra nativa di sistema.`;
+### Risoluzione Bug
+- ✍️ **Correzione Cursore e Selezione nelle Finestre Ingrandite (Focus Modal)**:
+  - Risolto il problema per cui, durante la digitazione nelle finestre ingrandite a schermo intero (note, bacheca, personaggi, ambientazioni, idee, scaletta, timeline), il cursore veniva forzato alla fine del testo a ogni battitura.
+  - Ripristinata la piena facoltà di posizionare il cursore in mezzo al testo, modificare liberamente qualsiasi frase, selezionare ed evidenziare porzioni di testo per copiarle, tagliarle o cancellarle senza alcun reset.`;
 
   for (const repo of repos) {
     console.log(`\n-----------------------------------------`);
