@@ -102,7 +102,7 @@ const schemaData = {
       },
       "sameAs": [
         "https://ko-fi.com/marcotamby",
-        "https://github.com/marcotamby/folia"
+        "https://github.com/marcotamby/folia-releases"
       ]
     },
     {
