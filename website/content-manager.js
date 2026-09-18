@@ -123,7 +123,7 @@
       let val = getNestedValue(data, key);
       if (val !== null && typeof val === 'string') {
         if (key === 'hero.cta_download' || key === 'download.card_title') {
-          val = val.replace(/1\.0\.[123456]/g, '1.0.7');
+          val = val.replace(/1\.0\.[123456]/g, '1.0.8');
         }
         if (el.tagName === 'TITLE') {
           // Strip any HTML tags for browser window title

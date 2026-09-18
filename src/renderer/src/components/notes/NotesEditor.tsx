@@ -111,15 +111,29 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
                   <h4 className="font-brand font-bold text-xs text-paper-900 truncate">
                     {note.title || 'Senza titolo'}
                   </h4>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteNote(note.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-paper-400 hover:text-red-600 transition-opacity"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedNoteId(note.id);
+                        setIsExpanded(true);
+                      }}
+                      className="p-1 text-paper-400 hover:text-folia-800 transition-colors cursor-pointer rounded"
+                      title="Ingrandisci a schermo intero"
+                    >
+                      <Maximize2 className="w-3 h-3" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteNote(note.id);
+                      }}
+                      className="p-1 text-paper-400 hover:text-red-600 transition-colors cursor-pointer rounded"
+                      title="Elimina nota"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
                 <p className={`text-[11px] line-clamp-2 leading-relaxed ${note.content ? 'text-paper-600' : 'text-paper-400 italic'}`}>
                   {note.content || note.placeholder || 'Nessun contenuto...'}
@@ -166,7 +180,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
               onChange={(e) => handleUpdateNote(activeNote.id, 'content', e.target.value)}
               placeholder={activeNote.placeholder || (isTtrpg ? "Regole speciali della campagna, varianti di riposo, critici e gestione del party..." : "Scrivi qui i tuoi appunti di ricerca, riferimenti storici, dettagli tecnici o bozze...")}
               rows={16}
-              className="w-full p-4 bg-white rounded-2xl border border-paper-250 shadow-xs focus:outline-hidden focus:border-folia-600 text-sm text-paper-800 leading-relaxed font-serif resize-none placeholder:text-paper-400 placeholder:italic"
+              className="w-full p-4 bg-white rounded-2xl border border-paper-250 shadow-xs focus:outline-hidden focus:border-folia-600 text-sm text-paper-800 leading-relaxed font-serif resize-y min-h-[220px] placeholder:text-paper-400 placeholder:italic"
             />
           </div>
         ) : (

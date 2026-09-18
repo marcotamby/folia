@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Save, 
+  SaveAll,
   Clock, 
   FileDown, 
   Settings as SettingsIcon, 
@@ -42,6 +43,7 @@ interface TopBarProps {
   isFocusMode: boolean;
   onToggleFocusMode: () => void;
   onSaveManual: () => void;
+  onSaveAs?: () => void;
   onOpenProjectsList: () => void;
   onOpenNewProject: () => void;
   onOpenExport: () => void;
@@ -80,6 +82,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   isFocusMode,
   onToggleFocusMode,
   onSaveManual,
+  onSaveAs,
   onOpenProjectsList,
   onOpenNewProject,
   onOpenExport,
@@ -189,6 +192,18 @@ export const TopBar: React.FC<TopBarProps> = ({
               <Save className="w-3.5 h-3.5 text-folia-700" />
               <span className="hidden lg:inline">{t('app.save')}</span>
             </button>
+
+            {/* Save As Button */}
+            {onSaveAs && (
+              <button
+                onClick={onSaveAs}
+                title={`${t('app.save_as') || 'Salva con nome'} (Ctrl+Shift+S)`}
+                className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-lg text-paper-700 hover:bg-paper-150 hover:text-folia-800 transition-colors cursor-pointer"
+              >
+                <SaveAll className="w-3.5 h-3.5 text-folia-700" />
+                <span className="hidden xl:inline">{t('app.save_as') || 'Salva con nome'}</span>
+              </button>
+            )}
 
             {/* Export Button */}
             <button

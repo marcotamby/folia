@@ -571,7 +571,11 @@ export default function App() {
       if (e.ctrlKey || e.metaKey) {
         if (e.key === 's' || e.key === 'S') {
           e.preventDefault();
-          handleSaveProjectAs();
+          if (e.shiftKey) {
+            handleSaveProjectAs();
+          } else {
+            handleManualSave();
+          }
         } else if (e.key === '=' || e.key === '+') {
           e.preventDefault();
           handleUpdateZoom(zoomLevel + 10);
@@ -1270,17 +1274,31 @@ ${formattedMarkers}`;
     setTimeout(() => setSaveToast(null), 3000);
   };
 
-  // Custom Save Dialog to save ANYWHERE on the PC
-  const handleSaveProjectAs = async () => {
-    // If the project already has a file path, we just perform a normal save and clear the dirty flag
+  // Manual Save (saves directly to existing filePath if present, otherwise prompts for file)
+  const handleManualSave = async () => {
     if (project.filePath && (window as any).foliaAPI?.saveProjectDirect) {
-      performSave();
-      setSaveToast('Progetto salvato con successo');
-      setTimeout(() => setSaveToast(null), 3000);
+      try {
+        await (window as any).foliaAPI.saveProjectDirect(project.filePath, project);
+        localStorage.setItem(STORAGE_PROJECT_PREFIX + project.id, JSON.stringify(project));
+        syncCurrentToProjectsIndex(project);
+        clearDirty();
+        setSaveToast('Progetto salvato con successo');
+        setTimeout(() => setSaveToast(null), 3000);
+      } catch (e) {
+        console.error('Error direct saving project:', e);
+        performSave();
+        setSaveToast('Progetto salvato localmente');
+        setTimeout(() => setSaveToast(null), 3000);
+      }
       return;
     }
 
-    // Otherwise, we show the Save As dialog
+    // No existing file path -> prompt user with Save As dialog
+    await handleSaveProjectAs();
+  };
+
+  // Custom Save Dialog to save ANYWHERE on the PC (Salva con nome)
+  const handleSaveProjectAs = async () => {
     if ((window as any).foliaAPI?.saveProjectDialog) {
       try {
         const res = await (window as any).foliaAPI.saveProjectDialog(project.title || 'Manoscritto', project);
@@ -1360,7 +1378,8 @@ ${formattedMarkers}`;
         onChangeZoom={handleUpdateZoom}
         isFocusMode={isFocusMode}
         onToggleFocusMode={() => setIsFocusMode(!isFocusMode)}
-        onSaveManual={handleSaveProjectAs}
+        onSaveManual={handleManualSave}
+        onSaveAs={handleSaveProjectAs}
         onOpenProjectsList={() => setIsProjectsOpen(true)}
         onOpenNewProject={() => setIsCreateProjectOpen(true)}
         onOpenExport={() => setIsExportOpen(true)}

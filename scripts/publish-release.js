@@ -104,86 +104,106 @@ async function run() {
   }
 
   const owner = 'marcotamby';
-  const repo = 'folia-releases';
+  const repos = ['folia-releases', 'folia'];
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
   const version = pkg.version;
   const tag = `v${version}`;
 
-  console.log(`Creating GitHub Release ${tag} for ${owner}/${repo}...`);
+  const releaseBody = `## Folia v${version}
 
-  // Check if release already exists
-  let release = null;
-  const checkRes = await request(`https://api.github.com/repos/${owner}/${repo}/releases/tags/${tag}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github.v3+json'
-    }
-  });
+### Novità e Miglioramenti
+- 💡 **Ingrandimento Note e Idee Veloci**:
+  - **In fase di scrittura**: introdotto il pulsante *Ingrandisci* nel riquadro di inserimento per redigere note e idee a schermo intero (FocusTextModal) con conteggio parole e caratteri in tempo reale.
+  - **Sulle schede già salvate**: aggiunta l'opzione di ingrandimento su ciascun post-it della bacheca idee per consultare e revisionare comodamente i testi.
+  - **Campi di testo ridimensionabili**: aggiunto il ridimensionamento verticale alle textarea di scrittura e lettura per una migliore leggibilità.
+  - **Note di ricerca**: supporto all'ingrandimento a schermo intero direttamente dall'elenco note a sinistra e textarea di redazione ridimensionabile.
+- 💾 **Opzione "Salva con nome"**:
+  - Aggiunto il pulsante dedicato **Salva con nome** (\`Ctrl+Shift+S\`) nella barra superiore accanto al comando **Salva** (\`Ctrl+S\`).
+  - Consente di creare copie del progetto o selezionare una nuova cartella/nome file in qualsiasi momento tramite la finestra nativa di sistema.`;
 
-  if (checkRes.statusCode === 200) {
-    console.log(`Release ${tag} already exists, will upload assets.`);
-    release = JSON.parse(checkRes.data.toString('utf-8'));
-  } else {
-    const createBody = JSON.stringify({
-      tag_name: tag,
-      target_commitish: 'main',
-      name: `Folia v${version}`,
-      body: `## Folia v${version}\n\n### Novità e Miglioramenti\n- ⏳ **Nuova Sezione Linea Temporale**: Gestione completa di ere storiche ed eventi cronologici per progetti di narrativa, con interlinking bidirezionale verso capitoli e personaggi.\n- 🔄 **Drag and Drop degli Eventi**: Riordinamento fluido degli eventi tramite trascinamento sia all'interno della stessa era che tra ere diverse, con supporto completo a ere vuote ed ere compresse.\n- 🗂️ **Isolamento collasso sezioni Sidebar**: Risolto il comportamento delle freccine di collasso nella barra laterale, che ora permettono di comprimere o espandere le sezioni senza cambiare la vista o il capitolo attualmente aperto.\n- 📝 **Modelli di trama e tipografia**: Normalizzati tutti i 20 template di struttura narrativa al sentence case italiano e uniformato il font dei placeholder dell'intera applicazione.\n- 🔍 **Rifinitura modali e note**: Supporto all'ingrandimento a schermo intero (FocusTextModal) e note ridimensionabili per ere ed eventi con font ad alta leggibilità.`,
-      draft: false,
-      prerelease: false
-    });
+  for (const repo of repos) {
+    console.log(`\n-----------------------------------------`);
+    console.log(`Creating/Updating GitHub Release ${tag} for ${owner}/${repo}...`);
 
-    const createRes = await request(`https://api.github.com/repos/${owner}/${repo}/releases`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    }, createBody);
-
-    if (createRes.statusCode !== 201) {
-      throw new Error(`Failed to create release: HTTP ${createRes.statusCode} ${createRes.data.toString('utf-8')}`);
-    }
-
-    release = JSON.parse(createRes.data.toString('utf-8'));
-    console.log(`✓ Release created: ${release.html_url}`);
-  }
-
-  const uploadUrl = release.upload_url;
-
-  // If release already has assets, check and delete existing ones to overwrite cleanly
-  if (Array.isArray(release.assets) && release.assets.length > 0) {
-    for (const a of release.assets) {
-      console.log(`Removing previous asset ${a.name}...`);
-      await request(`https://api.github.com/repos/${owner}/${repo}/releases/assets/${a.id}`, {
-        method: 'DELETE',
+    try {
+      // Check if release already exists
+      let release = null;
+      const checkRes = await request(`https://api.github.com/repos/${owner}/${repo}/releases/tags/${tag}`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/vnd.github.v3+json'
         }
-      }).catch(() => {});
+      });
+
+      if (checkRes.statusCode === 200) {
+        console.log(`Release ${tag} already exists on ${repo}, will update assets.`);
+        release = JSON.parse(checkRes.data.toString('utf-8'));
+      } else {
+        const createBody = JSON.stringify({
+          tag_name: tag,
+          target_commitish: 'main',
+          name: `Folia v${version}`,
+          body: releaseBody,
+          draft: false,
+          prerelease: false
+        });
+
+        const createRes = await request(`https://api.github.com/repos/${owner}/${repo}/releases`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        }, createBody);
+
+        if (createRes.statusCode !== 201) {
+          console.warn(`Could not create release on ${repo}: HTTP ${createRes.statusCode} ${createRes.data.toString('utf-8')}`);
+          continue;
+        }
+
+        release = JSON.parse(createRes.data.toString('utf-8'));
+        console.log(`✓ Release created on ${repo}: ${release.html_url}`);
+      }
+
+      const uploadUrl = release.upload_url;
+
+      // If release already has assets, check and delete existing ones to overwrite cleanly
+      if (Array.isArray(release.assets) && release.assets.length > 0) {
+        for (const a of release.assets) {
+          console.log(`[${repo}] Removing previous asset ${a.name}...`);
+          await request(`https://api.github.com/repos/${owner}/${repo}/releases/assets/${a.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          }).catch(() => {});
+        }
+      }
+
+      // Assets to upload
+      const assets = [
+        { path: path.join(__dirname, '../release/latest.yml'), type: 'text/yaml' },
+        { path: path.join(__dirname, `../release/Folia-Installer-Setup-${version}.exe.blockmap`), type: 'application/octet-stream' },
+        { path: path.join(__dirname, `../release/Folia-Installer-Setup-${version}.exe`), type: 'application/vnd.microsoft.portable-executable' }
+      ];
+
+      for (const asset of assets) {
+        if (fs.existsSync(asset.path)) {
+          await uploadAsset(uploadUrl, token, asset.path, asset.type);
+        } else {
+          console.warn(`[${repo}] File not found: ${asset.path}`);
+        }
+      }
+
+      console.log(`✓ Release v${version} assets uploaded successfully to ${repo}!`);
+      console.log(`URL: ${release.html_url}`);
+    } catch (err) {
+      console.error(`Failed to publish to ${repo}:`, err.message);
     }
   }
-
-  // Assets to upload
-  const assets = [
-    { path: path.join(__dirname, '../release/latest.yml'), type: 'text/yaml' },
-    { path: path.join(__dirname, `../release/Folia-Installer-Setup-${version}.exe.blockmap`), type: 'application/octet-stream' },
-    { path: path.join(__dirname, `../release/Folia-Installer-Setup-${version}.exe`), type: 'application/vnd.microsoft.portable-executable' }
-  ];
-
-  for (const asset of assets) {
-    if (fs.existsSync(asset.path)) {
-      await uploadAsset(uploadUrl, token, asset.path, asset.type);
-    } else {
-      console.warn(`File not found: ${asset.path}`);
-    }
-  }
-
-  console.log(`\n🎉 Release v${version} and all assets uploaded successfully!`);
-  console.log(`URL: ${release.html_url}`);
 }
 
 run().catch(err => {

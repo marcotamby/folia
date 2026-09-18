@@ -97,11 +97,11 @@ module.exports = async function handler(req, res) {
               continue;
             }
             if (row.content_key === 'hero.cta_download' && typeof val === 'string' && (val.includes('1.0.1') || val.includes('1.0.2') || val.includes('1.0.3') || val.includes('1.0.4') || val.includes('1.0.5') || val.includes('1.0.6'))) {
-              val = val.replace(/v?1\.0\.[123456]/g, 'v1.0.7');
+              val = val.replace(/v?1\.0\.[123456]/g, 'v1.0.8');
               supabase.from('site_contents').update({ value_it: val }).eq('content_key', 'hero.cta_download').then(() => {}).catch(() => {});
             }
             if (row.content_key === 'download.card_title' && typeof val === 'string' && (val.includes('1.0.1') || val.includes('1.0.2') || val.includes('1.0.3') || val.includes('1.0.4') || val.includes('1.0.5') || val.includes('1.0.6'))) {
-              val = val.replace(/1\.0\.[123456]/g, '1.0.7');
+              val = val.replace(/1\.0\.[123456]/g, '1.0.8');
               supabase.from('site_contents').update({ value_it: val }).eq('content_key', 'download.card_title').then(() => {}).catch(() => {});
             }
 
